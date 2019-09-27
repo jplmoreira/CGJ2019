@@ -25,9 +25,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-//////////////////////////////////////////////////////////////////////// ERRORS
+////////////////////////////////////////////////// ERROR CALLBACK (OpenGL 4.3+)
 
-static std::string errorSource(GLenum source)
+static const std::string errorSource(GLenum source)
 {
 	switch (source) {
 	case GL_DEBUG_SOURCE_API:				return "API";
@@ -40,7 +40,7 @@ static std::string errorSource(GLenum source)
 	}
 }
 
-static std::string errorType(GLenum type)
+static const std::string errorType(GLenum type)
 {
 	switch (type) {
 	case GL_DEBUG_TYPE_ERROR:				return "error";
@@ -56,7 +56,7 @@ static std::string errorType(GLenum type)
 	}
 }
 
-static std::string errorSeverity(GLenum severity)
+static const std::string errorSeverity(GLenum severity)
 {
 	switch (severity) {
 	case GL_DEBUG_SEVERITY_HIGH:			return "high";
@@ -84,6 +84,50 @@ void setupErrorCallback()
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, 0, GL_TRUE);
 	// params: source, type, severity, count, ids, enabled
+}
+
+///////////////////////////////////////////////// ERROR HANDLING (All versions)
+
+static const std::string errorString(GLenum error)
+{
+	switch(error) {
+	case GL_NO_ERROR:
+		return "No error has been recorded.";
+	case GL_INVALID_ENUM:
+		return "An unacceptable value is specified for an enumerated argument.";
+	case GL_INVALID_VALUE:
+		return "A numeric argument is out of range.";
+	case GL_INVALID_OPERATION:
+		return "The specified operation is not allowed in the current state.";
+	case GL_INVALID_FRAMEBUFFER_OPERATION:
+		return "The framebuffer object is not complete.";
+	case GL_OUT_OF_MEMORY:
+		return "There is not enough memory left to execute the command.";
+	case GL_STACK_UNDERFLOW:
+		return "An attempt has been made to perform an operation that would cause an internal stack to underflow.";
+	case GL_STACK_OVERFLOW:
+		return "An attempt has been made to perform an operation that would cause an internal stack to overflow.";
+	default: exit(EXIT_FAILURE);
+	}
+}
+
+static bool isOpenGLError() 
+{
+	bool isError = false;
+	GLenum errCode;
+	while ((errCode = glGetError()) != GL_NO_ERROR) {
+		isError = true;
+		std::cerr << "OpenGL ERROR [" << errorString(errCode) << "]." << std::endl;
+	}
+	return isError;
+}
+
+static void checkOpenGLError(std::string error)
+{
+	if (isOpenGLError()) {
+		std::cerr << error << std::endl;
+		exit(EXIT_FAILURE);
+	}
 }
 
 ///////////////////////////////////////////////////////////////////// CALLBACKS
@@ -173,6 +217,7 @@ GLFWwindow* setupGLFW(int gl_major, int gl_minor,
 	}
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, gl_major);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, gl_minor);
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
 	GLFWwindow* win = setupWindow(winx, winy, title, is_fullscreen, is_vsync);
 	setupCallbacks(win);
@@ -233,7 +278,7 @@ GLFWwindow* setup(int major, int minor,
 		setupGLFW(major, minor, winx, winy, title, is_fullscreen, is_vsync);
 	setupGLEW();
 	setupOpenGL(winx, winy);
-	setupErrorCallback();
+	//setupErrorCallback();
 	return win;
 }
 
@@ -276,6 +321,8 @@ void run(GLFWwindow* win)
 		display_callback(win, elapsed_time);
 		glfwSwapBuffers(win);
 		glfwPollEvents();
+
+		checkOpenGLError("ERROR: MAIN/RUN");
 	}
 	glfwDestroyWindow(win);
 	glfwTerminate();
@@ -285,7 +332,7 @@ void run(GLFWwindow* win)
 
 int main(int argc, char* argv[])
 {
-	int gl_major = 3, gl_minor = 3;
+	int gl_major = 4, gl_minor = 3;
 	int is_fullscreen = 0;
 	int is_vsync = 1;
 	GLFWwindow* win = setup(gl_major, gl_minor, 
