@@ -80,7 +80,7 @@ static void error(GLenum source, GLenum type, GLuint id, GLenum severity, GLsize
 void setupErrorCallback()
 {
 	glEnable(GL_DEBUG_OUTPUT);
-	//glDebugMessageCallback(error, 0);
+	glDebugMessageCallback(error, 0);
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, 0, GL_TRUE);
 	// params: source, type, severity, count, ids, enabled
@@ -278,7 +278,7 @@ GLFWwindow* setup(int major, int minor,
 		setupGLFW(major, minor, winx, winy, title, is_fullscreen, is_vsync);
 	setupGLEW();
 	setupOpenGL(winx, winy);
-	//setupErrorCallback();
+	setupErrorCallback();
 	return win;
 }
 
@@ -322,7 +322,7 @@ void run(GLFWwindow* win)
 		glfwSwapBuffers(win);
 		glfwPollEvents();
 
-		checkOpenGLError("ERROR: MAIN/RUN");
+		//checkOpenGLError("ERROR: MAIN/RUN");
 	}
 	glfwDestroyWindow(win);
 	glfwTerminate();
@@ -334,7 +334,7 @@ int main(int argc, char* argv[])
 {
 	int gl_major = 4, gl_minor = 3;
 	int is_fullscreen = 0;
-	int is_vsync = 1;
+	int is_vsync = 2;
 	GLFWwindow* win = setup(gl_major, gl_minor, 
 		640, 480, "OpenGL Viewer (GLFW)", is_fullscreen, is_vsync);
 	run(win);
