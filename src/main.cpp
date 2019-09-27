@@ -1,9 +1,9 @@
-#include "i_GLapp.h"
 #include "GLengine.h"
+#include "i_GLapp.h"
 
 ///////////////////////////////////////////////////////////////////// CALLBACKS
 
-class app : i_GLapp {
+class app : public i_GLapp {
 public:
 	void window_close_callback(GLFWwindow* win) {
 		std::cout << "closing..." << std::endl;
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 	int is_vsync = 2;
 	app my_app;
 	GLengine *engine = GLengine::get_instance();
-	GLFWwindow* win = engine->setup(&my_app, gl_major, gl_minor, 
+	GLFWwindow* win = engine->setup(my_app, gl_major, gl_minor, 
 		640, 480, "OpenGL Viewer (GLFW)", is_fullscreen, is_vsync);
 	engine->run(win);
 	exit(EXIT_SUCCESS);

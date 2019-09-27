@@ -115,18 +115,18 @@ GLFWwindow* setupWindow(int winx, int winy, const char* title, int is_fullscreen
 	return win;
 }
 
-void setupCallbacks(i_GLapp* app, GLFWwindow* win) {
-	glfwSetKeyCallback(win, app->key_callback);
-	glfwSetCursorPosCallback(win, app->mouse_callback);
-	glfwSetMouseButtonCallback(win, app->mouse_button_callback);
-	glfwSetScrollCallback(win, app->scroll_callback);
-	glfwSetJoystickCallback(app->joystick_callback);
+void setupCallbacks(i_GLapp &app, GLFWwindow* win) {
+	glfwSetKeyCallback(win, app.key_callback);
+	glfwSetCursorPosCallback(win, app.mouse_callback);
+	glfwSetMouseButtonCallback(win, app.mouse_button_callback);
+	glfwSetScrollCallback(win, app.scroll_callback);
+	glfwSetJoystickCallback(app.joystick_callback);
 
-	glfwSetWindowCloseCallback(win, app->window_close_callback);
-	glfwSetWindowSizeCallback(win, app->window_size_callback);
+	glfwSetWindowCloseCallback(win, app.window_close_callback);
+	glfwSetWindowSizeCallback(win, app.window_size_callback);
 }
 
-GLFWwindow* setupGLFW(i_GLapp* app, int gl_major, int gl_minor, int winx, int winy, const char* title, int is_fullscreen, int is_vsync) {
+GLFWwindow* setupGLFW(i_GLapp &app, int gl_major, int gl_minor, int winx, int winy, const char* title, int is_fullscreen, int is_vsync) {
 	glfwSetErrorCallback(glfw_error_callback);
 	if(!glfwInit()) {
 		exit(EXIT_FAILURE);
@@ -209,7 +209,7 @@ void display_callback(GLFWwindow* win, double elapsed_sec) {
 
 ////////////////////////////////////////////////////////////////////////// ENGINE CLASS
 
-GLFWwindow* GLengine::setup(i_GLapp* app, int major, int minor,
+GLFWwindow* GLengine::setup(i_GLapp &app, int major, int minor,
 	int winx, int winy, const char* title, int is_fullscreen, int is_vsync) {
 	GLFWwindow* win =
 		setupGLFW(app, major, minor, winx, winy, title, is_fullscreen, is_vsync);
