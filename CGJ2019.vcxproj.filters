@@ -18,15 +18,21 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GLengine.cpp">
+    <ClCompile Include="src\gl_engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gl_app.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\i_GLapp.h">
+    <ClInclude Include="src\gl_engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GLengine.h">
+    <ClInclude Include="src\i_gl_app.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gl_app.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

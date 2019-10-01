@@ -1,4 +1,5 @@
-#include "GLengine.h"
+#include "gl_engine.h"
+#include "gl_app.h"
 
 ////////////////////////////////////////////////// ERROR CALLBACK (OpenGL 4.3+)
 
@@ -97,6 +98,30 @@ void checkOpenGLError(std::string error) {
 	}
 }
 
+///////////////////////////////////////////////////////////////////// CALLBACKS
+
+void window_close_callback(GLFWwindow* win) {
+	gl_app::get_instance()->window_close_callback(win);
+}
+void window_size_callback(GLFWwindow* win, int winx, int winy) {
+	gl_app::get_instance()->window_size_callback(win, winx, winy);
+}
+void key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
+	gl_app::get_instance()->key_callback(win, key, scancode, action, mods);
+}
+void mouse_callback(GLFWwindow* win, double xpos, double ypos) {
+	gl_app::get_instance()->mouse_callback(win, xpos, ypos);
+}
+void mouse_button_callback(GLFWwindow* win, int button, int action, int mods) {
+	gl_app::get_instance()->mouse_button_callback(win, button, action, mods);
+}
+void scroll_callback(GLFWwindow* win, double xoffset, double yoffset) {
+	gl_app::get_instance()->scroll_callback(win, xoffset, yoffset);
+}
+void joystick_callback(int jid, int event) {
+	gl_app::get_instance()->joystick_callback(jid, event);
+}
+
 ///////////////////////////////////////////////////////////////////////// SETUP
 
 void glfw_error_callback(int error, const char* description) {
@@ -115,18 +140,18 @@ GLFWwindow* setupWindow(int winx, int winy, const char* title, int is_fullscreen
 	return win;
 }
 
-void setupCallbacks(i_GLapp &app, GLFWwindow* win) {
-	glfwSetKeyCallback(win, app.key_callback);
-	glfwSetCursorPosCallback(win, app.mouse_callback);
-	glfwSetMouseButtonCallback(win, app.mouse_button_callback);
-	glfwSetScrollCallback(win, app.scroll_callback);
-	glfwSetJoystickCallback(app.joystick_callback);
+void setupCallbacks(GLFWwindow* win) {
+	glfwSetKeyCallback(win, key_callback);
+	glfwSetCursorPosCallback(win, mouse_callback);
+	glfwSetMouseButtonCallback(win, mouse_button_callback);
+	glfwSetScrollCallback(win, scroll_callback);
+	glfwSetJoystickCallback(joystick_callback);
 
-	glfwSetWindowCloseCallback(win, app.window_close_callback);
-	glfwSetWindowSizeCallback(win, app.window_size_callback);
+	glfwSetWindowCloseCallback(win, window_close_callback);
+	glfwSetWindowSizeCallback(win, window_size_callback);
 }
 
-GLFWwindow* setupGLFW(i_GLapp &app, int gl_major, int gl_minor, int winx, int winy, const char* title, int is_fullscreen, int is_vsync) {
+GLFWwindow* setupGLFW(int gl_major, int gl_minor, int winx, int winy, const char* title, int is_fullscreen, int is_vsync) {
 	glfwSetErrorCallback(glfw_error_callback);
 	if(!glfwInit()) {
 		exit(EXIT_FAILURE);
@@ -136,7 +161,7 @@ GLFWwindow* setupGLFW(i_GLapp &app, int gl_major, int gl_minor, int winx, int wi
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
 	GLFWwindow* win = setupWindow(winx, winy, title, is_fullscreen, is_vsync);
-	setupCallbacks(app, win);
+	setupCallbacks(win);
 
 #if _DEBUG
 	std::cout << "GLFW " << glfwGetVersionString() << std::endl;
@@ -209,17 +234,19 @@ void display_callback(GLFWwindow* win, double elapsed_sec) {
 
 ////////////////////////////////////////////////////////////////////////// ENGINE CLASS
 
-GLFWwindow* GLengine::setup(i_GLapp &app, int major, int minor,
+gl_engine* gl_engine::instance;
+
+GLFWwindow* gl_engine::setup(int major, int minor,
 	int winx, int winy, const char* title, int is_fullscreen, int is_vsync) {
 	GLFWwindow* win =
-		setupGLFW(app, major, minor, winx, winy, title, is_fullscreen, is_vsync);
+		setupGLFW(major, minor, winx, winy, title, is_fullscreen, is_vsync);
 	setupGLEW();
 	setupOpenGL(winx, winy);
 	setupErrorCallback();
 	return win;
 }
 
-void GLengine::run(GLFWwindow* win) {
+void gl_engine::run(GLFWwindow* win) {
 	double last_time = glfwGetTime();
 	while(!glfwWindowShouldClose(win)) {
 		double time = glfwGetTime();

@@ -7,20 +7,19 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "i_GLapp.h"
+class gl_engine {
 
-class GLengine {
-	static GLengine* instance;
+	static gl_engine* instance;
 
-	GLengine() {}
+	gl_engine() {}
 
 public:
-	static GLengine* get_instance() {
-		if(!instance) instance = new GLengine();
+	static gl_engine* get_instance() {
+		if(!instance) instance = new gl_engine();
 		return instance;
 	}
 
-	GLFWwindow* setup(i_GLapp &app, int major, int minor,
+	GLFWwindow* setup(int major, int minor,
 		int winx, int winy, const char* title, int is_fullscreen, int is_vsync);
 
 	void run(GLFWwindow* win);

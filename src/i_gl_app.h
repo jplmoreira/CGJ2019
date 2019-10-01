@@ -2,7 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
-class i_GLapp {
+class i_gl_app {
 	virtual void window_close_callback(GLFWwindow* win) = 0;
 	virtual void window_size_callback(GLFWwindow* win, int winx, int winy) = 0;
 	virtual void key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) = 0;

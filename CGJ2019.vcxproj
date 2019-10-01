@@ -19,12 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\GLengine.cpp" />
+    <ClCompile Include="src\gl_app.cpp" />
+    <ClCompile Include="src\gl_engine.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\GLengine.h" />
-    <ClInclude Include="src\i_GLapp.h" />
+    <ClInclude Include="src\gl_app.h" />
+    <ClInclude Include="src\gl_engine.h" />
+    <ClInclude Include="src\i_gl_app.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
