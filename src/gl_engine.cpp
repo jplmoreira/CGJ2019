@@ -262,3 +262,5 @@ void gl_engine::run(GLFWwindow* win) {
 	glfwDestroyWindow(win);
 	glfwTerminate();
 }
+
+/////////////////////////////////////////////////////////////////////////// END
