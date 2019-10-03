@@ -287,7 +287,7 @@ const bool vec4::operator!=(const vec4& v) {
 }
 
 const vec4 operator*(const float k, const vec4& v) {
-	return vec4(v.x*k, v.y*k, v.z*k, w);
+	return vec4(v.x*k, v.y*k, v.z*k, v.w);
 }
 
 std::ostream& operator<<(std::ostream& os, const vec4& v) {
