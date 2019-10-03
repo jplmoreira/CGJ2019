@@ -31,15 +31,18 @@ const float math::vec2::length() const {
 	return sqrt(quadrance());
 }
 
-const math::vec2 math::vec2::normalize() {
-	float len = length();
-	if(len > 0) return vec2((1 / len) * x, (1 / len) * y);
-	else return vec2();
+const math::vec2 math::vec2::normalize() const {
+	return *this / (*this).length();
+}
+
+const float math::vec2::dot(const vec2& v) const {
+	return x*v.x + y*v.y;
 }
 
 math::vec2& math::vec2::operator=(const vec2& v) {
 	x = v.x;
 	y = v.y;
+	return *this;
 }
 
 const math::vec2 math::vec2::operator-() const {
@@ -49,35 +52,42 @@ const math::vec2 math::vec2::operator-() const {
 math::vec2& math::vec2::operator+=(const vec2& v) {
 	x += v.x;
 	y += v.y;
+	return *this;
 }
 
 math::vec2& math::vec2::operator-=(const vec2& v) {
 	x -= v.x;
 	y -= v.y;
+	return *this;
 }
 
 math::vec2& math::vec2::operator*=(const float k) {
 	x *= k;
 	y *= k;
+	return *this;
 }
 
-const math::vec2 math::vec2::operator+(const vec2& v) {
+const math::vec2 math::vec2::operator+(const vec2& v) const {
 	return vec2(x + v.x, y + v.y);
 }
 
-const math::vec2 math::vec2::operator-(const vec2& v) {
+const math::vec2 math::vec2::operator-(const vec2& v) const {
 	return vec2(x - v.x, y - v.y);
 }
 
-const math::vec2 math::vec2::operator*(const float k) {
+const math::vec2 math::vec2::operator/(const float k) const {
+	return vec2(x / k, y / k);
+}
+
+const math::vec2 math::vec2::operator*(const float k) const {
 	return vec2(x * k, y * k);
 }
 
-const bool math::vec2::operator==(const vec2& v) {
+const bool math::vec2::operator==(const vec2& v) const {
 	return x == v.x && y == v.y;
 }
 
-const bool math::vec2::operator!=(const vec2& v) {
+const bool math::vec2::operator!=(const vec2& v) const {
 	return x != v.x || y != v.y;
 }
 
@@ -127,16 +137,25 @@ const float math::vec3::length() const {
 	return sqrt(quadrance());
 }
 
-const math::vec3 math::vec3::normalize() {
-	float len = length();
-	if(len > 0) return vec3( (1 / len) * x, (1 / len) * y, (1 / len) * z );
-	else return vec3();
+const math::vec3 math::vec3::normalize() const {
+	return *this / (*this).length();
+}
+
+const float math::vec3::dot(const vec3& v) const {
+	return x*v.x + y*v.y + z*v.z;
+}
+
+const math::vec3 math::vec3::cross(const vec3& v) const {
+	return vec3((y * v.z) - (z * v.y),
+		(z * v.x) - (x * v.z),
+		(x * v.y) - (y * v.x));
 }
 
 math::vec3& math::vec3::operator=(const vec3& v) {
 	x = v.x;
 	y = v.y;
 	z = v.z;
+	return *this;
 }
 
 const math::vec3 math::vec3::operator-() const {
@@ -147,37 +166,44 @@ math::vec3& math::vec3::operator+=(const vec3& v) {
 	x += v.x;
 	y += v.y;
 	z += v.z;
+	return *this;
 }
 
 math::vec3& math::vec3::operator-=(const vec3& v) {
 	x -= v.x;
 	y -= v.y;
 	z -= v.z;
+	return *this;
 }
 
 math::vec3& math::vec3::operator*=(const float k) {
 	x *= k;
 	y *= k;
 	z *= k;
+	return *this;
 }
 
-const math::vec3 math::vec3::operator+(const vec3& v) {
+const math::vec3 math::vec3::operator+(const vec3& v) const {
 	return vec3(x + v.x, y + v.y, z + v.z);
 }
 
-const math::vec3 math::vec3::operator-(const vec3& v) {
+const math::vec3 math::vec3::operator-(const vec3& v) const {
 	return vec3(x - v.x, y - v.y, z - v.z);
 }
 
-const math::vec3 math::vec3::operator*(const float k) {
+const math::vec3 math::vec3::operator/(const float k) const {
+	return vec3(x / k, y / k, z / k);
+}
+
+const math::vec3 math::vec3::operator*(const float k) const {
 	return vec3(x * k, y * k, z * k);
 }
 
-const bool math::vec3::operator==(const vec3& v) {
+const bool math::vec3::operator==(const vec3& v) const {
 	return x == v.x && y == v.y && z == v.z;
 }
 
-const bool math::vec3::operator!=(const vec3& v) {
+const bool math::vec3::operator!=(const vec3& v) const {
 	return x != v.x || y != v.y || z != v.z;
 }
 
@@ -199,103 +225,119 @@ std::istream& math::operator>>(std::istream& is, vec3& v) {
 
 ////////////////////////////////////////////////////////////////////////// VEC4
 
-vec4::vec4() :
+math::vec4::vec4() :
 	x(0), y(0), z(0), w(1) {}
 
-vec4::vec4(const float k) :
+math::vec4::vec4(const float k) :
 	x(k), y(k), z(k), w(1) {}
 
-vec4::vec4(const float x, const float y, const float z, const float w) :
+math::vec4::vec4(const float x, const float y, const float z, const float w) :
 	x(x), y(y), z(z), w(w) {}
 
-vec4::vec4(const math::vec3& v) :
+math::vec4::vec4(const math::vec3& v) :
 	x(v.x), y(v.y), z(v.z), w(1) {}
 
-vec4::vec4(const vec4& v) :
+math::vec4::vec4(const vec4& v) :
 	x(v.x), y(v.y), z(v.z), w(v.w) {}
 
-float* vec4::data() {
+float* math::vec4::data() {
 	float ret[4] = { x, y, z, w };
 	return ret;
 }
 
-void vec4::clean() {
+void math::vec4::clean() {
 	x = y = z = 0;
 }
 
-const float vec4::quadrance() const {
+const float math::vec4::quadrance() const {
 	return x*x + y*y + z*z;
 }
 
-const float vec4::length() const {
+const float math::vec4::length() const {
 	return sqrt(quadrance());
 }
 
-const vec4 vec4::normalize() {
-	float len = length();
-	if(len > 0) return vec4((1/len) * x, (1/len) * y, (1/len) * z, w);
-	else return vec4();
+const math::vec4 math::vec4::normalize() const {
+	return *this / (*this).length();
 }
 
-vec4& vec4::operator=(const vec4& v) {
+const float math::vec4::dot(const vec4& v) const {
+	return x * v.x + y * v.y + z * v.z;
+}
+
+const math::vec4 math::vec4::cross(const vec4& v) const {
+	return vec4((y * v.z) - (z * v.y),
+		(z * v.x) - (x * v.z),
+		(x * v.y) - (y * v.x), w);
+}
+
+math::vec4& math::vec4::operator=(const vec4& v) {
 	x = v.x;
 	y = v.y;
 	z = v.z;
 	w = v.w;
+	return *this;
 }
 
-const vec4 vec4::operator-() const {
+const math::vec4 math::vec4::operator-() const {
 	return vec4(-x, -y, -z, w);
 }
 
-vec4& vec4::operator+=(const vec4& v) {
+math::vec4& math::vec4::operator+=(const vec4& v) {
 	x += v.x;
 	y += v.y;
 	z += v.z;
+	return *this;
 }
 
-vec4& vec4::operator-=(const vec4& v) {
+math::vec4& math::vec4::operator-=(const vec4& v) {
 	x -= v.x;
 	y -= v.y;
 	z -= v.z;
+	return *this;
 }
 
-vec4& vec4::operator*=(const float k) {
+math::vec4& math::vec4::operator*=(const float k) {
 	x *= k;
 	y *= k;
 	z *= k;
+	return *this;
 }
 
-const vec4 vec4::operator+(const vec4& v) {
+const math::vec4 math::vec4::operator+(const vec4& v) const {
 	return vec4(x + v.x, y + v.y, z + v.z, w);
 }
 
-const vec4 vec4::operator-(const vec4& v) {
+const math::vec4 math::vec4::operator-(const vec4& v) const {
 	return vec4(x - v.x, y - v.y, z - v.z, w);
 }
 
-const vec4 vec4::operator*(const float k) {
+const math::vec4 math::vec4::operator/(const float k) const {
+	return vec4(x / k, y / k, z / k, w);
+}
+
+const math::vec4 math::vec4::operator*(const float k) const {
 	return vec4(x*k, y*k, z*k, w);
 }
 
-const bool vec4::operator==(const vec4& v) {
+const bool math::vec4::operator==(const vec4& v) const {
 	return x == v.x && y == v.y && z == v.z && w == v.w;
 }
 
-const bool vec4::operator!=(const vec4& v) {
+const bool math::vec4::operator!=(const vec4& v) const {
 	return x != v.x || y != v.y || z != v.z || w != v.w;
 }
 
-const vec4 operator*(const float k, const vec4& v) {
+const math::vec4 math::operator*(const float k, const vec4& v) {
 	return vec4(v.x*k, v.y*k, v.z*k, v.w);
 }
 
-std::ostream& operator<<(std::ostream& os, const vec4& v) {
+std::ostream& math::operator<<(std::ostream& os, const vec4& v) {
 	os << "vec4(" << v.x << ", " << v.y << ", " << v.z << ", " << v.z << ")";
 	return os;
 }
 
-std::istream& operator>>(std::istream& is, vec4& v) {
+std::istream& math::operator>>(std::istream& is, vec4& v) {
 	is >> v.x;
 	is >> v.y;
 	is >> v.z;
