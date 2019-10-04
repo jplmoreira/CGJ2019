@@ -1,7 +1,12 @@
 #include <iostream>
+#include <ctime>
 
 #include "test.h"
 #include "../math/vectors.h"
+
+inline float random_float_1() {
+	return static_cast<float>(rand())/static_cast<float>(RAND_MAX/2.0f)-1.0f;
+}
 
 void vec_tests() {
 	math::vec3 v1 = math::vec3(1, 0, 0);
@@ -28,4 +33,25 @@ void vec_tests() {
 
 	std::cout << "TEST 6\n" << std::endl;
 	std::cout << "Expected: 0\nResult: " << v2.dot(v3) << std::endl;
+}
+
+void vec_eval() {
+	srand(static_cast<unsigned> (time(0)));
+
+	for(int x = 0; x < 9; x++) {
+		math::vec3 i = math::vec3(random_float_1(), random_float_1(), random_float_1());
+		math::vec3 j = math::vec3(random_float_1(), random_float_1(), random_float_1());
+		math::vec3 k = math::vec3(random_float_1(), random_float_1(), random_float_1());
+		math::vec3 right = i.cross(j.cross(k));
+		math::vec3 left = j * (i.dot(k)) - k * (i.dot(j));
+
+		std::cout << "Test #" << x + 1 << " - " << (right == left) << std::endl;
+	}
+
+	math::vec3 i = math::vec3();
+	math::vec3 j = math::vec3(random_float_1(), random_float_1(), random_float_1());
+	math::vec3 k = math::vec3(random_float_1(), random_float_1(), random_float_1());
+	math::vec3 right = i.cross(j.cross(k));
+	math::vec3 left = j * (i.dot(k)) - k * (i.dot(j));
+	std::cout << "Test #10 - " << (right == left) << std::endl;
 }

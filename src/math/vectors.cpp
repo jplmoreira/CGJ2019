@@ -1,9 +1,11 @@
 #include "vectors.h"
 
+#define THRESHOLD 0.00001f
+
 ////////////////////////////////////////////////////////////////////////// VEC2
 
 math::vec2::vec2() :
-	x(0), y(0) {}
+	x(0.0f), y(0.0f) {}
 
 math::vec2::vec2(const float k) :
 	x(k), y(k) {}
@@ -20,7 +22,8 @@ float* math::vec2::data() {
 }
 
 void math::vec2::clean() {
-	x = y = 0;
+	if(abs(x) < THRESHOLD) x = 0.0f;
+	if(abs(y) < THRESHOLD) y = 0.0f;
 }
 
 const float math::vec2::quadrance() const {
@@ -84,11 +87,11 @@ const math::vec2 math::vec2::operator*(const float k) const {
 }
 
 const bool math::vec2::operator==(const vec2& v) const {
-	return x == v.x && y == v.y;
+	return (abs(x - v.x) < THRESHOLD) && (abs(y - v.y) < THRESHOLD);
 }
 
 const bool math::vec2::operator!=(const vec2& v) const {
-	return x != v.x || y != v.y;
+	return (abs(x - v.x) >= THRESHOLD) || (abs(y - v.y) >= THRESHOLD);
 }
 
 const math::vec2 math::operator*(const float k, const vec2& v) {
@@ -109,7 +112,7 @@ std::istream& math::operator>>(std::istream& is, vec2& v) {
 ////////////////////////////////////////////////////////////////////////// VEC3
 
 math::vec3::vec3() :
-	x(0), y(0), z(0) {}
+	x(0.0f), y(0.0f), z(0.0f) {}
 
 math::vec3::vec3(const float k) :
 	x(k), y(k), z(k) {}
@@ -126,7 +129,9 @@ float* math::vec3::data() {
 }
 
 void math::vec3::clean() {
-	x = y = z = 0;
+	if(abs(x) < THRESHOLD) x = 0.0f;
+	if(abs(y) < THRESHOLD) y = 0.0f;
+	if(abs(z) < THRESHOLD) z = 0.0f;
 }
 
 const float math::vec3::quadrance() const {
@@ -200,11 +205,11 @@ const math::vec3 math::vec3::operator*(const float k) const {
 }
 
 const bool math::vec3::operator==(const vec3& v) const {
-	return x == v.x && y == v.y && z == v.z;
+	return (abs(x - v.x) < THRESHOLD) && (abs(y - v.y) < THRESHOLD) && (abs(z - v.z) < THRESHOLD);
 }
 
 const bool math::vec3::operator!=(const vec3& v) const {
-	return x != v.x || y != v.y || z != v.z;
+	return (abs(x - v.x) >= THRESHOLD) || (abs(y - v.y) >= THRESHOLD) || (abs(z - v.z) >= THRESHOLD);
 }
 
 const math::vec3 math::operator*(const float k, const vec3& v) {
@@ -226,16 +231,16 @@ std::istream& math::operator>>(std::istream& is, vec3& v) {
 ////////////////////////////////////////////////////////////////////////// VEC4
 
 math::vec4::vec4() :
-	x(0), y(0), z(0), w(1) {}
+	x(0.0f), y(0.0f), z(0.0f), w(1.0f) {}
 
 math::vec4::vec4(const float k) :
-	x(k), y(k), z(k), w(1) {}
+	x(k), y(k), z(k), w(1.0f) {}
 
 math::vec4::vec4(const float x, const float y, const float z, const float w) :
 	x(x), y(y), z(z), w(w) {}
 
 math::vec4::vec4(const math::vec3& v) :
-	x(v.x), y(v.y), z(v.z), w(1) {}
+	x(v.x), y(v.y), z(v.z), w(1.0f) {}
 
 math::vec4::vec4(const vec4& v) :
 	x(v.x), y(v.y), z(v.z), w(v.w) {}
@@ -246,7 +251,9 @@ float* math::vec4::data() {
 }
 
 void math::vec4::clean() {
-	x = y = z = 0;
+	if(abs(x) < THRESHOLD) x = 0.0f;
+	if(abs(y) < THRESHOLD) y = 0.0f;
+	if(abs(z) < THRESHOLD) z = 0.0f;
 }
 
 const float math::vec4::quadrance() const {
@@ -321,11 +328,11 @@ const math::vec4 math::vec4::operator*(const float k) const {
 }
 
 const bool math::vec4::operator==(const vec4& v) const {
-	return x == v.x && y == v.y && z == v.z && w == v.w;
+	return (abs(x - v.x) < THRESHOLD) && (abs(y - v.y) < THRESHOLD) && (abs(z - v.z) < THRESHOLD);
 }
 
 const bool math::vec4::operator!=(const vec4& v) const {
-	return x != v.x || y != v.y || z != v.z || w != v.w;
+	return (abs(x - v.x) >= THRESHOLD) || (abs(y - v.y) >= THRESHOLD) || (abs(z - v.z) >= THRESHOLD);
 }
 
 const math::vec4 math::operator*(const float k, const vec4& v) {
