@@ -1,95 +1,139 @@
 #include "matrices.h"
 
-math::mat2::mat2() {}
+#define THRESHOLD 0.00001f
 
-math::mat2::mat2(float k) {}
+math::mat2::mat2() :
+    data{ 0.0f } {}
 
-math::mat2::mat2(float v1, float v2, float v3, float v4) {}
+math::mat2::mat2(float k) :
+    data{ k, 0.0f, 0.0f, k } {}
 
-void math::mat2::clean() {}
+math::mat2::mat2(float v1, float v2, float v3, float v4) :
+    data{ v1, v2, v3, v4 } {}
+
+math::mat2::mat2(const mat2& m) :
+    data{ m.data[0], m.data[1], m.data[2], m.data[3] } {}
+
+void math::mat2::clean() {
+    for(int i = 0; i < 4; i++) {
+        if(std::fabs(data[i]) < THRESHOLD) data[i] = 0.0f;
+    }
+}
 
 const float math::mat2::determinant() const {
-    return 0.0f;
+    return data[0] * data[3] + data[1] * data[2];
 }
 
 const math::mat2 math::mat2::transposed() const {
-    return mat2();
+    return mat2(data[0], data[2], data[1], data[3]);
 }
 
 const math::mat2 math::mat2::inversed() const {
-    return mat2();
+    float det = determinant();
+    if(det > 0) return mat2(data[3]/det, -data[1]/det, -data[2]/det, data[0]/det);
+    return mat2(*this);
 }
 
 math::mat2& math::mat2::operator=(const mat2& m) {
-    // TODO: insert return statement here
+    data[0] = m.data[0];
+    data[1] = m.data[1];
+    data[2] = m.data[2];
+    data[3] = m.data[3];
+
+    return *this;
 }
 
 const math::mat2 math::mat2::operator-() const {
-    return mat2();
+    return mat2(-data[0],-data[1],-data[2],-data[3]);
 }
 
 math::mat2& math::mat2::operator+=(const mat2& m) {
-    // TODO: insert return statement here
+    data[0] += m.data[0];
+    data[1] += m.data[1];
+    data[2] += m.data[2];
+    data[3] += m.data[3];
+
+    return *this;
 }
 
 math::mat2& math::mat2::operator-=(const mat2& m) {
-    // TODO: insert return statement here
+    data[0] -= m.data[0];
+    data[1] -= m.data[1];
+    data[2] -= m.data[2];
+    data[3] -= m.data[3];
+
+    return *this;
 }
 
 math::mat2& math::mat2::operator*=(const float k) {
-    // TODO: insert return statement here
+    data[0] *= k;
+    data[1] *= k;
+    data[2] *= k;
+    data[3] *= k;
+
+    return *this;
 }
 
 const math::mat2 math::mat2::operator+(const mat2& m) const {
-    return mat2();
+    return mat2(data[0] + m.data[0], data[1] + m.data[1], data[2] + m.data[2], data[3] + m.data[3]);
 }
 
 const math::mat2 math::mat2::operator-(const mat2& m) const {
-    return mat2();
+    return mat2(data[0] - m.data[0], data[1] - m.data[1], data[2] - m.data[2], data[3] - m.data[3]);
 }
 
 const math::mat2 math::mat2::operator*(const mat2& m) const {
-    return mat2();
+    return mat2(data[0] * m.data[0], data[1] * m.data[1], data[2] * m.data[2], data[3] * m.data[3]);
 }
 
 const math::vec2 math::mat2::operator*(const vec2& v) const {
-    return vec2();
+    float x = data[0] * v.x + data[2] * v.y;
+    float y = data[1] * v.x + data[3] * v.y;
+    return vec2(x, y);
 }
 
 const math::mat2 math::mat2::operator*(const float k) const {
-    return mat2();
+    return mat2(data[0] * k, data[1] * k, data[2] * k, data[3] * k);
 }
 
 const bool math::mat2::operator==(const mat2& m) const {
-    return false;
+    for(int i = 0; i < 4; i++) {
+        if(std::fabs(data[i] - m.data[i]) >= THRESHOLD) return false;
+    }
+    return true;
 }
 
 const bool math::mat2::operator!=(const mat2& m) const {
+    for(int i = 0; i < 4; i++) {
+        if(std::fabs(data[i] - m.data[i]) >= THRESHOLD) return true;
+    }
     return false;
 }
 
 math::mat2 math::mat2::identity_mat() {
-    return mat2();
+    return mat2(1.0f, 0.0f, 0.0f, 1.0f);
 }
 
 math::mat3 math::mat2::translate_mat(float dx, float dy) {
-    return mat3();
+    return mat3(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, dx, dy, 1.0f);
 }
 
 math::mat2 math::mat2::scale_mat(float sx, float sy) {
-    return mat2();
+    return mat2(sx, 0.0f, 0.0f, sy);
 }
 
 math::mat2 math::mat2::rotate(float angle) {
-    return mat2();
+    return mat2(std::cos(angle), std::sin(angle), -std::sin(angle), std::cos(angle));
 }
 
 const math::mat2 math::operator*(const float k, const mat2& m) {
-    return mat2();
+    return mat2(m.data[0] * k, m.data[1] * k, m.data[2] * k, m.data[3] * k);
 }
 
 std::ostream& math::operator<<(std::ostream& os, const mat2& m) {
-    // TODO: insert return statement here
+    os << "mat2[" << m.data[0] << ", " << m.data[2] << "]" << std::endl;
+    os << "    [" << m.data[1] << ", " << m.data[3] << "]";
+    return os;
 }
 
 const math::mat3 math::operator*(const float k, const mat3& m) {

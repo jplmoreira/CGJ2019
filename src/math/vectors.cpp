@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "vectors.h"
 
 #define THRESHOLD 0.00001f
@@ -22,8 +24,8 @@ float* math::vec2::data() {
 }
 
 void math::vec2::clean() {
-    if(abs(x) < THRESHOLD) x = 0.0f;
-    if(abs(y) < THRESHOLD) y = 0.0f;
+    if(std::fabs(x) < THRESHOLD) x = 0.0f;
+    if(std::fabs(y) < THRESHOLD) y = 0.0f;
 }
 
 const float math::vec2::quadrance() const {
@@ -83,11 +85,11 @@ const math::vec2 math::vec2::operator*(const float k) const {
 }
 
 const bool math::vec2::operator==(const vec2& v) const {
-    return (abs(x - v.x) < THRESHOLD) && (abs(y - v.y) < THRESHOLD);
+    return (std::fabs(x - v.x) < THRESHOLD) && (std::fabs(y - v.y) < THRESHOLD);
 }
 
 const bool math::vec2::operator!=(const vec2& v) const {
-    return (abs(x - v.x) >= THRESHOLD) || (abs(y - v.y) >= THRESHOLD);
+    return (std::fabs(x - v.x) >= THRESHOLD) || (std::fabs(y - v.y) >= THRESHOLD);
 }
 
 const float math::dot(const vec2& v1, const vec2& v2) {
@@ -129,9 +131,9 @@ float* math::vec3::data() {
 }
 
 void math::vec3::clean() {
-    if(abs(x) < THRESHOLD) x = 0.0f;
-    if(abs(y) < THRESHOLD) y = 0.0f;
-    if(abs(z) < THRESHOLD) z = 0.0f;
+    if(std::fabs(x) < THRESHOLD) x = 0.0f;
+    if(std::fabs(y) < THRESHOLD) y = 0.0f;
+    if(std::fabs(z) < THRESHOLD) z = 0.0f;
 }
 
 const float math::vec3::quadrance() const {
@@ -195,11 +197,11 @@ const math::vec3 math::vec3::operator*(const float k) const {
 }
 
 const bool math::vec3::operator==(const vec3& v) const {
-    return (abs(x - v.x) < THRESHOLD) && (abs(y - v.y) < THRESHOLD) && (abs(z - v.z) < THRESHOLD);
+    return (std::fabs(x - v.x) < THRESHOLD) && (std::fabs(y - v.y) < THRESHOLD) && (std::fabs(z - v.z) < THRESHOLD);
 }
 
 const bool math::vec3::operator!=(const vec3& v) const {
-    return (abs(x - v.x) >= THRESHOLD) || (abs(y - v.y) >= THRESHOLD) || (abs(z - v.z) >= THRESHOLD);
+    return (std::fabs(x - v.x) >= THRESHOLD) || (std::fabs(y - v.y) >= THRESHOLD) || (std::fabs(z - v.z) >= THRESHOLD);
 }
 
 const float math::dot(const vec3& v1, const vec3& v2) {
@@ -251,9 +253,9 @@ float* math::vec4::data() {
 }
 
 void math::vec4::clean() {
-    if(abs(x) < THRESHOLD) x = 0.0f;
-    if(abs(y) < THRESHOLD) y = 0.0f;
-    if(abs(z) < THRESHOLD) z = 0.0f;
+    if(std::fabs(x) < THRESHOLD) x = 0.0f;
+    if(std::fabs(y) < THRESHOLD) y = 0.0f;
+    if(std::fabs(z) < THRESHOLD) z = 0.0f;
 }
 
 const float math::vec4::quadrance() const {
@@ -318,11 +320,11 @@ const math::vec4 math::vec4::operator*(const float k) const {
 }
 
 const bool math::vec4::operator==(const vec4& v) const {
-    return (abs(x - v.x) < THRESHOLD) && (abs(y - v.y) < THRESHOLD) && (abs(z - v.z) < THRESHOLD);
+    return (std::fabs(x - v.x) < THRESHOLD) && (std::fabs(y - v.y) < THRESHOLD) && (std::fabs(z - v.z) < THRESHOLD);
 }
 
 const bool math::vec4::operator!=(const vec4& v) const {
-    return (abs(x - v.x) >= THRESHOLD) || (abs(y - v.y) >= THRESHOLD) || (abs(z - v.z) >= THRESHOLD);
+    return (std::fabs(x - v.x) >= THRESHOLD) || (std::fabs(y - v.y) >= THRESHOLD) || (std::fabs(z - v.z) >= THRESHOLD);
 }
 
 const float math::dot(const vec4& v1, const vec4& v2) {

@@ -16,6 +16,7 @@ namespace math {
         mat2();
         mat2(float k);
         mat2(float v1, float v2, float v3, float v4);
+        mat2(const mat2& m);
 
         void clean();
         const float determinant() const;
