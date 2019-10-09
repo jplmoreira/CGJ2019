@@ -47,5 +47,8 @@
     <ClInclude Include="src\test\test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\math\matrices.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

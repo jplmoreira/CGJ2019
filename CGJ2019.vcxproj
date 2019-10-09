@@ -29,6 +29,7 @@
     <ClInclude Include="src\gl_app.h" />
     <ClInclude Include="src\gl_engine.h" />
     <ClInclude Include="src\i_gl_app.h" />
+    <ClInclude Include="src\math\matrices.h" />
     <ClInclude Include="src\math\vectors.h" />
     <ClInclude Include="src\test\test.h" />
   </ItemGroup>

@@ -9,18 +9,18 @@
 
 class gl_engine {
 
-	static gl_engine* instance;
+    static gl_engine* instance;
 
-	gl_engine() {}
+    gl_engine() {}
 
 public:
-	static gl_engine* get_instance() {
-		if(!instance) instance = new gl_engine();
-		return instance;
-	}
+    static gl_engine* get_instance() {
+        if(!instance) instance = new gl_engine();
+        return instance;
+    }
 
-	GLFWwindow* setup(int major, int minor,
-		int winx, int winy, const char* title, int is_fullscreen, int is_vsync);
+    GLFWwindow* setup(int major, int minor,
+        int winx, int winy, const char* title, int is_fullscreen, int is_vsync);
 
-	void run(GLFWwindow* win);
+    void run(GLFWwindow* win);
 };
