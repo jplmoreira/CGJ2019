@@ -21,7 +21,7 @@ namespace math {
 		const float quadrance() const;
 		const float length() const;
 		const vec2 normalize() const;
-		const float dot(const vec2& v) const;
+		friend const float dot(const vec2& v1, const vec2& v2);
 		vec2& operator=(const vec2& v);
 		const vec2 operator-() const;
 		vec2& operator+=(const vec2& v);
@@ -52,8 +52,8 @@ namespace math {
 		const float quadrance() const;
 		const float length() const;
 		const vec3 normalize() const;
-		const float dot(const vec3& v) const;
-		const vec3 cross(const vec3& v) const;
+		friend const float dot(const vec3& v1, const vec3& v2);
+		friend const vec3 cross(const vec3& v1, const vec3& v2);
 		vec3& operator=(const vec3& v);
 		const vec3 operator-() const;
 		vec3& operator+=(const vec3& v);
@@ -85,8 +85,8 @@ namespace math {
 		const float quadrance() const;
 		const float length() const;
 		const vec4 normalize() const;
-		const float dot(const vec4& v) const;
-		const vec4 cross(const vec4& v) const;
+		friend const float dot(const vec4& v1, const vec4& v2);
+		friend const vec4 cross(const vec4& v1, const vec4& v2);
 		vec4& operator=(const vec4& v);
 		const vec4 operator-() const;
 		vec4& operator+=(const vec4& v);

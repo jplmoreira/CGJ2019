@@ -38,10 +38,6 @@ const math::vec2 math::vec2::normalize() const {
 	return *this / (*this).length();
 }
 
-const float math::vec2::dot(const vec2& v) const {
-	return x*v.x + y*v.y;
-}
-
 math::vec2& math::vec2::operator=(const vec2& v) {
 	x = v.x;
 	y = v.y;
@@ -94,6 +90,10 @@ const bool math::vec2::operator!=(const vec2& v) const {
 	return (abs(x - v.x) >= THRESHOLD) || (abs(y - v.y) >= THRESHOLD);
 }
 
+const float math::dot(const vec2& v1, const vec2& v2) {
+    return v1.x * v2.x + v1.y * v2.y;
+}
+
 const math::vec2 math::operator*(const float k, const vec2& v) {
 	return vec2(v.x * k, v.y * k);
 }
@@ -144,16 +144,6 @@ const float math::vec3::length() const {
 
 const math::vec3 math::vec3::normalize() const {
 	return *this / (*this).length();
-}
-
-const float math::vec3::dot(const vec3& v) const {
-	return x*v.x + y*v.y + z*v.z;
-}
-
-const math::vec3 math::vec3::cross(const vec3& v) const {
-	return vec3((y * v.z) - (z * v.y),
-		(z * v.x) - (x * v.z),
-		(x * v.y) - (y * v.x));
 }
 
 math::vec3& math::vec3::operator=(const vec3& v) {
@@ -212,6 +202,16 @@ const bool math::vec3::operator!=(const vec3& v) const {
 	return (abs(x - v.x) >= THRESHOLD) || (abs(y - v.y) >= THRESHOLD) || (abs(z - v.z) >= THRESHOLD);
 }
 
+const float math::dot(const vec3& v1, const vec3& v2) {
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+const math::vec3 math::cross(const vec3& v1, const vec3& v2) {
+    return vec3((v1.y * v2.z) - (v1.z * v2.y),
+        (v1.z * v2.x) - (v1.x * v2.z),
+        (v1.x * v2.y) - (v1.y * v2.x));
+}
+
 const math::vec3 math::operator*(const float k, const vec3& v) {
 	return vec3(v.x * k, v.y * k, v.z * k);
 }
@@ -266,16 +266,6 @@ const float math::vec4::length() const {
 
 const math::vec4 math::vec4::normalize() const {
 	return *this / (*this).length();
-}
-
-const float math::vec4::dot(const vec4& v) const {
-	return x * v.x + y * v.y + z * v.z;
-}
-
-const math::vec4 math::vec4::cross(const vec4& v) const {
-	return vec4((y * v.z) - (z * v.y),
-		(z * v.x) - (x * v.z),
-		(x * v.y) - (y * v.x), w);
 }
 
 math::vec4& math::vec4::operator=(const vec4& v) {
@@ -333,6 +323,16 @@ const bool math::vec4::operator==(const vec4& v) const {
 
 const bool math::vec4::operator!=(const vec4& v) const {
 	return (abs(x - v.x) >= THRESHOLD) || (abs(y - v.y) >= THRESHOLD) || (abs(z - v.z) >= THRESHOLD);
+}
+
+const float math::dot(const vec4& v1, const vec4& v2) {
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+const math::vec4 math::cross(const vec4& v1, const vec4& v2) {
+    return vec4((v1.y * v2.z) - (v1.z * v2.y),
+        (v1.z * v2.x) - (v1.x * v2.z),
+        (v1.x * v2.y) - (v1.y * v2.x), v1.w);
 }
 
 const math::vec4 math::operator*(const float k, const vec4& v) {

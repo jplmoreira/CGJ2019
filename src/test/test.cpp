@@ -29,10 +29,10 @@ void vec_tests() {
 	std::cout << "Expected: vec3(1, 0, 0)\nResult: " << (v1 * 8).normalize() << std::endl << std::endl;
 
 	std::cout << "TEST 5\n" << std::endl;
-	std::cout << "Expected: vec3(1, 0, 0)\nResult: " << v2.cross(v3) << std::endl << std::endl;
+	std::cout << "Expected: vec3(1, 0, 0)\nResult: " << cross(v2, v3) << std::endl << std::endl;
 
 	std::cout << "TEST 6\n" << std::endl;
-	std::cout << "Expected: 0\nResult: " << v2.dot(v3) << std::endl;
+	std::cout << "Expected: 0\nResult: " << dot(v2, v3) << std::endl;
 }
 
 void vec_eval() {
@@ -42,8 +42,8 @@ void vec_eval() {
 		math::vec3 i = math::vec3(random_float_1(), random_float_1(), random_float_1());
 		math::vec3 j = math::vec3(random_float_1(), random_float_1(), random_float_1());
 		math::vec3 k = math::vec3(random_float_1(), random_float_1(), random_float_1());
-		math::vec3 right = i.cross(j.cross(k));
-		math::vec3 left = j * (i.dot(k)) - k * (i.dot(j));
+		math::vec3 right = cross(i, cross(j, k));
+		math::vec3 left = j * (dot(i, k)) - k * (dot(i, j));
 
 		std::cout << "Test #" << x + 1 << " - " << (right == left) << std::endl;
 	}
@@ -51,7 +51,7 @@ void vec_eval() {
 	math::vec3 i = math::vec3();
 	math::vec3 j = math::vec3(random_float_1(), random_float_1(), random_float_1());
 	math::vec3 k = math::vec3(random_float_1(), random_float_1(), random_float_1());
-	math::vec3 right = i.cross(j.cross(k));
-	math::vec3 left = j * (i.dot(k)) - k * (i.dot(j));
+	math::vec3 right = cross(i, cross(j, k));
+	math::vec3 left = j * (dot(i, k)) - k * (dot(i, j));
 	std::cout << "Test #10 - " << (right == left) << std::endl;
 }
