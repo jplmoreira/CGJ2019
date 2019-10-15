@@ -1,4 +1,4 @@
-#include "matrices.h"
+#include "matrices.hpp"
 
 #define THRESHOLD 0.00001f
 
@@ -15,9 +15,8 @@ math::mat2::mat2(const mat2& m) :
     data{ m.data[0], m.data[1], m.data[2], m.data[3] } {}
 
 void math::mat2::clean() {
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 4; i++)
         if(std::fabs(data[i]) < THRESHOLD) data[i] = 0.0f;
-    }
 }
 
 const float math::mat2::determinant() const {
@@ -97,16 +96,14 @@ const math::mat2 math::mat2::operator*(const float k) const {
 }
 
 const bool math::mat2::operator==(const mat2& m) const {
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 4; i++)
         if(std::fabs(data[i] - m.data[i]) >= THRESHOLD) return false;
-    }
     return true;
 }
 
 const bool math::mat2::operator!=(const mat2& m) const {
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 4; i++)
         if(std::fabs(data[i] - m.data[i]) >= THRESHOLD) return true;
-    }
     return false;
 }
 
@@ -114,20 +111,8 @@ math::mat2 math::mat2::identity_mat() {
     return mat2(1.0f);
 }
 
-math::mat3 math::mat2::translate_mat(const float dx, const float dy) {
-    return mat3(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, dx, dy, 1.0f);
-}
-
-math::mat2 math::mat2::scale_mat(const float sx, const float sy) {
-    return mat2(sx, 0.0f, 0.0f, sy);
-}
-
-math::mat2 math::mat2::rotate(const float angle) {
-    return mat2(std::cos(angle), std::sin(angle), -std::sin(angle), std::cos(angle));
-}
-
 const math::mat2 math::operator*(const float k, const mat2& m) {
-    return mat2(m.data[0] * k, m.data[1] * k, m.data[2] * k, m.data[3] * k);
+    return m * k;
 }
 
 std::ostream& math::operator<<(std::ostream& os, const mat2& m) {
@@ -146,13 +131,12 @@ math::mat3::mat3(float k) :
 
 math::mat3::mat3(float v1, float v2, float v3,
     float v4, float v5, float v6,
-    float v7, float v8, float v9) : 
-    data{v1,v2,v3,v4,v5,v6,v7,v8,v9} {}
+    float v7, float v8, float v9) :
+    data{ v1,v2,v3,v4,v5,v6,v7,v8,v9 } {}
 
 void math::mat3::clean() {
-    for(int i = 0; i < 9; i++) {
+    for(int i = 0; i < 9; i++)
         if(std::fabs(data[i]) < THRESHOLD) data[i] = 0.0f;
-    }
 }
 
 const float math::mat3::determinant() const {
@@ -197,13 +181,13 @@ math::mat3& math::mat3::operator*=(const float k) {
 
 const math::mat3 math::mat3::operator+(const mat3& m) const {
     float aux[9] = { 0.0f };
-    for(int i = 0; i < 9; i++) aux[i] = data[i]+m.data[i];
+    for(int i = 0; i < 9; i++) aux[i] = data[i] + m.data[i];
     return mat3(aux[0], aux[1], aux[2], aux[3], aux[4], aux[5], aux[6], aux[7], aux[8]);
 }
 
 const math::mat3 math::mat3::operator-(const mat3& m) const {
     float aux[9] = { 0.0f };
-    for(int i = 0; i < 9; i++) aux[i] = data[i] + m.data[i];
+    for(int i = 0; i < 9; i++) aux[i] = data[i] - m.data[i];
     return mat3(aux[0], aux[1], aux[2], aux[3], aux[4], aux[5], aux[6], aux[7], aux[8]);
 }
 
@@ -237,16 +221,14 @@ const math::mat3 math::mat3::operator*(const float k) const {
 }
 
 const bool math::mat3::operator==(const mat3& m) const {
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 4; i++)
         if(std::fabs(data[i] - m.data[i]) >= THRESHOLD) return false;
-    }
     return true;
 }
 
 const bool math::mat3::operator!=(const mat3& m) const {
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 4; i++)
         if(std::fabs(data[i] - m.data[i]) >= THRESHOLD) return true;
-    }
     return false;
 }
 
@@ -254,47 +236,33 @@ math::mat3 math::mat3::identity_mat() {
     return mat3(1.0f);
 }
 
-math::mat4 math::mat3::translate_mat(const float dx, const float dy, const float dz) {
-    return mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, dx, dy, dz, 1.0f);
-}
-
-math::mat3 math::mat3::scale_mat(const float sx, const float sy, const float sz) {
-    return mat3(sx, 0.0f, 0.0f, 0.0f, sy, 0.0f,  0.0f, 0.0f, sz);
-}
-
-math::mat3 math::mat3::rotate(const float angle, const vec3& axis) {
-    return mat3();
-}
-
 float math::mat3::minimat_det(const int i, const mat3& m) {
     switch(i) {
     case 0:
-        return m.data[4] * m.data[8] - m.data[5] * m.data[7];
+        return mat2(m.data[4], m.data[5], m.data[7], m.data[8]).determinant();
     case 1:
-        return m.data[3] * m.data[8] - m.data[5] * m.data[6];
+        return mat2(m.data[3], m.data[5], m.data[6], m.data[8]).determinant();
     case 2:
-        return m.data[3] * m.data[7] - m.data[4] * m.data[6];
+        return mat2(m.data[3], m.data[4], m.data[6], m.data[7]).determinant();
     case 3:
-        return m.data[1] * m.data[8] - m.data[2] * m.data[7];
+        return mat2(m.data[1], m.data[2], m.data[7], m.data[8]).determinant();
     case 4:
-        return m.data[0] * m.data[8] - m.data[2] * m.data[6];
+        return mat2(m.data[0], m.data[2], m.data[6], m.data[8]).determinant();
     case 5:
-        return m.data[0] * m.data[7] - m.data[1] * m.data[6];
+        return mat2(m.data[0], m.data[1], m.data[6], m.data[7]).determinant();
     case 6:
-        return m.data[1] * m.data[5] - m.data[2] * m.data[4];
+        return mat2(m.data[1], m.data[2], m.data[4], m.data[5]).determinant();
     case 7:
-        return m.data[0] * m.data[5] - m.data[2] * m.data[3];
+        return mat2(m.data[0], m.data[2], m.data[3], m.data[5]).determinant();
     case 8:
-        return m.data[0] * m.data[4] - m.data[1] * m.data[3];
+        return mat2(m.data[0], m.data[1], m.data[3], m.data[4]).determinant();
     default:
         return 0.0f;
     }
 }
 
 const math::mat3 math::operator*(const float k, const mat3& m) {
-    float aux[9] = { 0.0f };
-    for(int i = 0; i < 9; i++) aux[i] = m.data[i] * k;
-    return mat3(aux[0], aux[1], aux[2], aux[3], aux[4], aux[5], aux[6], aux[7], aux[8]);
+    return m * k;
 }
 
 std::ostream& math::operator<<(std::ostream& os, const mat3& m) {
@@ -323,9 +291,8 @@ math::mat4::mat4(float v1, float v2, float v3, float v4,
         v13, v14,v15,v16 } {}
 
 void math::mat4::clean() {
-    for(int i = 0; i < 16; i++) {
+    for(int i = 0; i < 16; i++)
         if(std::fabs(data[i]) < THRESHOLD) data[i] = 0.0f;
-    }
 }
 
 const float math::mat4::determinant() const {
@@ -349,27 +316,39 @@ math::mat4& math::mat4::operator=(const mat4& m) {
 }
 
 const math::mat4 math::mat4::operator-() const {
-    return mat4();
+    float aux[16] = { 0.0f };
+    for(int i = 0; i < 16; i++) aux[i] = -data[i];
+    return mat4(aux[0], aux[1], aux[2], aux[3], aux[4], aux[5], aux[6], aux[7], 
+        aux[8], aux[9], aux[10], aux[11], aux[12], aux[13], aux[14], aux[15]);
 }
 
 math::mat4& math::mat4::operator+=(const mat4& m) {
-    // TODO: insert return statement here
+    for(int i = 0; i < 16; i++) data[i] += m.data[i];
+    return *this;
 }
 
 math::mat4& math::mat4::operator-=(const mat4& m) {
-    // TODO: insert return statement here
+    for(int i = 0; i < 16; i++) data[i] -= m.data[i];
+    return *this;
 }
 
 math::mat4& math::mat4::operator*=(const float k) {
-    // TODO: insert return statement here
+    for(int i = 0; i < 16; i++) data[i] *= k;
+    return *this;
 }
 
 const math::mat4 math::mat4::operator+(const mat4& m) const {
-    return mat4();
+    float aux[16] = { 0.0f };
+    for(int i = 0; i < 16; i++) aux[i] = data[i] + m.data[i];
+    return mat4(aux[0], aux[1], aux[2], aux[3], aux[4], aux[5], aux[6], aux[7],
+        aux[8], aux[9], aux[10], aux[11], aux[12], aux[13], aux[14], aux[15]);
 }
 
 const math::mat4 math::mat4::operator-(const mat4& m) const {
-    return mat4();
+    float aux[16] = { 0.0f };
+    for(int i = 0; i < 16; i++) aux[i] = data[i] - m.data[i];
+    return mat4(aux[0], aux[1], aux[2], aux[3], aux[4], aux[5], aux[6], aux[7],
+        aux[8], aux[9], aux[10], aux[11], aux[12], aux[13], aux[14], aux[15]);
 }
 
 const math::mat4 math::mat4::operator*(const mat4& m) const {
@@ -381,41 +360,93 @@ const math::vec4 math::mat4::operator*(const vec4& v) const {
 }
 
 const math::mat4 math::mat4::operator*(const float k) const {
-    return mat4();
+    float aux[16] = { 0.0f };
+    for(int i = 0; i < 16; i++) aux[i] = data[i] * k;
+    return mat4(aux[0], aux[1], aux[2], aux[3], aux[4], aux[5], aux[6], aux[7],
+        aux[8], aux[9], aux[10], aux[11], aux[12], aux[13], aux[14], aux[15]);
 }
 
 const bool math::mat4::operator==(const mat4& m) const {
-    return false;
+    for(int i = 0; i < 16; i++)
+        if(std::fabs(data[i] - m.data[i]) >= THRESHOLD) return false;
+    return true;
 }
 
 const bool math::mat4::operator!=(const mat4& m) const {
+    for(int i = 0; i < 16; i++)
+        if(std::fabs(data[i] - m.data[i]) >= THRESHOLD) return true;
     return false;
 }
 
 math::mat4 math::mat4::identity_mat() {
-    return mat4();
+    return mat4(1.0f);
 }
 
-math::mat4 math::mat4::translate_mat(float dx, float dy, float dz) {
-    return mat4();
-}
 
-math::mat4 math::mat4::scale_mat(float sx, float sy, float sz) {
-    return mat4();
-}
-
-math::mat4 math::mat4::rotate(float angle, vec3& axis) {
-    return mat4();
-}
-
+// TODO: finish this method
 float math::mat4::minimat_det(const int i, const mat4& m) {
-    return 0.0f;
+    switch(i) {
+    case 0:
+        return mat3(m.data[5], m.data[6], m.data[7], m.data[8],
+            m.data[10], m.data[11], m.data[13], m.data[14], m.data[15]).determinant();
+    case 1:
+        return mat3(m.data[4], m.data[6], m.data[7], m.data[9],
+            m.data[10], m.data[11], m.data[12], m.data[14], m.data[15]).determinant();
+    case 2:
+        return mat3(m.data[4], m.data[5], m.data[7], m.data[8],
+            m.data[9], m.data[11], m.data[12], m.data[13], m.data[15]).determinant();
+    case 3:
+        return mat3(m.data[5], m.data[6], m.data[7], m.data[9],
+            m.data[10], m.data[11], m.data[13], m.data[14], m.data[15]).determinant();
+    case 4:
+        return mat3(m.data[5], m.data[6], m.data[7], m.data[9],
+            m.data[10], m.data[11], m.data[13], m.data[14], m.data[15]).determinant();
+    case 5:
+        return mat3(m.data[5], m.data[6], m.data[7], m.data[9],
+            m.data[10], m.data[11], m.data[13], m.data[14], m.data[15]).determinant();
+    case 6:
+        return mat3(m.data[5], m.data[6], m.data[7], m.data[9],
+            m.data[10], m.data[11], m.data[13], m.data[14], m.data[15]).determinant();
+    case 7:
+        return mat3(m.data[5], m.data[6], m.data[7], m.data[9],
+            m.data[10], m.data[11], m.data[13], m.data[14], m.data[15]).determinant();
+    case 8:
+        return mat3(m.data[5], m.data[6], m.data[7], m.data[9],
+            m.data[10], m.data[11], m.data[13], m.data[14], m.data[15]).determinant();
+    case 9:
+        return mat3(m.data[5], m.data[6], m.data[7], m.data[9],
+            m.data[10], m.data[11], m.data[13], m.data[14], m.data[15]).determinant();
+    case 10:
+        return mat3(m.data[5], m.data[6], m.data[7], m.data[9],
+            m.data[10], m.data[11], m.data[13], m.data[14], m.data[15]).determinant();
+    case 11:
+        return mat3(m.data[5], m.data[6], m.data[7], m.data[9],
+            m.data[10], m.data[11], m.data[13], m.data[14], m.data[15]).determinant();
+    case 12:
+        return mat3(m.data[5], m.data[6], m.data[7], m.data[9],
+            m.data[10], m.data[11], m.data[13], m.data[14], m.data[15]).determinant();
+    case 13:
+        return mat3(m.data[5], m.data[6], m.data[7], m.data[9],
+            m.data[10], m.data[11], m.data[13], m.data[14], m.data[15]).determinant();
+    case 14:
+        return mat3(m.data[5], m.data[6], m.data[7], m.data[9],
+            m.data[10], m.data[11], m.data[13], m.data[14], m.data[15]).determinant();
+    case 15:
+        return mat3(m.data[5], m.data[6], m.data[7], m.data[9],
+            m.data[10], m.data[11], m.data[13], m.data[14], m.data[15]).determinant();
+    default:
+        return 0.0f;
+    }
 }
 
 const math::mat4 math::operator*(const float k, const mat4& m) {
-    return mat4();
+    return m * k;
 }
 
 std::ostream& math::operator<<(std::ostream& os, const mat4& m) {
-    // TODO: insert return statement here
+    os << "mat4[" << m.data[0] << ", " << m.data[4] << ", " << m.data[8] << ", " << m.data[12] << "]" << std::endl;
+    os << "    [" << m.data[1] << ", " << m.data[5] << ", " << m.data[9] << ", " << m.data[13] << "]" << std::endl;
+    os << "    [" << m.data[2] << ", " << m.data[6] << ", " << m.data[10] << ", " << m.data[14] << "]" << std::endl;
+    os << "    [" << m.data[3] << ", " << m.data[7] << ", " << m.data[11] << ", " << m.data[15] << "]";
+    return os;
 }

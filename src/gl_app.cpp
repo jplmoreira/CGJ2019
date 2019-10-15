@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "gl_app.h"
+#include "gl_app.hpp"
 
 gl_app* gl_app::instance;
 

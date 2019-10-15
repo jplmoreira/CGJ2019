@@ -1,5 +1,5 @@
-#include "gl_engine.h"
-#include "gl_app.h"
+#include "gl_engine.hpp"
+#include "gl_app.hpp"
 
 ////////////////////////////////////////////////// ERROR CALLBACK (OpenGL 4.3+)
 

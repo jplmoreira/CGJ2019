@@ -1,5 +1,5 @@
-#include "gl_engine.h"
-#include "test/test.h"
+#include "gl_engine.hpp"
+#include "test/test.hpp"
 
 ////////////////////////////////////////////////////////////////////////// MAIN
 

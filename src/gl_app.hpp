@@ -1,6 +1,6 @@
 #pragma once
 
-#include "i_gl_app.h"
+#include "i_gl_app.hpp"
 
 class gl_app : public i_gl_app {
 

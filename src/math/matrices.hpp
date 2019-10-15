@@ -1,8 +1,6 @@
 #pragma once
 
-#include <iostream>
-
-#include "vectors.h"
+#include "vectors.hpp"
 
 namespace math {
     struct mat2;
@@ -39,9 +37,6 @@ namespace math {
         friend std::ostream& operator<<(std::ostream& os, const mat2& m);
 
         static mat2 identity_mat();
-        static mat3 translate_mat(const float dx, const float dy);
-        static mat2 scale_mat(const float sx, const float sy);
-        static mat2 rotate(const float angle);
     };
 
     ////////////////////////////////////////////////////////////////////////// MAT3
@@ -75,9 +70,6 @@ namespace math {
         friend std::ostream& operator<<(std::ostream& os, const mat3& m);
 
         static mat3 identity_mat();
-        static mat4 translate_mat(const float dx, const float dy, const float dz);
-        static mat3 scale_mat(const float sx, const float sy, const float sz);
-        static mat3 rotate(const float angle, const vec3& axis);
         static float minimat_det(const int i, const mat3& m);
     };
 
@@ -113,9 +105,6 @@ namespace math {
         friend std::ostream& operator<<(std::ostream& os, const mat4& m);
 
         static mat4 identity_mat();
-        static mat4 translate_mat(float dx, float dy, float dz);
-        static mat4 scale_mat(float sx, float sy, float sz);
-        static mat4 rotate(float angle, vec3& axis);
         static float minimat_det(const int i, const mat4& m);
     };
 }

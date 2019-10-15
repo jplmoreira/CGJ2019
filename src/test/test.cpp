@@ -1,8 +1,8 @@
 #include <iostream>
 #include <ctime>
 
-#include "test.h"
-#include "../math/vectors.h"
+#include "test.hpp"
+#include "../math/vectors.hpp"
 
 inline float random_float_1() {
     return static_cast<float>(rand()) / static_cast<float>(RAND_MAX / 2.0f) - 1.0f;
@@ -26,7 +26,7 @@ void vec_tests() {
     std::cout << "Expected: vec3(3, -3, 0)\nResult: " << res << std::endl << std::endl;
 
     std::cout << "TEST 4\n" << std::endl;
-    std::cout << "Expected: vec3(1, 0, 0)\nResult: " << (v1 * 8).normalize() << std::endl << std::endl;
+    std::cout << "Expected: vec3(1, 0, 0)\nResult: " << (v1 * 8).normalized() << std::endl << std::endl;
 
     std::cout << "TEST 5\n" << std::endl;
     std::cout << "Expected: vec3(1, 0, 0)\nResult: " << cross(v2, v3) << std::endl << std::endl;

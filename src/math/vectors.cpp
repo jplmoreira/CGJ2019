@@ -1,6 +1,6 @@
-#include <cmath>
+#include "vectors.hpp"
 
-#include "vectors.h"
+#include <cmath>
 
 #define THRESHOLD 0.00001f
 
@@ -97,7 +97,7 @@ const float math::dot(const vec2& v1, const vec2& v2) {
 }
 
 const math::vec2 math::operator*(const float k, const vec2& v) {
-    return vec2(v.x * k, v.y * k);
+    return v * k;
 }
 
 std::ostream& math::operator<<(std::ostream& os, const vec2& v) {
@@ -215,7 +215,7 @@ const math::vec3 math::cross(const vec3& v1, const vec3& v2) {
 }
 
 const math::vec3 math::operator*(const float k, const vec3& v) {
-    return vec3(v.x * k, v.y * k, v.z * k);
+    return v * k;
 }
 
 std::ostream& math::operator<<(std::ostream& os, const vec3& v) {
@@ -338,7 +338,7 @@ const math::vec4 math::cross(const vec4& v1, const vec4& v2) {
 }
 
 const math::vec4 math::operator*(const float k, const vec4& v) {
-    return vec4(v.x * k, v.y * k, v.z * k, v.w);
+    return v * k;
 }
 
 std::ostream& math::operator<<(std::ostream& os, const vec4& v) {
