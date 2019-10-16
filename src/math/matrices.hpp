@@ -83,11 +83,10 @@ namespace math {
             float v5, float v6, float v7, float v8,
             float v9, float v10, float v11, float v12,
             float v13, float v14, float v15, float v16);
+        mat4(mat3& m);
 
         void clean();
-        const float determinant() const;
         const mat4 transposed() const;
-        const mat4 inversed() const;
 
         mat4& operator=(const mat4& m);
         const mat4 operator-() const;
@@ -105,6 +104,5 @@ namespace math {
         friend std::ostream& operator<<(std::ostream& os, const mat4& m);
 
         static mat4 identity_mat();
-        static float minimat_det(const int i, const mat4& m);
     };
 }
