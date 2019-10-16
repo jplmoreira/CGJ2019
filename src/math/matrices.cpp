@@ -150,7 +150,21 @@ const math::mat3 math::mat3::transposed() const {
 }
 
 const math::mat3 math::mat3::inversed() const {
-    return mat3();
+    float det = this->determinant();
+    if(det == 0)
+        throw std::exception("Impossible to invert matrix");
+
+    mat3 adj = mat3(minimat_det(0, *this), minimat_det(1, *this), minimat_det(2, *this), minimat_det(3, *this),
+        minimat_det(4, *this), minimat_det(5, *this), minimat_det(6, *this), minimat_det(7, *this), minimat_det(8, *this));
+
+    mat3 inv = adj / det;
+    inv.data[1] *= -1;
+    inv.data[3] *= -1;
+    inv.data[5] *= -1;
+    inv.data[7] *= -1;
+
+
+    return inv;
 }
 
 math::mat3& math::mat3::operator=(const mat3& m) {
@@ -217,6 +231,12 @@ const math::vec3 math::mat3::operator*(const vec3& v) const {
 const math::mat3 math::mat3::operator*(const float k) const {
     float aux[9] = { 0.0f };
     for(int i = 0; i < 9; i++) aux[i] = data[i] * k;
+    return mat3(aux[0], aux[1], aux[2], aux[3], aux[4], aux[5], aux[6], aux[7], aux[8]);
+}
+
+const math::mat3 math::mat3::operator/(const float k) const {
+    float aux[9] = { 0.0f };
+    for(int i = 0; i < 9; i++) aux[i] = data[i] / k;
     return mat3(aux[0], aux[1], aux[2], aux[3], aux[4], aux[5], aux[6], aux[7], aux[8]);
 }
 
@@ -350,7 +370,6 @@ const math::mat4 math::mat4::operator-(const mat4& m) const {
 }
 
 const math::mat4 math::mat4::operator*(const mat4& m) const {
-
     float r0 = data[0] * m.data[0] + data[4] * m.data[1] + data[8] * m.data[2] + data[12] * m.data[3];
     float r1 = data[1] * m.data[0] + data[5] * m.data[1] + data[9] * m.data[2] + data[13] * m.data[3];
     float r2 = data[2] * m.data[0] + data[6] * m.data[1] + data[10] * m.data[2] + data[14] * m.data[3];

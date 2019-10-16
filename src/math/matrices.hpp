@@ -64,6 +64,7 @@ namespace math {
         const mat3 operator*(const mat3& m) const;
         const vec3 operator*(const vec3& v) const;
         const mat3 operator*(const float k) const;
+        const mat3 operator/(const float k) const;
         friend const mat3 operator*(const float k, const mat3& m);
         const bool operator==(const mat3& m) const;
         const bool operator!=(const mat3& m) const;
