@@ -3,6 +3,8 @@
 
 #include "test.hpp"
 #include "../math/vectors.hpp"
+#include "../math/matrices.hpp"
+#include "../math/mat_fact.hpp"
 
 inline float random_float_1() {
     return static_cast<float>(rand()) / static_cast<float>(RAND_MAX / 2.0f) - 1.0f;
@@ -54,4 +56,32 @@ void vec_eval() {
     math::vec3 right = cross(i, cross(j, k));
     math::vec3 left = j * (dot(i, k)) - k * (dot(i, j));
     std::cout << "Test #10 - " << (right == left) << std::endl;
+}
+
+void mat_tests() {
+
+    std::cout << "MATRIX TESTS" << std::endl;
+
+    math::mat4 res = math::mat4::identity_mat();
+    math::mat4 mat1 = math::mat_fact::translate(1.5f, 0.5f, 1.0f);
+    math::mat4 mat2 = math::mat_fact::translate(0.5f, 1.0f, 0.0f);
+
+    res = mat2 * mat1 * res;
+    math::mat4 cmp = math::mat4::identity_mat();
+    cmp.data[12] = 2.0f;
+    cmp.data[13] = 1.5f;
+    cmp.data[14] = 1.0f;
+
+    std::cout << "mult test - " << (res == cmp) << std::endl;
+
+    math::vec4 point = math::vec4(1.0f);
+    mat1 = math::mat_fact::translate(1.0f, 0.0f, 0.0f);
+    point = mat1 * point;
+
+    std::cout << "vec mult test - " << (point == math::vec4(2.0f, 1.0f, 1.0f, 1.0f)) << std::endl;
+
+    math::mat3 inv = math::mat3(1.0f, 0.0f, 5.0f, 2.0f, 1.0f, 6.0f, 3.0f, 4.0f, 0.0f);
+    inv = inv.inversed();
+
+    std::cout << "inverse - " << (inv == math::mat3(-24.0f, 20.0f, -5.0f, 18.0f, -15.0f, 4.0f, 5.0f, -4.0f, 1.0f)) << std::endl;
 }

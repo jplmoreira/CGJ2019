@@ -20,7 +20,7 @@ void math::mat2::clean() {
 }
 
 const float math::mat2::determinant() const {
-    return data[0] * data[3] + data[1] * data[2];
+    return data[0] * data[3] - data[1] * data[2];
 }
 
 const math::mat2 math::mat2::transposed() const {
@@ -154,15 +154,16 @@ const math::mat3 math::mat3::inversed() const {
     if(det == 0)
         throw std::exception("Impossible to invert matrix");
 
-    mat3 adj = mat3(minimat_det(0, *this), minimat_det(1, *this), minimat_det(2, *this), minimat_det(3, *this),
-        minimat_det(4, *this), minimat_det(5, *this), minimat_det(6, *this), minimat_det(7, *this), minimat_det(8, *this));
+    mat3 trans = this->transposed();
+
+    mat3 adj = mat3(minimat_det(0, trans), minimat_det(1, trans), minimat_det(2, trans), minimat_det(3, trans),
+        minimat_det(4, trans), minimat_det(5, trans), minimat_det(6, trans), minimat_det(7, trans), minimat_det(8, trans));
 
     mat3 inv = adj / det;
     inv.data[1] *= -1;
     inv.data[3] *= -1;
     inv.data[5] *= -1;
     inv.data[7] *= -1;
-
 
     return inv;
 }

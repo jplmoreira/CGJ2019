@@ -17,11 +17,9 @@ math::mat4 math::mat_fact::rotate(float angle, vec3& axis) {
     mat3 aux = mat3::identity_mat();
     if(axis.x == 1.0f) {
         aux = mat3(1.0f, 0.0f, 0.0f, 0.0f, std::cos(rad), -std::sin(rad), 0.0f, std::sin(rad), std::cos(rad));
-    }
-    else if(axis.y == 1.0f) {
+    } else if(axis.y == 1.0f) {
         aux = mat3(std::cos(rad), 0.0f, std::sin(rad), 0.0f, 1.0f, 0.0f, -std::sin(rad), 0.0f, std::cos(rad));
-    }
-    else if(axis.z == 1.0f) {
+    } else if(axis.z == 1.0f) {
         aux = mat3(std::cos(rad), -std::sin(rad), 0.0f, std::sin(rad), std::cos(rad), 0.0f, 0.0f, 0.0f, 1.0f);
     }
     return mat4(aux);
