@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ctime>
+#include <vector>
 
 #include "test.hpp"
 #include "../math/vectors.hpp"
@@ -54,6 +55,7 @@ void vec_eval() {
     math::vec3 j = math::vec3(random_float_1(), random_float_1(), random_float_1());
     math::vec3 k = math::vec3(random_float_1(), random_float_1(), random_float_1());
     math::vec3 right = cross(i, cross(j, k));
+
     math::vec3 left = j * (dot(i, k)) - k * (dot(i, j));
     std::cout << "Test #10 - " << (right == left) << std::endl;
 }
@@ -84,4 +86,16 @@ void mat_tests() {
     inv = inv.inversed();
 
     std::cout << "inverse - " << (inv == math::mat3(-24.0f, 20.0f, -5.0f, 18.0f, -15.0f, 4.0f, 5.0f, -4.0f, 1.0f)) << std::endl;
+}
+
+void mat_eval() {
+    std::vector<math::vec3> vs = { math::vec3(2.0f, 0.0f, 0.0f), math::vec3(0.0f, 3.0f, 0.0f), math::vec3(0.0f, 0.0f, 4.0f) };
+    const float angle = 90.0f;
+
+    for(const math::vec3& v1 : vs) {
+        for(const math::vec3& v2 : vs) {
+            math::vec3 res = math::mat_fact::rodr_rot(angle, v1) * v2;
+            std::cout << "Rotation of " << v2 << " around " << v1 << ":" << std::endl << "\t" << res << std::endl;
+        }
+    }
 }

@@ -24,3 +24,13 @@ math::mat4 math::mat_fact::rotate(float angle, vec3& axis) {
     }
     return mat4(aux);
 }
+
+math::mat3 math::mat_fact::dual_mat(const vec3& v) {
+    return mat3(0.0f, v.z, -v.y, -v.z, 0.0f, v.x, v.y, -v.x, 0.0f);
+}
+
+math::mat3 math::mat_fact::rodr_rot(const float angle, const vec3& axis) {
+    float rad = angle * pi / 180.0f;
+    mat3 a = dual_mat(axis.normalized());
+    return mat3::identity_mat() + std::sin(rad) * a + (1 - std::cos(rad)) * (a * a);
+}

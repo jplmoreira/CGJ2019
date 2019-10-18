@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
     GLFWwindow* win = engine->setup(gl_major, gl_minor,
         640, 480, "OpenGL Viewer (GLFW)", is_fullscreen, is_vsync);
     engine->run(win);*/
-    mat_tests();
+    mat_eval();
     while(true) {}
     exit(EXIT_SUCCESS);
 }
