@@ -101,25 +101,25 @@ void checkOpenGLError(std::string error) {
 ///////////////////////////////////////////////////////////////////// CALLBACKS
 
 void window_close_callback(GLFWwindow* win) {
-    gl_app::get_instance()->window_close_callback(win);
+    engine::gl_app::get_instance()->window_close_callback(win);
 }
 void window_size_callback(GLFWwindow* win, int winx, int winy) {
-    gl_app::get_instance()->window_size_callback(win, winx, winy);
+    engine::gl_app::get_instance()->window_size_callback(win, winx, winy);
 }
 void key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
-    gl_app::get_instance()->key_callback(win, key, scancode, action, mods);
+    engine::gl_app::get_instance()->key_callback(win, key, scancode, action, mods);
 }
 void mouse_callback(GLFWwindow* win, double xpos, double ypos) {
-    gl_app::get_instance()->mouse_callback(win, xpos, ypos);
+    engine::gl_app::get_instance()->mouse_callback(win, xpos, ypos);
 }
 void mouse_button_callback(GLFWwindow* win, int button, int action, int mods) {
-    gl_app::get_instance()->mouse_button_callback(win, button, action, mods);
+    engine::gl_app::get_instance()->mouse_button_callback(win, button, action, mods);
 }
 void scroll_callback(GLFWwindow* win, double xoffset, double yoffset) {
-    gl_app::get_instance()->scroll_callback(win, xoffset, yoffset);
+    engine::gl_app::get_instance()->scroll_callback(win, xoffset, yoffset);
 }
 void joystick_callback(int jid, int event) {
-    gl_app::get_instance()->joystick_callback(jid, event);
+    engine::gl_app::get_instance()->joystick_callback(jid, event);
 }
 
 ///////////////////////////////////////////////////////////////////////// SETUP
@@ -234,9 +234,9 @@ void display_callback(GLFWwindow* win, double elapsed_sec) {
 
 ////////////////////////////////////////////////////////////////////////// ENGINE CLASS
 
-gl_engine* gl_engine::instance;
+engine::gl_engine* engine::gl_engine::instance;
 
-GLFWwindow* gl_engine::setup(int major, int minor,
+GLFWwindow* engine::gl_engine::setup(int major, int minor,
     int winx, int winy, const char* title, int is_fullscreen, int is_vsync) {
     GLFWwindow* win =
         setupGLFW(major, minor, winx, winy, title, is_fullscreen, is_vsync);
@@ -246,7 +246,7 @@ GLFWwindow* gl_engine::setup(int major, int minor,
     return win;
 }
 
-void gl_engine::run(GLFWwindow* win) {
+void engine::gl_engine::run(GLFWwindow* win) {
     double last_time = glfwGetTime();
     while(!glfwWindowShouldClose(win)) {
         double time = glfwGetTime();
