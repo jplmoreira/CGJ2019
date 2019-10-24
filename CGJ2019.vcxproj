@@ -19,30 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\gl_app.cpp" />
-    <ClCompile Include="src\engine\gl_engine.cpp" />
     <ClCompile Include="src\engine\math\matrices.cpp" />
     <ClCompile Include="src\engine\math\mat_fact.cpp" />
     <ClCompile Include="src\engine\math\vectors.cpp" />
-    <ClCompile Include="src\engine\objects\geometry.cpp" />
-    <ClCompile Include="src\engine\scene.cpp" />
-    <ClCompile Include="src\engine\shader.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\test\test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine\gl_app.hpp" />
-    <ClInclude Include="src\engine\gl_engine.hpp" />
-    <ClInclude Include="src\engine\include.hpp" />
-    <ClInclude Include="src\engine\i_gl_app.hpp" />
     <ClInclude Include="src\engine\math\matrices.hpp" />
     <ClInclude Include="src\engine\math\mat_fact.hpp" />
     <ClInclude Include="src\engine\math\vectors.hpp" />
-    <ClInclude Include="src\engine\objects\geometry.hpp" />
-    <ClInclude Include="src\engine\objects\object.hpp" />
-    <ClInclude Include="src\engine\scene.hpp" />
-    <ClInclude Include="src\engine\shader.hpp" />
-    <ClInclude Include="src\engine\vertex_attr.hpp" />
     <ClInclude Include="src\test\test.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
