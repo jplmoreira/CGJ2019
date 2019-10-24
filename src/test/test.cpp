@@ -3,9 +3,6 @@
 #include <vector>
 
 #include "test.hpp"
-#include "../engine/math/vectors.hpp"
-#include "../engine/math/matrices.hpp"
-#include "../engine/math/mat_fact.hpp"
 
 inline float random_float_1() {
     return static_cast<float>(rand()) / static_cast<float>(RAND_MAX / 2.0f) - 1.0f;

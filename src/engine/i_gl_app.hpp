@@ -1,6 +1,7 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
+#include "include.hpp"
+
 namespace engine {
     class i_gl_app {
         virtual void window_close_callback(GLFWwindow* win) = 0;
@@ -10,5 +11,7 @@ namespace engine {
         virtual void mouse_button_callback(GLFWwindow* win, int button, int action, int mods) = 0;
         virtual void scroll_callback(GLFWwindow* win, double xoffset, double yoffset) = 0;
         virtual void joystick_callback(int jid, int event) = 0;
+        virtual void setup() = 0;
+        virtual void display() = 0;
     };
 }

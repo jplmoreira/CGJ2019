@@ -1,16 +1,18 @@
 #include "gl_engine.hpp"
-#include "gl_app.hpp"
+
+#define ERROR_CALLBACK
+#ifdef  ERROR_CALLBACK
 
 ////////////////////////////////////////////////// ERROR CALLBACK (OpenGL 4.3+)
 
 const std::string errorSource(GLenum source) {
     switch(source) {
-    case GL_DEBUG_SOURCE_API:				return "API";
-    case GL_DEBUG_SOURCE_WINDOW_SYSTEM:		return "window system";
-    case GL_DEBUG_SOURCE_SHADER_COMPILER:	return "shader compiler";
-    case GL_DEBUG_SOURCE_THIRD_PARTY:		return "third party";
-    case GL_DEBUG_SOURCE_APPLICATION:		return "application";
-    case GL_DEBUG_SOURCE_OTHER:				return "other";
+    case GL_DEBUG_SOURCE_API:	            return "API";
+    case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   return "window system";
+    case GL_DEBUG_SOURCE_SHADER_COMPILER: return "shader compiler";
+    case GL_DEBUG_SOURCE_THIRD_PARTY:     return "third party";
+    case GL_DEBUG_SOURCE_APPLICATION:     return "application";
+    case GL_DEBUG_SOURCE_OTHER:          return "other";
     default:								exit(EXIT_FAILURE);
     }
 }
@@ -47,6 +49,8 @@ void error(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei lengt
     std::cerr << "  type:       " << errorType(type) << std::endl;
     std::cerr << "  severity:   " << errorSeverity(severity) << std::endl;
     std::cerr << "  debug call: " << std::endl << message << std::endl << std::endl;
+    std::cerr << "Press <return>.";
+    std::cin.ignore();
 }
 
 void setupErrorCallback() {
@@ -56,6 +60,8 @@ void setupErrorCallback() {
     glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, 0, GL_TRUE);
     // params: source, type, severity, count, ids, enabled
 }
+
+#else
 
 ///////////////////////////////////////////////// ERROR HANDLING (All versions)
 
@@ -98,10 +104,15 @@ void checkOpenGLError(std::string error) {
     }
 }
 
+#endif
+
 ///////////////////////////////////////////////////////////////////// CALLBACKS
 
 void window_close_callback(GLFWwindow* win) {
     engine::gl_app::get_instance()->window_close_callback(win);
+#ifndef ERROR_CALLBACK
+    checkOpenGLError("Error: Could not destroy app.");
+#endif // !ERROR_CALLBACK
 }
 void window_size_callback(GLFWwindow* win, int winx, int winy) {
     engine::gl_app::get_instance()->window_size_callback(win, winx, winy);
@@ -196,7 +207,7 @@ void setupOpenGL(int winx, int winy) {
 #if _DEBUG
     checkOpenGLInfo();
 #endif
-    glClearColor(0.1f, 0.1f, 0.3f, 1.0f);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
     glDepthMask(GL_TRUE);
@@ -229,7 +240,11 @@ void updateFPS(GLFWwindow* win, double elapsed_sec) {
 }
 
 void display_callback(GLFWwindow* win, double elapsed_sec) {
-    updateFPS(win, elapsed_sec);
+    //updateFPS(win, elapsed_sec);
+    engine::gl_app::get_instance()->display();
+#ifndef ERROR_CALLBACK
+    checkOpenGLError("Error: Could not display.");
+#endif // !ERROR_CALLBACK
 }
 
 ////////////////////////////////////////////////////////////////////////// ENGINE CLASS
@@ -242,22 +257,36 @@ GLFWwindow* engine::gl_engine::setup(int major, int minor,
         setupGLFW(major, minor, winx, winy, title, is_fullscreen, is_vsync);
     setupGLEW();
     setupOpenGL(winx, winy);
+#ifdef ERROR_CALLBACK
     setupErrorCallback();
+#endif // ERROR_CALLBACK
+
+    engine::gl_app::get_instance()->setup();
+
+#ifndef ERROR_CALLBACK
+    checkOpenGLError("Error: Could not setup app.");
+#endif // !ERROR_CALLBACK
+
+
     return win;
 }
 
 void engine::gl_engine::run(GLFWwindow* win) {
+
     double last_time = glfwGetTime();
     while(!glfwWindowShouldClose(win)) {
+
         double time = glfwGetTime();
         double elapsed_time = time - last_time;
         last_time = time;
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         display_callback(win, elapsed_time);
         glfwSwapBuffers(win);
         glfwPollEvents();
-
-        //checkOpenGLError("ERROR: MAIN/RUN");
+#ifndef ERROR_CALLBACK
+        checkOpenGLError("ERROR: MAIN/RUN");
+#endif // !ERROR_CALLBACK
     }
     glfwDestroyWindow(win);
     glfwTerminate();

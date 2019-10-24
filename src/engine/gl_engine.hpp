@@ -1,11 +1,10 @@
 #pragma once
 
+#include "gl_app.hpp"
 #include <sstream>
 #include <iostream>
 #include <iomanip>
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 namespace engine {
     class gl_engine {
 

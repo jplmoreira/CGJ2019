@@ -1,11 +1,14 @@
 #pragma once
-
+#include "scene.hpp"
+#include "shader.hpp"
 #include "i_gl_app.hpp"
 
 namespace engine {
     class gl_app : public i_gl_app {
 
         static gl_app* instance;
+        shader sh;
+        scene sc;
 
         gl_app() {}
 
@@ -22,5 +25,7 @@ namespace engine {
         virtual void mouse_button_callback(GLFWwindow* win, int button, int action, int mods) override;
         virtual void scroll_callback(GLFWwindow* win, double xoffset, double yoffset) override;
         virtual void joystick_callback(int jid, int event) override;
+        virtual void setup() override;
+        virtual void display() override;
     };
 }
