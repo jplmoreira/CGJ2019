@@ -317,7 +317,7 @@ engine::math::mat4::mat4(float v1, float v2, float v3, float v4,
         v9,v10,v11,v12,
         v13, v14,v15,v16 } {}
 
-engine::math::mat4::mat4(mat3& m) :
+engine::math::mat4::mat4(const mat3& m) :
     data{ m.data[0], m.data[1], m.data[2], 0.0f,
     m.data[3], m.data[4], m.data[5], 0.0f,
     m.data[6], m.data[7], m.data[8], 0.0f,
@@ -406,7 +406,7 @@ const engine::math::vec4 engine::math::mat4::operator*(const vec4& v) const {
     float z = data[2] * v.x + data[6] * v.y + data[10] * v.z + data[14] * v.w;
     float w = data[3] * v.x + data[7] * v.y + data[11] * v.z + data[15] * v.w;
 
-    return vec4(x, y, w, z);
+    return vec4(x, y, z, w);
 }
 
 const engine::math::mat4 engine::math::mat4::operator*(const float k) const {

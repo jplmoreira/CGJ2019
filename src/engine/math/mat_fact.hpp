@@ -9,7 +9,7 @@ namespace engine {
             static mat4 scale(float sx, float sy, float sz);
             static mat4 rotate(float angle, vec3& axis);
             static mat3 dual_mat(const vec3& v);
-            static mat3 rodr_rot(const float angle, const vec3& axis);
+            static mat4 rodr_rot(const float angle, const vec3& axis);
         };
     }
 }

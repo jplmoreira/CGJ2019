@@ -85,7 +85,7 @@ namespace engine {
                 float v5, float v6, float v7, float v8,
                 float v9, float v10, float v11, float v12,
                 float v13, float v14, float v15, float v16);
-            mat4(mat3& m);
+            mat4(const mat3& m);
 
             void clean();
             const mat4 transposed() const;

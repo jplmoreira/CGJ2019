@@ -93,8 +93,8 @@ void mat_eval() {
 
     for(const engine::math::vec4& v1 : vs) {
         for(const engine::math::vec4& v2 : vs) {
-            engine::math::mat3 rot = engine::math::mat_fact::rodr_rot(angle, engine::math::vec3(v1.x, v1.y, v1.z));
-            engine::math::vec4 res = engine::math::mat4(rot) * v2;
+            engine::math::mat4 rot = engine::math::mat_fact::rodr_rot(angle, engine::math::vec3(v1.x, v1.y, v1.z));
+            engine::math::vec4 res = rot * v2;
             std::cout << "Rotation of " << v2 << " around " << v1 << ":" << std::endl << "\t" << res << std::endl;
         }
     }
