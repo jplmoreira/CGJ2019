@@ -347,7 +347,7 @@ const engine::math::vec4 engine::math::operator*(const float k, const vec4& v) {
 }
 
 std::ostream& engine::math::operator<<(std::ostream& os, const vec4& v) {
-    os << "vec4(" << v.x << ", " << v.y << ", " << v.z << ", " << v.z << ")";
+    os << "vec4(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
     return os;
 }
 

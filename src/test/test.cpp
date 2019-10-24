@@ -88,12 +88,13 @@ void mat_tests() {
 }
 
 void mat_eval() {
-    std::vector<engine::math::vec3> vs = { engine::math::vec3(2.0f, 0.0f, 0.0f), engine::math::vec3(0.0f, 3.0f, 0.0f), engine::math::vec3(0.0f, 0.0f, 4.0f) };
+    std::vector<engine::math::vec4> vs = { engine::math::vec4(2.0f, 0.0f, 0.0f, 1.0f), engine::math::vec4(0.0f, 3.0f, 0.0f, 1.0f), engine::math::vec4(0.0f, 0.0f, 4.0f, 1.0f) };
     const float angle = 90.0f;
 
-    for(const engine::math::vec3& v1 : vs) {
-        for(const engine::math::vec3& v2 : vs) {
-            engine::math::vec3 res = engine::math::mat_fact::rodr_rot(angle, v1) * v2;
+    for(const engine::math::vec4& v1 : vs) {
+        for(const engine::math::vec4& v2 : vs) {
+            engine::math::mat3 rot = engine::math::mat_fact::rodr_rot(angle, engine::math::vec3(v1.x, v1.y, v1.z));
+            engine::math::vec4 res = engine::math::mat4(rot) * v2;
             std::cout << "Rotation of " << v2 << " around " << v1 << ":" << std::endl << "\t" << res << std::endl;
         }
     }

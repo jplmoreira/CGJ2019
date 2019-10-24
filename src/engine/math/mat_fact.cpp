@@ -32,5 +32,5 @@ engine::math::mat3 engine::math::mat_fact::dual_mat(const vec3& v) {
 engine::math::mat3 engine::math::mat_fact::rodr_rot(const float angle, const vec3& axis) {
     float rad = angle * pi / 180.0f;
     mat3 a = dual_mat(axis.normalized());
-    return mat3::identity_mat() + std::sin(rad) * a + (1 - std::cos(rad)) * (a * a);
+    return mat3::identity_mat() + std::sinf(rad) * a + (1 - std::cosf(rad)) * (a * a);
 }
