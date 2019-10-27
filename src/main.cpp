@@ -24,6 +24,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
+#include <array>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -34,7 +35,7 @@
 
 #define VERTICES 0
 #define COLORS 1
-#define OBJS 7
+#define OBJS 1
 
 int indices[OBJS];
 engine::math::mat4 transforms[OBJS];
@@ -228,75 +229,147 @@ engine::math::vec4 green(62.0f / 255.0f, 137.0f / 255.0f, 98.0f / 255.0f, 1.0f);
 engine::math::vec4 brown(126.0f / 255.0f, 83.0f / 255.0f, 60.0f / 255.0f, 1.0f);
 engine::math::vec4 teal(19.0f / 255.0f, 111.0f / 255.0f, 114.0f / 255.0f, 1.0f);
 
-
-typedef struct {
-    GLfloat XYZW[4];
-    GLfloat RGBA[4];
-} Vertex;
-
-float right_triangle_v[3][4] = {
+std::array<std::array<float, 4>, 3> v_triangle = { {
     { 0.0f, 0.0f, 0.0f, 1.0f },
     { 1.0f, 0.0f, 0.0f, 1.0f },
     { 0.0f, 1.0f, 0.0f, 1.0f }
-};
+} };
+std::array<GLushort, 3> i_triangle = {0,1,2};
 
-GLushort right_triangle_i[3] = { 0, 1, 2 };
-
-float square_v[4][4] = {
+std::array<std::array<float, 4>, 4> v_square = { {
     { 0.5f, 0.5f, 0.0f, 1.0f },
     { -0.5f, 0.5f, 0.0f, 1.0f },
     { -0.5f, -0.5f, 0.0f, 1.0f },
     { 0.5f, -0.5f, 0.0f, 1.0f }
-};
+} };
 
-GLushort square_i[6] = { 0, 1, 2, 0, 2, 3 };
+std::array<GLushort, 6> i_square = { 0, 1, 2, 0, 2, 3 };
 
-float para_v[4][4] = {
+std::array<std::array<float, 4>, 4> v_para = { {
     { 0.25f, 0.5f, 0.0f, 1.0f },
     { -0.5f, 0.5f, 0.0f, 1.0f },
     { -0.25f, -0.5f, 0.0f, 1.0f },
     { 0.5f, -0.5f, 0.0f, 1.0f }
-};
+} };
 
-GLushort para_i[6] = { 0, 1, 2, 0, 2, 3 };
+std::array<GLushort, 6> i_para = { 0, 1, 2, 0, 2, 3 };
 
-void create_square(int i, const engine::math::vec4& color) {
-    indices[i] = 6;
-    glGenVertexArrays(1, &VaoId[i]);
-    glBindVertexArray(VaoId[i]);
-    {
-        glGenBuffers(3, VboId);
+//void create_square(int i, const engine::math::vec4& color) {
+//    indices[i] = 6;
+//    glGenVertexArrays(1, &VaoId[i]);
+//    glBindVertexArray(VaoId[i]);
+//    {
+//        glGenBuffers(3, VboId);
+//
+//        glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
+//        {
+//            glBufferData(GL_ARRAY_BUFFER, sizeof(square_v), square_v, GL_STATIC_DRAW);
+//            glEnableVertexAttribArray(VERTICES);
+//            glVertexAttribPointer(VERTICES, 4, GL_FLOAT, GL_FALSE, 0, 0);
+//        }
+//        glBindBuffer(GL_ARRAY_BUFFER, VboId[1]);
+//        {
+//            float color_v[4][4]{
+//                {color.x, color.y, color.z, color.w},
+//                {color.x, color.y, color.z, color.w},
+//                {color.x, color.y, color.z, color.w},
+//                {color.x, color.y, color.z, color.w}
+//            };
+//            glBufferData(GL_ARRAY_BUFFER, sizeof(color_v), color_v, GL_STATIC_DRAW);
+//            glEnableVertexAttribArray(COLORS);
+//            glVertexAttribPointer(COLORS, 4, GL_FLOAT, GL_FALSE, 0, 0);
+//        }
+//        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[2]);
+//        {
+//            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(square_i), square_i, GL_STATIC_DRAW);
+//        }
+//    }
+//    glBindVertexArray(0);
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+//}
+//
+//void create_parallelogram(int i, const engine::math::vec4& color) {
+//    indices[i] = 6;
+//    glGenVertexArrays(1, &VaoId[i]);
+//    glBindVertexArray(VaoId[i]);
+//    {
+//        glGenBuffers(3, VboId);
+//
+//        glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
+//        {
+//            glBufferData(GL_ARRAY_BUFFER, sizeof(para_v), para_v, GL_STATIC_DRAW);
+//            glEnableVertexAttribArray(VERTICES);
+//            glVertexAttribPointer(VERTICES, 4, GL_FLOAT, GL_FALSE, 0, 0);
+//        }
+//        glBindBuffer(GL_ARRAY_BUFFER, VboId[1]);
+//        {
+//            float color_v[4][4]{
+//                {color.x, color.y, color.z, color.w},
+//                {color.x, color.y, color.z, color.w},
+//                {color.x, color.y, color.z, color.w},
+//                {color.x, color.y, color.z, color.w}
+//            };
+//            glBufferData(GL_ARRAY_BUFFER, sizeof(color_v), color_v, GL_STATIC_DRAW);
+//            glEnableVertexAttribArray(COLORS);
+//            glVertexAttribPointer(COLORS, 4, GL_FLOAT, GL_FALSE, 0, 0);
+//        }
+//        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[2]);
+//        {
+//            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(para_i), para_i, GL_STATIC_DRAW);
+//        }
+//    }
+//    glBindVertexArray(0);
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+//}
+//
+//void create_triangle(int i, const engine::math::vec4& color) {
+//    indices[i] = 3;
+//    glGenVertexArrays(1, &VaoId[i]);
+//    glBindVertexArray(VaoId[i]);
+//    {
+//        glGenBuffers(3, VboId);
+//
+//        glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
+//        {
+//            glBufferData(GL_ARRAY_BUFFER, sizeof(right_triangle_v), right_triangle_v, GL_STATIC_DRAW);
+//            glEnableVertexAttribArray(VERTICES);
+//            glVertexAttribPointer(VERTICES, 4, GL_FLOAT, GL_FALSE, 0, 0);
+//        }
+//        glBindBuffer(GL_ARRAY_BUFFER, VboId[1]);
+//        {
+//            float color_v[3][4]{
+//                {color.x, color.y, color.z, color.w},
+//                {color.x, color.y, color.z, color.w},
+//                {color.x, color.y, color.z, color.w}
+//            };
+//            glBufferData(GL_ARRAY_BUFFER, sizeof(color_v), color_v, GL_STATIC_DRAW);
+//            glEnableVertexAttribArray(COLORS);
+//            glVertexAttribPointer(COLORS, 4, GL_FLOAT, GL_FALSE, 0, 0);
+//        }
+//        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[2]);
+//        {
+//            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(right_triangle_i), right_triangle_i, GL_STATIC_DRAW);
+//        }
+//    }
+//    glBindVertexArray(0);
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+//}
 
-        glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
-        {
-            glBufferData(GL_ARRAY_BUFFER, sizeof(square_v), square_v, GL_STATIC_DRAW);
-            glEnableVertexAttribArray(VERTICES);
-            glVertexAttribPointer(VERTICES, 4, GL_FLOAT, GL_FALSE, 0, 0);
-        }
-        glBindBuffer(GL_ARRAY_BUFFER, VboId[1]);
-        {
-            float color_v[4][4]{
-                {color.x, color.y, color.z, color.w},
-                {color.x, color.y, color.z, color.w},
-                {color.x, color.y, color.z, color.w},
-                {color.x, color.y, color.z, color.w}
-            };
-            glBufferData(GL_ARRAY_BUFFER, sizeof(color_v), color_v, GL_STATIC_DRAW);
-            glEnableVertexAttribArray(COLORS);
-            glVertexAttribPointer(COLORS, 4, GL_FLOAT, GL_FALSE, 0, 0);
-        }
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[2]);
-        {
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(square_i), square_i, GL_STATIC_DRAW);
-        }
+template<std::size_t SIZE_V, std::size_t SIZE_I>
+void create_object(int i, std::array<std::array<float, 4>, SIZE_V> vertices,
+    std::array<GLushort, SIZE_I> indices, engine::math::vec4 color) {
+    indices[i] = SIZE_I;
+
+    std::cout << vertices.data() << std::endl;
+
+    std::array<std::array<float, 4>, SIZE_V> v_colors = { {0.0f} };
+    for(auto& clr : v_colors) {
+        clr = { color.x, color.y, color.z, color.w };
     }
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
 
-void create_parallelogram(int i, const engine::math::vec4& color) {
-    indices[i] = 6;
     glGenVertexArrays(1, &VaoId[i]);
     glBindVertexArray(VaoId[i]);
     {
@@ -304,60 +377,25 @@ void create_parallelogram(int i, const engine::math::vec4& color) {
 
         glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
         {
-            glBufferData(GL_ARRAY_BUFFER, sizeof(para_v), para_v, GL_STATIC_DRAW);
+            for(const auto& vertex : vertices) {
+
+            }
+            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), NULL, GL_STATIC_DRAW);
+            for(const auto& vertex : vertices) {
+
+            }
             glEnableVertexAttribArray(VERTICES);
             glVertexAttribPointer(VERTICES, 4, GL_FLOAT, GL_FALSE, 0, 0);
         }
         glBindBuffer(GL_ARRAY_BUFFER, VboId[1]);
         {
-            float color_v[4][4]{
-                {color.x, color.y, color.z, color.w},
-                {color.x, color.y, color.z, color.w},
-                {color.x, color.y, color.z, color.w},
-                {color.x, color.y, color.z, color.w}
-            };
-            glBufferData(GL_ARRAY_BUFFER, sizeof(color_v), color_v, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(v_colors.data()), v_colors.data(), GL_STATIC_DRAW);
             glEnableVertexAttribArray(COLORS);
             glVertexAttribPointer(COLORS, 4, GL_FLOAT, GL_FALSE, 0, 0);
         }
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[2]);
         {
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(para_i), para_i, GL_STATIC_DRAW);
-        }
-    }
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
-void create_triangle(int i, const engine::math::vec4& color) {
-    indices[i] = 3;
-    glGenVertexArrays(1, &VaoId[i]);
-    glBindVertexArray(VaoId[i]);
-    {
-        glGenBuffers(3, VboId);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
-        {
-            glBufferData(GL_ARRAY_BUFFER, sizeof(right_triangle_v), right_triangle_v, GL_STATIC_DRAW);
-            glEnableVertexAttribArray(VERTICES);
-            glVertexAttribPointer(VERTICES, 4, GL_FLOAT, GL_FALSE, 0, 0);
-        }
-        glBindBuffer(GL_ARRAY_BUFFER, VboId[1]);
-        {
-            float color_v[4][4]{
-                {color.x, color.y, color.z, color.w},
-                {color.x, color.y, color.z, color.w},
-                {color.x, color.y, color.z, color.w},
-                {color.x, color.y, color.z, color.w}
-            };
-            glBufferData(GL_ARRAY_BUFFER, sizeof(color_v), color_v, GL_STATIC_DRAW);
-            glEnableVertexAttribArray(COLORS);
-            glVertexAttribPointer(COLORS, 4, GL_FLOAT, GL_FALSE, 0, 0);
-        }
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[2]);
-        {
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(right_triangle_i), right_triangle_i, GL_STATIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices.data()), indices.data(), GL_STATIC_DRAW);
         }
     }
     glBindVertexArray(0);
@@ -366,50 +404,52 @@ void create_triangle(int i, const engine::math::vec4& color) {
 }
 
 void createBufferObjects() {
-    engine::math::vec3 z_axis(0.0f, 0.0f, 1.0f);
-    create_square(0, purple);
-    transforms[0] = 
-        engine::math::mat_fact::translate(0.0f, -0.35f, 0.0f) * 
-        engine::math::mat_fact::rodr_rot(45.0f, z_axis) * 
-        engine::math::mat_fact::scale(0.5f, 0.5f, 1.0f);
+    create_object(0, v_square, i_square, teal);
 
-    create_triangle(1, yellow);
-    transforms[1] =
-        engine::math::mat_fact::translate(0.265f, -0.35f, 0.0f) *
-        engine::math::mat_fact::rodr_rot(45.0f, z_axis);
+    //engine::math::vec3 z_axis(0.0f, 0.0f, 1.0f);
+    //create_square(0, purple);
+    //transforms[0] =
+    //    engine::math::mat_fact::translate(0.0f, -0.35f, 0.0f) *
+    //    engine::math::mat_fact::rodr_rot(45.0f, z_axis) *
+    //    engine::math::mat_fact::scale(0.5f, 0.5f, 1.0f);
 
-    create_triangle(2, red);
-    transforms[2] =
-        engine::math::mat_fact::translate(0.0f, -0.085f, 0.0f) *
-        engine::math::mat_fact::rodr_rot(135.0f, z_axis) *
-        engine::math::mat_fact::scale(0.5f, 0.5f, 1.0f);
+    //create_triangle(1, yellow);
+    //transforms[1] =
+    //    engine::math::mat_fact::translate(0.265f, -0.35f, 0.0f) *
+    //    engine::math::mat_fact::rodr_rot(45.0f, z_axis);
 
-    create_triangle(3, blue);
-    transforms[3] =
-        engine::math::mat_fact::translate(-0.266f, 0.179f, 0.0f) *
-        engine::math::mat_fact::rodr_rot(180.0f, z_axis) *
-        engine::math::mat_fact::scale(0.71f, 0.71f, 1.0f);
+    //create_triangle(2, red);
+    //transforms[2] =
+    //    engine::math::mat_fact::translate(0.0f, -0.085f, 0.0f) *
+    //    engine::math::mat_fact::rodr_rot(135.0f, z_axis) *
+    //    engine::math::mat_fact::scale(0.5f, 0.5f, 1.0f);
 
-    create_triangle(4, green);
-    transforms[4] =
-        engine::math::mat_fact::translate(-0.27f, 0.71f, 0.0f) *
-        engine::math::mat_fact::rodr_rot(225.0f, z_axis);
+    //create_triangle(3, blue);
+    //transforms[3] =
+    //    engine::math::mat_fact::translate(-0.266f, 0.179f, 0.0f) *
+    //    engine::math::mat_fact::rodr_rot(180.0f, z_axis) *
+    //    engine::math::mat_fact::scale(0.71f, 0.71f, 1.0f);
 
-    create_parallelogram(5, brown);
-    transforms[5] =
-        engine::math::mat_fact::translate(0.436f, 0.272f, 0.0f) *
-        engine::math::mat_fact::scale(0.95f, 0.243f, 1.0f);
+    //create_triangle(4, green);
+    //transforms[4] =
+    //    engine::math::mat_fact::translate(-0.27f, 0.71f, 0.0f) *
+    //    engine::math::mat_fact::rodr_rot(225.0f, z_axis);
 
-    create_triangle(6, teal);
-    transforms[6] =
-        engine::math::mat_fact::translate(0.35f, 0.63f, 0.0f) *
-        engine::math::mat_fact::rodr_rot(225.0f, z_axis) *
-        engine::math::mat_fact::scale(0.5f, 0.5f, 1.0f);
+    //create_parallelogram(5, brown);
+    //transforms[5] =
+    //    engine::math::mat_fact::translate(0.436f, 0.272f, 0.0f) *
+    //    engine::math::mat_fact::scale(0.95f, 0.243f, 1.0f);
 
-    for(int i = 0; i < OBJS; i++) {
-        transforms[i] = transforms[i] *
-            engine::math::mat_fact::scale(0.75, 0.75, 1.0f);
-    }
+    //create_triangle(6, teal);
+    //transforms[6] =
+    //    engine::math::mat_fact::translate(0.35f, 0.63f, 0.0f) *
+    //    engine::math::mat_fact::rodr_rot(225.0f, z_axis) *
+    //    engine::math::mat_fact::scale(0.5f, 0.5f, 1.0f);
+
+    //for(int i = 0; i < OBJS; i++) {
+    //    transforms[i] = transforms[i] *
+    //        engine::math::mat_fact::scale(0.75, 0.75, 1.0f);
+    //}
 
 #ifndef ERROR_CALLBACK
     checkOpenGLError("ERROR: Could not create VAOs and VBOs.");
