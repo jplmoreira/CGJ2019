@@ -26,6 +26,9 @@
     <ClCompile Include="src\test\test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\geometry\geometry.hpp" />
+    <ClInclude Include="src\engine\geometry\object.hpp" />
+    <ClInclude Include="src\engine\include.hpp" />
     <ClInclude Include="src\engine\math\matrices.hpp" />
     <ClInclude Include="src\engine\math\mat_fact.hpp" />
     <ClInclude Include="src\engine\math\vectors.hpp" />
