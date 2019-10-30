@@ -52,8 +52,8 @@ namespace engine {
                 glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
                 {
                     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-                    glEnableVertexAttribArray(VERTICES);
-                    glVertexAttribPointer(VERTICES, 4, GL_FLOAT, GL_FALSE, 0, 0);
+                    glEnableVertexAttribArray(ATTR::VERTICES);
+                    glVertexAttribPointer(ATTR::VERTICES, 4, GL_FLOAT, GL_FALSE, 0, 0);
                 }
                 glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
                 {
@@ -64,8 +64,8 @@ namespace engine {
                         {color.x, color.y, color.z, color.w}
                     };
                     glBufferData(GL_ARRAY_BUFFER, sizeof(v_color), v_color, GL_STATIC_DRAW);
-                    glEnableVertexAttribArray(COLORS);
-                    glVertexAttribPointer(COLORS, 4, GL_FLOAT, GL_FALSE, 0, 0);
+                    glEnableVertexAttribArray(ATTR::COLORS);
+                    glVertexAttribPointer(ATTR::COLORS, 4, GL_FLOAT, GL_FALSE, 0, 0);
                 }
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
                 {

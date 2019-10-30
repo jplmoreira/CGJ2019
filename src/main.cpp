@@ -3,15 +3,12 @@
 
 #include "engine/include.hpp"
 
-#include "engine/math/vectors.hpp"
-#include "engine/math/matrices.hpp"
-#include "engine/math/mat_fact.hpp"
+#include "engine/shader.hpp"
 #include "engine/geometry/object.hpp"
 #include "engine/geometry/geometry.hpp"
 
 std::vector<engine::geometry::object> objs;
 
-#define ERROR_CALLBACK
 #ifdef  ERROR_CALLBACK
 
 ////////////////////////////////////////////////// ERROR CALLBACK (OpenGL 4.3+)
@@ -117,76 +114,6 @@ static void checkOpenGLError(std::string error) {
 
 #endif // ERROR_CALLBACK
 
-/////////////////////////////////////////////////////////////////////// SHADERs
-
-const GLchar* VertexShader =
-{
-    "#version 330 core\n"
-
-    "in vec4 in_Position;\n"
-    "in vec4 in_Color;\n"
-    "out vec4 ex_Color;\n"
-
-    "uniform mat4 Matrix;\n"
-
-    "void main(void)\n"
-    "{\n"
-    "	gl_Position = Matrix * in_Position;\n"
-    "	ex_Color = in_Color;\n"
-    "}\n"
-};
-
-const GLchar* FragmentShader =
-{
-    "#version 330 core\n"
-
-    "in vec4 ex_Color;\n"
-    "out vec4 out_Color;\n"
-
-    "void main(void)\n"
-    "{\n"
-    "	out_Color = ex_Color;\n"
-    "}\n"
-};
-
-void createShaderProgram() {
-    VertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(VertexShaderId, 1, &VertexShader, 0);
-    glCompileShader(VertexShaderId);
-
-    FragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(FragmentShaderId, 1, &FragmentShader, 0);
-    glCompileShader(FragmentShaderId);
-
-    ProgramId = glCreateProgram();
-    glAttachShader(ProgramId, VertexShaderId);
-    glAttachShader(ProgramId, FragmentShaderId);
-
-    glBindAttribLocation(ProgramId, VERTICES, "in_Position");
-    glBindAttribLocation(ProgramId, COLORS, "in_Color");
-
-    glLinkProgram(ProgramId);
-    UniformId = glGetUniformLocation(ProgramId, "Matrix");
-
-    glDetachShader(ProgramId, VertexShaderId);
-    glDeleteShader(VertexShaderId);
-    glDetachShader(ProgramId, FragmentShaderId);
-    glDeleteShader(FragmentShaderId);
-
-#ifndef ERROR_CALLBACK
-    checkOpenGLError("ERROR: Could not create shaders.");
-#endif
-}
-
-void destroyShaderProgram() {
-    glUseProgram(0);
-    glDeleteProgram(ProgramId);
-
-#ifndef ERROR_CALLBACK
-    checkOpenGLError("ERROR: Could not destroy shaders.");
-#endif
-}
-
 /////////////////////////////////////////////////////////////////////// VAOs & VBOs
 
 void createBufferObjects() {
@@ -253,8 +180,8 @@ void destroyBufferObjects() {
 
     for(auto &o : objs) {
         glBindVertexArray(o.vao);
-        glDisableVertexAttribArray(VERTICES);
-        glDisableVertexAttribArray(COLORS);
+        glDisableVertexAttribArray(engine::ATTR::VERTICES);
+        glDisableVertexAttribArray(engine::ATTR::COLORS);
         glDeleteBuffers(3, vbo);
         glDeleteVertexArrays(1, &o.vao);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -272,9 +199,9 @@ void destroyBufferObjects() {
 void drawScene() {
     for(auto &o : objs) {
         glBindVertexArray(o.vao);
-        glUseProgram(ProgramId);
+        glUseProgram(engine::shader::get_instance()->get_id());
 
-        glUniformMatrix4fv(UniformId, 1, GL_FALSE, o.transform.data);
+        glUniformMatrix4fv(engine::shader::get_instance()->get_uniform(), 1, GL_FALSE, o.transform.data);
         glDrawElements(GL_TRIANGLES, o.num_indexes, GL_UNSIGNED_SHORT, (GLvoid*)0);
 
         glUseProgram(0);
@@ -289,7 +216,7 @@ void drawScene() {
 ///////////////////////////////////////////////////////////////////// CALLBACKS
 
 void window_close_callback(GLFWwindow* win) {
-    destroyShaderProgram();
+    engine::shader::get_instance()->destroy();
     destroyBufferObjects();
 }
 
@@ -388,7 +315,7 @@ GLFWwindow* setup(int major, int minor,
 #ifdef ERROR_CALLBACK
     setupErrorCallback();
 #endif
-    createShaderProgram();
+    engine::shader::get_instance()->load();
     createBufferObjects();
     return win;
 }

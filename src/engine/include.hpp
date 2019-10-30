@@ -6,9 +6,6 @@
 #include "math/vectors.hpp"
 #include "math/matrices.hpp"
 #include "math/mat_fact.hpp"
+#include "vert_attr.hpp"
 
-#define VERTICES 0
-#define COLORS 1
-
-GLuint VertexShaderId, FragmentShaderId, ProgramId;
-GLint UniformId;
+#define ERROR_CALLBACK
