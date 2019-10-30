@@ -62,14 +62,13 @@ GLint engine::shader::get_uniform() {
 
 void engine::shader::load() {
     const char* vertex_shader = read_shader("res/shaders/vertex.glsl");
-    std::cout << vertex_shader[0] << vertex_shader[1] << vertex_shader[2] << vertex_shader[3] << std::endl;
     GLuint vertex_shdr_id = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex_shdr_id, 1, &vertex_shader, 0);
+    glShaderSource(vertex_shdr_id, 1, &VertexShader, 0);
     glCompileShader(vertex_shdr_id);
 
     const char* fragment_shader = read_shader("res/shaders/fragment.glsl");
     GLuint fragment_shdr_id = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shdr_id, 1, &fragment_shader, 0);
+    glShaderSource(fragment_shdr_id, 1, &FragmentShader, 0);
     glCompileShader(fragment_shdr_id);
 
     program_id = glCreateProgram();

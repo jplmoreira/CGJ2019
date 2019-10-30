@@ -22,6 +22,7 @@
     <ClCompile Include="src\engine\math\matrices.cpp" />
     <ClCompile Include="src\engine\math\mat_fact.cpp" />
     <ClCompile Include="src\engine\math\vectors.cpp" />
+    <ClCompile Include="src\engine\scene.cpp" />
     <ClCompile Include="src\engine\shader.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\test\test.cpp" />
@@ -33,6 +34,7 @@
     <ClInclude Include="src\engine\math\matrices.hpp" />
     <ClInclude Include="src\engine\math\mat_fact.hpp" />
     <ClInclude Include="src\engine\math\vectors.hpp" />
+    <ClInclude Include="src\engine\scene.hpp" />
     <ClInclude Include="src\engine\shader.hpp" />
     <ClInclude Include="src\engine\vert_attr.hpp" />
     <ClInclude Include="src\test\test.hpp" />
