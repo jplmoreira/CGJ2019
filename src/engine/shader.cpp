@@ -3,39 +3,9 @@
 
 #include "shader.hpp"
 
-const GLchar* VertexShader =
-{
-    "#version 330 core\n"
-
-    "in vec4 in_Position;\n"
-    "in vec4 in_Color;\n"
-    "out vec4 ex_Color;\n"
-
-    "uniform mat4 Matrix;\n"
-
-    "void main(void)\n"
-    "{\n"
-    "	gl_Position = Matrix * in_Position;\n"
-    "	ex_Color = in_Color;\n"
-    "}\n"
-};
-
-const GLchar* FragmentShader =
-{
-    "#version 330 core\n"
-
-    "in vec4 ex_Color;\n"
-    "out vec4 out_Color;\n"
-
-    "void main(void)\n"
-    "{\n"
-    "	out_Color = ex_Color;\n"
-    "}\n"
-};
-
 std::shared_ptr<engine::shader> engine::shader::instance;
 
-const char* engine::shader::read_shader(std::string file_name) {
+std::string engine::shader::read_shader(std::string file_name) {
     std::string str;
 
     std::ifstream infile(file_name.c_str(), std::ios::in);
@@ -49,7 +19,7 @@ const char* engine::shader::read_shader(std::string file_name) {
     str.assign((std::istreambuf_iterator<char>(infile)),
         std::istreambuf_iterator<char>());
 
-    return str.c_str();
+    return str;
 }
 
 GLuint engine::shader::get_id() {
@@ -61,14 +31,16 @@ GLint engine::shader::get_uniform() {
 }
 
 void engine::shader::load() {
-    const char* vertex_shader = read_shader("res/shaders/vertex.glsl");
+    std::string vertex_shader = read_shader("res/shaders/vertex.glsl");
     GLuint vertex_shdr_id = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex_shdr_id, 1, &VertexShader, 0);
+    const GLchar* vscode = vertex_shader.c_str();
+    glShaderSource(vertex_shdr_id, 1, &vscode, 0);
     glCompileShader(vertex_shdr_id);
 
-    const char* fragment_shader = read_shader("res/shaders/fragment.glsl");
+    std::string fragment_shader = read_shader("res/shaders/fragment.glsl");
     GLuint fragment_shdr_id = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shdr_id, 1, &FragmentShader, 0);
+    const GLchar* fscode = fragment_shader.c_str();
+    glShaderSource(fragment_shdr_id, 1, &fscode, 0);
     glCompileShader(fragment_shdr_id);
 
     program_id = glCreateProgram();

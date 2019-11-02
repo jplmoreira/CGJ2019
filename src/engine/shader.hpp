@@ -10,7 +10,7 @@ namespace engine {
         GLuint program_id;
         GLint uniform_id;
 
-        static const char* read_shader(std::string file_name);
+        static std::string read_shader(std::string file_name);
 
     public:
         static std::shared_ptr<shader> get_instance() {
