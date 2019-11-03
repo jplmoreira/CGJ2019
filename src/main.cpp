@@ -250,7 +250,7 @@ int main(int argc, char* argv[]) {
     int is_fullscreen = 0;
     int is_vsync = 1;
     GLFWwindow* win = setup(gl_major, gl_minor,
-        1280, 1280, "Hello Modern 2D World", is_fullscreen, is_vsync);
+        1280, 1280, "Tangram", is_fullscreen, is_vsync);
     run(win);
     exit(EXIT_SUCCESS);
 }

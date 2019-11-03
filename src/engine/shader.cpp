@@ -51,7 +51,7 @@ void engine::shader::load() {
     glBindAttribLocation(program_id, engine::ATTR::COLORS, "in_color");
 
     glLinkProgram(program_id);
-    uniform_id = glGetUniformLocation(program_id, "Matrix");
+    uniform_id = glGetUniformLocation(program_id, "ModelMatrix");
 
     glDetachShader(program_id, vertex_shdr_id);
     glDeleteShader(vertex_shdr_id);
