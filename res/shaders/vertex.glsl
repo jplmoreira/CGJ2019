@@ -6,7 +6,12 @@ out vec4 ex_color;
 
 uniform mat4 ModelMatrix;
 
+uniform SharedMatrices {
+    mat4 ViewMatrix;
+    mat4 ProjectionMatrix;
+};
+
 void main(void) {
-	gl_Position = ModelMatrix * in_position;
+	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * in_position;
 	ex_color = in_color;
 }

@@ -9,6 +9,7 @@ namespace engine {
         static std::shared_ptr<shader> instance;
         GLuint program_id;
         GLint uniform_id;
+        const GLuint block_pointer = 0;
 
         static std::string read_shader(std::string file_name);
 
@@ -20,6 +21,7 @@ namespace engine {
 
         GLuint get_id();
         GLint get_uniform();
+        const GLuint get_block_ptr();
         void load();
         void destroy();
     };

@@ -1,8 +1,34 @@
 #include <cmath>
 
 #include "camera.hpp"
+#include "shader.hpp"
 
 std::shared_ptr<engine::camera> engine::camera::instance;
+
+void engine::camera::create_block() {
+    glGenBuffers(1, &ubo_id);
+
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo_id);
+    {
+        glBufferData(GL_UNIFORM_BUFFER, sizeof(float) * 16 * 2, 0, GL_STREAM_DRAW);
+        glBindBufferBase(GL_UNIFORM_BUFFER, shader::get_instance()->get_block_ptr(), ubo_id);
+    }
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+void engine::camera::calculate_camera() {
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo_id);
+    {
+        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float) * 16, math::mat4::identity_mat().data);
+        glBufferSubData(GL_UNIFORM_BUFFER, sizeof(float) * 16, sizeof(float) * 16, math::mat4::identity_mat().data);
+    }
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+void engine::camera::destroy_block() {
+    glDeleteBuffers(1, &ubo_id);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
 
 void engine::camera::look_at(const math::vec3& eye, const math::vec3& center, const math::vec3& up) {
     this->eye = math:: vec3(eye);

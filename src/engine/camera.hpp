@@ -12,12 +12,17 @@ namespace engine {
         math::vec3 center;
         math::vec3 up;
         math::mat4 project_mat;
+        GLuint ubo_id;
 
     public:
         static std::shared_ptr<camera> get_instance() {
             if(!instance) instance = std::make_shared<camera>();
             return instance;
         }
+
+        void create_block();
+        void calculate_camera();
+        void destroy_block();
 
         void look_at(const math::vec3 &eye, const math::vec3 &center,
             const math::vec3 &up);

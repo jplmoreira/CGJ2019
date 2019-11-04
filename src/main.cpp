@@ -3,6 +3,7 @@
 
 #include "engine/include.hpp"
 
+#include "engine/camera.hpp"
 #include "engine/shader.hpp"
 #include "engine/scene.hpp"
 
@@ -115,6 +116,7 @@ static void checkOpenGLError(std::string error) {
 
 void window_close_callback(GLFWwindow* win) {
     engine::shader::get_instance()->destroy();
+    engine::camera::get_instance()->destroy_block();
     engine::scene::get_instance()->delete_objects();
 }
 
@@ -214,13 +216,20 @@ GLFWwindow* setup(int major, int minor,
     setupErrorCallback();
 #endif
     engine::shader::get_instance()->load();
+    engine::camera::get_instance()->create_block();
     engine::scene::get_instance()->create_objects();
+    engine::math::vec3 eye = engine::math::vec3(0.0f, 0.0f, 5.0f);
+    engine::math::vec3 center = engine::math::vec3(0.0f, 0.0f, 0.0f);
+    engine::math::vec3 up = engine::math::vec3(0.0f, 1.0f, 0.0f);
+    engine::camera::get_instance()->look_at(eye, center, up);
+    engine::camera::get_instance()->orthographic(-2, 2, 2, -2, 1, 10);
     return win;
 }
 
 ////////////////////////////////////////////////////////////////////////// RUN
 
 void display(GLFWwindow* win, double elapsed_sec) {
+    engine::camera::get_instance()->calculate_camera();
     engine::scene::get_instance()->draw();
 }
 
@@ -250,7 +259,7 @@ int main(int argc, char* argv[]) {
     int is_fullscreen = 0;
     int is_vsync = 1;
     GLFWwindow* win = setup(gl_major, gl_minor,
-        1280, 1280, "Tangram", is_fullscreen, is_vsync);
+        1280, 1280, "CGJ Project", is_fullscreen, is_vsync);
     run(win);
     exit(EXIT_SUCCESS);
 }

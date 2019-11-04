@@ -30,6 +30,10 @@ GLint engine::shader::get_uniform() {
     return uniform_id;
 }
 
+const GLuint engine::shader::get_block_ptr() {
+    return block_pointer;
+}
+
 void engine::shader::load() {
     std::string vertex_shader = read_shader("res/shaders/vertex.glsl");
     GLuint vertex_shdr_id = glCreateShader(GL_VERTEX_SHADER);
@@ -52,6 +56,8 @@ void engine::shader::load() {
 
     glLinkProgram(program_id);
     uniform_id = glGetUniformLocation(program_id, "ModelMatrix");
+    GLint ubo_id = glGetUniformBlockIndex(program_id, "SharedMatrices");
+    glUniformBlockBinding(program_id, ubo_id, block_pointer);
 
     glDetachShader(program_id, vertex_shdr_id);
     glDeleteShader(vertex_shdr_id);
