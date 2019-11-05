@@ -1,4 +1,6 @@
 #include <vector>
+#include <sstream>
+#include <iomanip>
 #include <iostream>
 
 #include "engine/include.hpp"
@@ -222,13 +224,33 @@ GLFWwindow* setup(int major, int minor,
     engine::math::vec3 center = engine::math::vec3(0.0f, 0.0f, 0.0f);
     engine::math::vec3 up = engine::math::vec3(0.0f, 1.0f, 0.0f);
     engine::camera::get_instance()->look_at(eye, center, up);
-    engine::camera::get_instance()->orthographic(-2, 2, 2, -2, 1, 10);
+    engine::camera::get_instance()->orthographic(-1, 1, 1, -1, 1, 10);
+    std::cout << engine::camera::get_instance()->projection() << std::endl;
     return win;
 }
 
 ////////////////////////////////////////////////////////////////////////// RUN
 
+void updateFPS(GLFWwindow* win, double elapsed_sec) {
+    static unsigned int acc_frames = 0;
+    static double acc_time = 0.0;
+    const double UPDATE_TIME = 1.0;
+
+    ++acc_frames;
+    acc_time += elapsed_sec;
+    if(acc_time > UPDATE_TIME) {
+        std::ostringstream oss;
+        double fps = acc_frames / acc_time;
+        oss << std::fixed << std::setw(5) << std::setprecision(1) << fps << " FPS";
+        glfwSetWindowTitle(win, oss.str().c_str());
+
+        acc_frames = 0;
+        acc_time = 0.0;
+    }
+}
+
 void display(GLFWwindow* win, double elapsed_sec) {
+    updateFPS(win, elapsed_sec);
     engine::camera::get_instance()->calculate_camera();
     engine::scene::get_instance()->draw();
 }

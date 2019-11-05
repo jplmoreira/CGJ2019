@@ -19,8 +19,8 @@ void engine::camera::create_block() {
 void engine::camera::calculate_camera() {
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_id);
     {
-        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float) * 16, math::mat4::identity_mat().data);
-        glBufferSubData(GL_UNIFORM_BUFFER, sizeof(float) * 16, sizeof(float) * 16, math::mat4::identity_mat().data);
+        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float) * 16, view().data);
+        glBufferSubData(GL_UNIFORM_BUFFER, sizeof(float) * 16, sizeof(float) * 16, projection().data);
     }
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
@@ -54,7 +54,7 @@ void engine::camera::orthographic(const float left, const float right, const flo
     
     project_mat = math::mat4(2.0f / (right - left), 0.0f, 0.0f, 0.0f,
         0.0f, 2.0f / (up - bottom), 0.0f, 0.0f,
-        0.0f, 0.0f, 2.0f / (far - near), 0.0f,
+        0.0f, 0.0f, 2.0f / (near - far), 0.0f,
         (left + right) / (left - right), (up + bottom) / (up - bottom),
         (near + far) / (near - far), 1.0f);
 }

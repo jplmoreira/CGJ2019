@@ -57,13 +57,11 @@ namespace engine {
                 }
                 glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
                 {
-                    float v_color[4][4]{
-                        {color.x, color.y, color.z, color.w},
-                        {color.x, color.y, color.z, color.w},
-                        {color.x, color.y, color.z, color.w},
-                        {color.x, color.y, color.z, color.w}
-                    };
-                    glBufferData(GL_ARRAY_BUFFER, sizeof(v_color), v_color, GL_STATIC_DRAW);
+                    GLsizei offset = sizeof(float) * 4;
+                    glBufferData(GL_ARRAY_BUFFER, offset * SIZE_V, nullptr, GL_STATIC_DRAW);
+                    for(int i = 0; i < SIZE_V; i++) {
+                        glBufferSubData(GL_ARRAY_BUFFER, i * offset, offset, color.data());
+                    }
                     glEnableVertexAttribArray(ATTR::COLORS);
                     glVertexAttribPointer(ATTR::COLORS, 4, GL_FLOAT, GL_FALSE, 0, 0);
                 }
