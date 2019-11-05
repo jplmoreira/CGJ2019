@@ -30,6 +30,40 @@ void engine::camera::destroy_block() {
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
+void engine::camera::setup(const bool ortho, const int w, const int h, const float fov, const float near, const float far) {
+    this->ortho = ortho;
+    this->fov = fov;
+    this->near = near;
+    this->far = far;
+    resize(w, h);
+}
+
+void engine::camera::resize(const int w, const int h) {
+    if(ortho) {
+        float o_w = (float)w / (w + h);
+        float o_h = (float)h / (w + h);
+        o_w *= 2;
+        o_h *= 2;
+        orthographic(-o_w, o_w, o_h, -o_h, this->near, this->far);
+    } else {
+        float aspect = (float)w / h;
+        perspective(this->fov, aspect, this->near, this->far);
+    }
+}
+
+void engine::camera::make_ortho(const bool ortho) {
+    this->ortho = ortho;
+}
+
+void engine::camera::field_of_view(const float fov) {
+    this->fov = fov;
+}
+
+void engine::camera::view_planes(const float near, const float far) {
+    this->near = near;
+    this->far = far;
+}
+
 void engine::camera::look_at(const math::vec3& eye, const math::vec3& center, const math::vec3& up) {
     this->eye = math:: vec3(eye);
     this->center = math::vec3(center);

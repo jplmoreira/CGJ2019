@@ -123,6 +123,7 @@ void window_close_callback(GLFWwindow* win) {
 }
 
 void window_size_callback(GLFWwindow* win, int winx, int winy) {
+    engine::camera::get_instance()->resize(winx, winy);
     glViewport(0, 0, winx, winy);
 }
 
@@ -220,12 +221,10 @@ GLFWwindow* setup(int major, int minor,
     engine::shader::get_instance()->load();
     engine::camera::get_instance()->create_block();
     engine::scene::get_instance()->create_objects();
-    engine::math::vec3 eye = engine::math::vec3(0.0f, 0.0f, 5.0f);
-    engine::math::vec3 center = engine::math::vec3(0.0f, 0.0f, 0.0f);
-    engine::math::vec3 up = engine::math::vec3(0.0f, 1.0f, 0.0f);
-    engine::camera::get_instance()->look_at(eye, center, up);
-    engine::camera::get_instance()->orthographic(-1, 1, 1, -1, 1, 10);
-    std::cout << engine::camera::get_instance()->projection() << std::endl;
+    engine::camera::get_instance()->setup(false, winx, winy, 30.0f, 1.0f, 10.0f);
+    engine::camera::get_instance()->look_at(engine::math::vec3(0.0f, 0.0f, 5.0f),
+        engine::math::vec3(0.0f, 0.0f, 0.0f),
+        engine::math::vec3(0.0f, 1.0f, 0.0f));
     return win;
 }
 
