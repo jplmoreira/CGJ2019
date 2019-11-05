@@ -280,7 +280,7 @@ int main(int argc, char* argv[]) {
     int is_fullscreen = 0;
     int is_vsync = 1;
     GLFWwindow* win = setup(gl_major, gl_minor,
-        1280, 1280, "CGJ Project", is_fullscreen, is_vsync);
+        1280, 720, "CGJ Project", is_fullscreen, is_vsync);
     run(win);
     exit(EXIT_SUCCESS);
 }

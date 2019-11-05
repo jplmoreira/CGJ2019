@@ -40,10 +40,15 @@ void engine::camera::setup(const bool ortho, const int w, const int h, const flo
 
 void engine::camera::resize(const int w, const int h) {
     if(ortho) {
-        float o_w = (float)w / (w + h);
-        float o_h = (float)h / (w + h);
-        o_w *= 2;
-        o_h *= 2;
+        float o_w;
+        float o_h;
+        if(w > h) {
+            o_h = 1.0f;
+            o_w = (float)w / h;
+        } else {
+            o_w = 1.0f;
+            o_h = (float)h / w;
+        }
         orthographic(-o_w, o_w, o_h, -o_h, this->near, this->far);
     } else {
         float aspect = (float)w / h;
