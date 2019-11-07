@@ -20,7 +20,7 @@ void engine::camera::create_block() {
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-void engine::camera::calculate_camera(double time_elapsed) {
+void engine::camera::calculate_camera(float time_elapsed) {
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_id);
     {
         glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float) * 16, view().data);
@@ -130,7 +130,7 @@ void engine::camera::rotate(float x, float y) {
 }
 
 void engine::camera::perspective(const float fov, const float aspect, const float near, const float far) {
-    const float pi = std::acos(-1);
+    const float pi = std::acosf(-1);
 
     float rad = fov * pi / 180.0f;
     rad /= 2;

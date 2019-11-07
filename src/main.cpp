@@ -261,7 +261,7 @@ GLFWwindow* setup(int major, int minor,
     engine::camera::get_instance()->create_block();
     engine::scene::get_instance()->create_objects();
     engine::camera::get_instance()->setup(false, winx, winy, 30.0f, 1.0f, 100.0f);
-    engine::camera::get_instance()->look_at(engine::math::vec3(0.0f, 0.0f, -5.0f),
+    engine::camera::get_instance()->look_at(engine::math::vec3(0.0f, 0.0f, 5.0f),
         engine::math::vec3(0.0f, 0.0f, 0.0f),
         engine::math::vec3(0.0f, 1.0f, 0.0f));
     return win;
@@ -289,7 +289,7 @@ void updateFPS(GLFWwindow* win, double elapsed_sec) {
 
 void display(GLFWwindow* win, double elapsed_sec) {
     updateFPS(win, elapsed_sec);
-    engine::camera::get_instance()->calculate_camera(elapsed_sec);
+    engine::camera::get_instance()->calculate_camera((float)elapsed_sec);
     engine::scene::get_instance()->draw();
 }
 

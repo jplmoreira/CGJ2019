@@ -7,8 +7,8 @@
 namespace engine {
     class shader {
         static std::shared_ptr<shader> instance;
-        GLuint program_id;
-        GLint uniform_id;
+        GLuint program_id = 0;
+        GLint uniform_id = 0;
         const GLuint block_pointer = 0;
 
         static std::string read_shader(std::string file_name);

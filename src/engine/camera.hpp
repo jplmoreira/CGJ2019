@@ -29,7 +29,7 @@ namespace engine {
             if(!instance) instance = std::make_shared<camera>();
             return instance;
         }
-        static enum class DIR {
+        enum class DIR {
             RIGHT,
             LEFT,
             UP,
@@ -40,7 +40,7 @@ namespace engine {
         camera();
 
         void create_block();
-        void calculate_camera(double time_elapsed);
+        void calculate_camera(float time_elapsed);
         void destroy_block();
 
         void setup(const bool ortho, const int w, const int h, const float fov, const float near, const float far);
