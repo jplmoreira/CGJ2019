@@ -4,6 +4,10 @@
 
 #include "include.hpp"
 
+struct direction {
+
+};
+
 namespace engine {
     class camera {
         static std::shared_ptr<camera> instance;
@@ -15,15 +19,24 @@ namespace engine {
         math::mat4 project_mat;
         GLuint ubo_id;
         float fov, near, far;
+        math::vec3 dir;
+        const float velocity = 5.0f;
 
     public:
         static std::shared_ptr<camera> get_instance() {
             if(!instance) instance = std::make_shared<camera>();
             return instance;
         }
+        static enum class DIR {
+            RIGHT,
+            LEFT,
+            UP,
+            DOWN,
+            STOP
+        };
 
         void create_block();
-        void calculate_camera();
+        void calculate_camera(double time_elapsed);
         void destroy_block();
 
         void setup(const bool ortho, const int w, const int h, const float fov, const float near, const float far);
@@ -33,6 +46,7 @@ namespace engine {
         void view_planes(const float near, const float far);
         void look_at(const math::vec3 &eye, const math::vec3 &center,
             const math::vec3 &up);
+        void move(DIR direction);
         void perspective(const float fov, const float aspect,
             const float near, const float far);
         void orthographic(const float left, const float right,

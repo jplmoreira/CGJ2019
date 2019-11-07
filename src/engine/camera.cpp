@@ -1,4 +1,5 @@
 #include <cmath>
+#include <chrono>
 
 #include "camera.hpp"
 #include "shader.hpp"
@@ -16,13 +17,15 @@ void engine::camera::create_block() {
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-void engine::camera::calculate_camera() {
+void engine::camera::calculate_camera(double time_elapsed) {
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_id);
     {
         glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float) * 16, view().data);
         glBufferSubData(GL_UNIFORM_BUFFER, sizeof(float) * 16, sizeof(float) * 16, projection().data);
     }
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    eye += dir * velocity * time_elapsed;
+    center += dir * velocity * time_elapsed;
 }
 
 void engine::camera::destroy_block() {
@@ -73,6 +76,20 @@ void engine::camera::look_at(const math::vec3& eye, const math::vec3& center, co
     this->eye = math:: vec3(eye);
     this->center = math::vec3(center);
     this->up = math::vec3(up);
+}
+
+void engine::camera::move(DIR direction) {
+    if(direction == DIR::RIGHT) {
+        dir = cross((center - eye).normalized(), up).normalized();
+    } else if(direction == DIR::LEFT) {
+        dir = -cross((center - eye).normalized(), up).normalized();
+    } else if(direction == DIR::UP) {
+        dir = (center - eye).normalized();
+    } else if(direction == DIR::DOWN) {
+        dir = (eye - center).normalized();
+    } else if(direction == DIR::STOP) {
+        dir = math::vec3();
+    }
 }
 
 void engine::camera::perspective(const float fov, const float aspect, const float near, const float far) {

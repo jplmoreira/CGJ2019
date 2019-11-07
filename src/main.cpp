@@ -127,6 +127,33 @@ void window_size_callback(GLFWwindow* win, int winx, int winy) {
     glViewport(0, 0, winx, winy);
 }
 
+void key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
+    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(win, GLFW_TRUE);
+        window_close_callback(win);
+    } else if(key == GLFW_KEY_W && action == GLFW_PRESS) {
+        engine::camera::get_instance()->move(engine::camera::DIR::UP);
+    } else if(key == GLFW_KEY_W && action == GLFW_RELEASE) {
+        engine::camera::get_instance()->move(engine::camera::DIR::STOP);
+    } else if(key == GLFW_KEY_S && action == GLFW_PRESS) {
+        engine::camera::get_instance()->move(engine::camera::DIR::DOWN);
+    } else if(key == GLFW_KEY_S && action == GLFW_RELEASE) {
+        engine::camera::get_instance()->move(engine::camera::DIR::STOP);
+    } else if(key == GLFW_KEY_D && action == GLFW_PRESS) {
+        engine::camera::get_instance()->move(engine::camera::DIR::RIGHT);
+    } else if(key == GLFW_KEY_D && action == GLFW_RELEASE) {
+        engine::camera::get_instance()->move(engine::camera::DIR::STOP);
+    } else if(key == GLFW_KEY_A && action == GLFW_PRESS) {
+        engine::camera::get_instance()->move(engine::camera::DIR::LEFT);
+    } else if(key == GLFW_KEY_A && action == GLFW_RELEASE) {
+        engine::camera::get_instance()->move(engine::camera::DIR::STOP);
+    }
+}
+
+void mouse_callback(GLFWwindow* win, double xpos, double ypos) {}
+
+void mouse_button_callback(GLFWwindow* win, int button, int action, int mods) {}
+
 ///////////////////////////////////////////////////////////////////////// SETUP
 
 void glfw_error_callback(int error, const char* description) {
@@ -149,6 +176,10 @@ GLFWwindow* setupWindow(int winx, int winy, const char* title,
 void setupCallbacks(GLFWwindow* win) {
     glfwSetWindowCloseCallback(win, window_close_callback);
     glfwSetWindowSizeCallback(win, window_size_callback);
+
+    glfwSetKeyCallback(win, key_callback);
+    glfwSetCursorPosCallback(win, mouse_callback);
+    glfwSetMouseButtonCallback(win, mouse_button_callback);
 }
 
 GLFWwindow* setupGLFW(int gl_major, int gl_minor,
@@ -221,7 +252,7 @@ GLFWwindow* setup(int major, int minor,
     engine::shader::get_instance()->load();
     engine::camera::get_instance()->create_block();
     engine::scene::get_instance()->create_objects();
-    engine::camera::get_instance()->setup(false, winx, winy, 30.0f, 1.0f, 10.0f);
+    engine::camera::get_instance()->setup(false, winx, winy, 30.0f, 1.0f, 100.0f);
     engine::camera::get_instance()->look_at(engine::math::vec3(0.0f, 0.0f, 5.0f),
         engine::math::vec3(0.0f, 0.0f, 0.0f),
         engine::math::vec3(0.0f, 1.0f, 0.0f));
@@ -250,7 +281,7 @@ void updateFPS(GLFWwindow* win, double elapsed_sec) {
 
 void display(GLFWwindow* win, double elapsed_sec) {
     updateFPS(win, elapsed_sec);
-    engine::camera::get_instance()->calculate_camera();
+    engine::camera::get_instance()->calculate_camera(elapsed_sec);
     engine::scene::get_instance()->draw();
 }
 
@@ -280,7 +311,7 @@ int main(int argc, char* argv[]) {
     int is_fullscreen = 0;
     int is_vsync = 1;
     GLFWwindow* win = setup(gl_major, gl_minor,
-        1280, 720, "CGJ Project", is_fullscreen, is_vsync);
+        1280, 1000, "CGJ Project", is_fullscreen, is_vsync);
     run(win);
     exit(EXIT_SUCCESS);
 }
