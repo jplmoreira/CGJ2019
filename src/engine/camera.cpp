@@ -7,7 +7,9 @@
 std::shared_ptr<engine::camera> engine::camera::instance;
 
 engine::camera::camera() :
-    ubo_id(0), fov(0), near(0), far(0), ortho(false) {}
+    ubo_id(0), ortho(false), rotation(false),
+    change(false), fov(0), near(0), far(0),
+    width(0), height(0), velocity(5.0f) {}
 
 void engine::camera::create_block() {
     glGenBuffers(1, &ubo_id);
@@ -45,6 +47,8 @@ void engine::camera::setup(const bool ortho, const int w, const int h, const flo
 }
 
 void engine::camera::resize(const int w, const int h) {
+    this->width = w;
+    this->height = h;
     if(ortho) {
         float o_w;
         float o_h;
@@ -62,8 +66,14 @@ void engine::camera::resize(const int w, const int h) {
     }
 }
 
-void engine::camera::make_ortho(const bool ortho) {
-    this->ortho = ortho;
+void engine::camera::change_project(const bool press) {
+    if(press && !change) {
+        change = true;
+        ortho = !ortho;
+        resize(this->width, this->height);
+    } else if(!press) {
+        change = false;
+    }
 }
 
 void engine::camera::field_of_view(const float fov) {

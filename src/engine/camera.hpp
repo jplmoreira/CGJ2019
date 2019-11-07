@@ -12,17 +12,17 @@ namespace engine {
     class camera {
         static std::shared_ptr<camera> instance;
 
-        bool ortho;
         math::vec3 eye;
         math::vec3 center;
         math::vec3 up;
+        math::vec3 dir;
+        math::vec2 last_pos;
         math::mat4 project_mat;
         GLuint ubo_id;
+        bool ortho, rotation, change;
         float fov, near, far;
-        math::vec3 dir;
-        const float velocity = 5.0f;
-        bool rotation = false;
-        math::vec2 last_pos = math::vec2(-1.0f, -1.0f);
+        int width, height;
+        const float velocity;
 
     public:
         static std::shared_ptr<camera> get_instance() {
@@ -45,7 +45,7 @@ namespace engine {
 
         void setup(const bool ortho, const int w, const int h, const float fov, const float near, const float far);
         void resize(const int w, const int h);
-        void make_ortho(const bool ortho);
+        void change_project(const bool press);
         void field_of_view(const float fov);
         void view_planes(const float near, const float far);
         void look_at(const math::vec3 &eye, const math::vec3 &center,
