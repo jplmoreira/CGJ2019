@@ -150,9 +150,17 @@ void key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) 
     }
 }
 
-void mouse_callback(GLFWwindow* win, double xpos, double ypos) {}
+void mouse_callback(GLFWwindow* win, double xpos, double ypos) {
+    engine::camera::get_instance()->rotate((float)xpos, (float)ypos);
+}
 
-void mouse_button_callback(GLFWwindow* win, int button, int action, int mods) {}
+void mouse_button_callback(GLFWwindow* win, int button, int action, int mods) {
+    if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        engine::camera::get_instance()->activate_rotation(true);
+    } else if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+        engine::camera::get_instance()->activate_rotation(false);
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////// SETUP
 
@@ -253,7 +261,7 @@ GLFWwindow* setup(int major, int minor,
     engine::camera::get_instance()->create_block();
     engine::scene::get_instance()->create_objects();
     engine::camera::get_instance()->setup(false, winx, winy, 30.0f, 1.0f, 100.0f);
-    engine::camera::get_instance()->look_at(engine::math::vec3(0.0f, 0.0f, 5.0f),
+    engine::camera::get_instance()->look_at(engine::math::vec3(0.0f, 0.0f, -5.0f),
         engine::math::vec3(0.0f, 0.0f, 0.0f),
         engine::math::vec3(0.0f, 1.0f, 0.0f));
     return win;

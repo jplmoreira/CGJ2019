@@ -21,6 +21,8 @@ namespace engine {
         float fov, near, far;
         math::vec3 dir;
         const float velocity = 5.0f;
+        bool rotation = false;
+        math::vec2 last_pos = math::vec2(-1.0f, -1.0f);
 
     public:
         static std::shared_ptr<camera> get_instance() {
@@ -35,6 +37,8 @@ namespace engine {
             STOP
         };
 
+        camera();
+
         void create_block();
         void calculate_camera(double time_elapsed);
         void destroy_block();
@@ -47,6 +51,8 @@ namespace engine {
         void look_at(const math::vec3 &eye, const math::vec3 &center,
             const math::vec3 &up);
         void move(DIR direction);
+        void activate_rotation(bool activate);
+        void rotate(float x, float y);
         void perspective(const float fov, const float aspect,
             const float near, const float far);
         void orthographic(const float left, const float right,

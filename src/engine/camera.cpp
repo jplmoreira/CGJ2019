@@ -6,6 +6,9 @@
 
 std::shared_ptr<engine::camera> engine::camera::instance;
 
+engine::camera::camera() :
+    ubo_id(0), fov(0), near(0), far(0), ortho(false) {}
+
 void engine::camera::create_block() {
     glGenBuffers(1, &ubo_id);
 
@@ -89,6 +92,40 @@ void engine::camera::move(DIR direction) {
         dir = (eye - center).normalized();
     } else if(direction == DIR::STOP) {
         dir = math::vec3();
+    }
+}
+
+void engine::camera::activate_rotation(bool activate) {
+    rotation = activate;
+    if(!activate) last_pos = math::vec2(-1.0f, -1.0f);
+}
+
+void engine::camera::rotate(float x, float y) {
+    if(rotation) {
+        if(last_pos.x < 0.0f || last_pos.y < 0.0f) {
+            last_pos = math::vec2(x, y);
+        } else {
+            math::vec2 diff = math::vec2(x, y) - last_pos;
+            if(std::fabs(diff.x) < std::fabs(diff.y)) {   // PITCH
+                math::vec3 v = center - eye;
+                math::vec3 s = cross(v, up).normalized();
+
+                float angle = 0.001f;
+                math::mat3 rot_mat = math::mat_fact::rodr_rot(angle * diff.y, s);
+                math::vec3 v_rot = rot_mat * v;
+                center = eye + v_rot;
+                up = rot_mat * up;
+            } else {                                    // YAW
+                math::vec3 v = center - eye;
+                math::vec3 s = cross(v, up).normalized();
+                math::vec3 u = cross(s, v);
+
+                float angle = 0.01f;
+                math::vec3 v_rot = math::mat_fact::rodr_rot(angle * diff.x, u) * v;
+                center = eye + v_rot;
+                last_pos = math::vec2(x, y);
+            }
+        }
     }
 }
 
