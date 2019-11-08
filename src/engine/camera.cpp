@@ -116,25 +116,17 @@ void engine::camera::rotate(float x, float y) {
             last_pos = math::vec2(x, y);
         } else {
             math::vec2 diff = math::vec2(x, y) - last_pos;
-            if(std::fabs(diff.x) < std::fabs(diff.y)) {   // PITCH
-                math::vec3 v = center - eye;
-                math::vec3 s = cross(v, up).normalized();
+            math::vec3 v = center - eye;
+            math::vec3 s = cross(v, up).normalized();
+            math::vec3 u = cross(s, v);
+            
+            float angle = 0.001f;
+            math::mat3 pitch = math::mat_fact::rodr_rot(angle * diff.y, s);
+            math::mat3 yaw = math::mat_fact::rodr_rot(angle * diff.x, u);
 
-                float angle = 0.001f;
-                math::mat3 rot_mat = math::mat_fact::rodr_rot(angle * diff.y, s);
-                math::vec3 v_rot = rot_mat * v;
-                center = eye + v_rot;
-                up = rot_mat * up;
-            } else {                                    // YAW
-                math::vec3 v = center - eye;
-                math::vec3 s = cross(v, up).normalized();
-                math::vec3 u = cross(s, v);
-
-                float angle = 0.01f;
-                math::vec3 v_rot = math::mat_fact::rodr_rot(angle * diff.x, u) * v;
-                center = eye + v_rot;
-                last_pos = math::vec2(x, y);
-            }
+            up = pitch * up;
+            math::vec3 v_rot = pitch * yaw * v;
+            center = eye + v_rot;
         }
     }
 }
