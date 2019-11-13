@@ -8,6 +8,7 @@
 #include "math/vectors.hpp"
 #include "math/matrices.hpp"
 #include "math/mat_fact.hpp"
+#include "math/quaternions.hpp"
 #include "vert_attr.hpp"
 
 #define ERROR_CALLBACK

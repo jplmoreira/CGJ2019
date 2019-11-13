@@ -32,3 +32,17 @@ engine::math::mat3 engine::math::mat_fact::rodr_rot(const float angle, const vec
     mat3 a = dual_mat(axis.normalized());
     return mat3::identity_mat() + std::sinf(rad) * a + (1 - std::cosf(rad)) * (a * a);
 }
+
+engine::math::mat3 engine::math::mat_fact::rotate(const qtrn& q) {
+    float v1 = 1.0f - 2.0f * (q.v.y * q.v.y + q.v.z * q.v.z);
+    float v2 = 2.0f * (q.v.x * q.v.y + q.t * q.v.z);
+    float v3 = 2.0f * (q.v.x * q.v.z - q.t * q.v.y);
+    float v4 = 2.0f * (q.v.x * q.v.y - q.t * q.v.z);
+    float v5 = 1.0f - 2.0f * (q.v.x * q.v.x + q.v.z * q.v.z);
+    float v6 = 2.0f * (q.v.y * q.v.z + q.t * q.v.x);
+    float v7 = 2.0f * (q.v.x * q.v.z + q.t * q.v.y);
+    float v8 = 2.0f * (q.v.y * q.v.z - q.t * q.v.x);
+    float v9 = 1.0f - 2.0f * (q.v.x * q.v.x + q.v.y * q.v.y);
+
+    return mat3(v1, v2, v3, v4, v5, v6, v7, v8, v9);
+}
