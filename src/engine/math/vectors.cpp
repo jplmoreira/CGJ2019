@@ -1,7 +1,5 @@
 #include "vectors.hpp"
 
-#include <cmath>
-
 #define THRESHOLD 0.00001f
 
 ////////////////////////////////////////////////////////////////////////// VEC2
@@ -32,7 +30,7 @@ const float engine::math::vec2::quadrance() const {
 }
 
 const float engine::math::vec2::length() const {
-    return sqrt(quadrance());
+    return std::sqrt(quadrance());
 }
 
 const engine::math::vec2 engine::math::vec2::normalized() const {
@@ -139,7 +137,7 @@ const float engine::math::vec3::quadrance() const {
 }
 
 const float engine::math::vec3::length() const {
-    return sqrt(quadrance());
+    return std::sqrt(quadrance());
 }
 
 const engine::math::vec3 engine::math::vec3::normalized() const {
@@ -264,7 +262,7 @@ const float engine::math::vec4::quadrance() const {
 }
 
 const float engine::math::vec4::length() const {
-    return sqrt(quadrance());
+    return std::sqrt(quadrance());
 }
 
 const engine::math::vec4 engine::math::vec4::normalized() const {

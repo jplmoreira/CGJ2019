@@ -1,9 +1,5 @@
 #include "mat_fact.hpp"
 
-#include <cmath>
-
-const float pi = std::acosf(-1);
-
 engine::math::mat4 engine::math::mat_fact::translate(float dx, float dy, float dz) {
     return mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, dx, dy, dz, 1.0f);
 }
@@ -13,6 +9,7 @@ engine::math::mat4 engine::math::mat_fact::scale(float sx, float sy, float sz) {
 }
 
 engine::math::mat4 engine::math::mat_fact::rotate(float angle, vec3& axis) {
+    const float pi = std::acosf(-1);
     float rad = angle * pi / 180.0f;
     mat3 aux = mat3::identity_mat();
     if(axis.x == 1.0f) {
@@ -30,6 +27,7 @@ engine::math::mat3 engine::math::mat_fact::dual_mat(const vec3& v) {
 }
 
 engine::math::mat3 engine::math::mat_fact::rodr_rot(const float angle, const vec3& axis) {
+    const float pi = std::acosf(-1);
     float rad = angle * pi / 180.0f;
     mat3 a = dual_mat(axis.normalized());
     return mat3::identity_mat() + std::sinf(rad) * a + (1 - std::cosf(rad)) * (a * a);

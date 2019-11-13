@@ -1,4 +1,3 @@
-#include <cmath>
 #include <chrono>
 
 #include "camera.hpp"
@@ -132,8 +131,6 @@ void engine::camera::rotate(float x, float y) {
 }
 
 void engine::camera::perspective(const float fov, const float aspect, const float near, const float far) {
-    const float pi = std::acosf(-1);
-
     float rad = fov * pi / 180.0f;
     rad /= 2;
     float d = 1 / std::tan(rad);
