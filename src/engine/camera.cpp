@@ -8,7 +8,7 @@ std::shared_ptr<engine::camera> engine::camera::instance;
 engine::camera::camera() :
     ubo_id(0), ortho(false), rotation(false),
     change(false), fov(0), near(0), far(0),
-    width(0), height(0), velocity(5.0f) {}
+    width(0), height(0), velocity(5.0f), gimbal(false) {}
 
 void engine::camera::create_block() {
     glGenBuffers(1, &ubo_id);
@@ -75,6 +75,10 @@ void engine::camera::change_project(const bool press) {
     }
 }
 
+void engine::camera::toggle_gimbal() {
+    gimbal = !gimbal;
+}
+
 void engine::camera::field_of_view(const float fov) {
     this->fov = fov;
 }
@@ -120,8 +124,15 @@ void engine::camera::rotate(float x, float y) {
             math::vec3 u = cross(s, v);
             
             float angle = 0.001f;
-            math::mat3 pitch = math::mat_fact::rodr_rot(angle * diff.y, s);
-            math::mat3 yaw = math::mat_fact::rodr_rot(angle * diff.x, u);
+            math::mat3 pitch;
+            math::mat3 yaw;
+            if(gimbal) {
+                pitch = math::mat_fact::rodr_rot(angle * diff.y, s);
+                yaw = math::mat_fact::rodr_rot(angle * diff.x, u);
+            } else {
+                pitch = math::mat_fact::rot_qtrn(math::qtrn(s, angle * diff.y));
+                yaw = math::mat_fact::rot_qtrn(math::qtrn(u, angle * diff.x));
+            }
 
             up = pitch * up;
             math::vec3 v_rot = pitch * yaw * v;

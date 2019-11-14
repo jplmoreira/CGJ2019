@@ -151,6 +151,9 @@ void key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) 
         engine::camera::get_instance()->change_project(true);
     } else if(key == GLFW_KEY_P && action == GLFW_RELEASE) {
         engine::camera::get_instance()->change_project(false);
+    } else if(key == GLFW_KEY_G && action == GLFW_PRESS) {
+        std::cout << "toggling gimbal" << std::endl;
+        engine::camera::get_instance()->toggle_gimbal();
     }
 }
 

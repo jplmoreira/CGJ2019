@@ -19,7 +19,7 @@ namespace engine {
         math::vec2 last_pos;
         math::mat4 project_mat;
         GLuint ubo_id;
-        bool ortho, rotation, change;
+        bool ortho, rotation, change, gimbal;
         float fov, near, far;
         int width, height;
         const float velocity;
@@ -46,6 +46,7 @@ namespace engine {
         void setup(const bool ortho, const int w, const int h, const float fov, const float near, const float far);
         void resize(const int w, const int h);
         void change_project(const bool press);
+        void toggle_gimbal();
         void field_of_view(const float fov);
         void view_planes(const float near, const float far);
         void look_at(const math::vec3 &eye, const math::vec3 &center,

@@ -1,6 +1,10 @@
+#include <cmath>
+
 #include "quaternions.hpp"
 
 #define THRESHOLD 0.00001f
+
+const float pi = std::acosf(-1);
 
 engine::math::qtrn::qtrn() : 
     t(0.0f) {}
