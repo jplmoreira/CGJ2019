@@ -123,7 +123,7 @@ void engine::camera::rotate(float x, float y) {
             math::vec3 s = cross(v, up).normalized();
             math::vec3 u = cross(s, v);
             
-            float angle = 0.001f;
+            float angle = 0.01f;
             math::mat3 pitch;
             math::mat3 yaw;
             if(gimbal) {
@@ -134,9 +134,10 @@ void engine::camera::rotate(float x, float y) {
                 yaw = math::mat_fact::rot_qtrn(math::qtrn(u, angle * diff.x));
             }
 
+            eye = pitch * yaw * eye;
             up = pitch * up;
-            math::vec3 v_rot = pitch * yaw * v;
-            center = eye + v_rot;
+            //math::vec3 v_rot = pitch * yaw * v;
+            //center = eye + v_rot;
         }
     }
 }
