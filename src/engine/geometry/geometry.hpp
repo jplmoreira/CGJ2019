@@ -10,27 +10,27 @@ engine::math::vec4 green(62.0f / 255.0f, 137.0f / 255.0f, 98.0f / 255.0f, 1.0f);
 engine::math::vec4 brown(126.0f / 255.0f, 83.0f / 255.0f, 60.0f / 255.0f, 1.0f);
 engine::math::vec4 teal(19.0f / 255.0f, 111.0f / 255.0f, 114.0f / 255.0f, 1.0f);
 
-float v_triangle[3][4] = {
-    { 0.0f, 0.0f, 0.0f, 1.0f },
-    { 1.0f, 0.0f, 0.0f, 1.0f },
-    { 0.0f, 1.0f, 0.0f, 1.0f }
+float v_triangle[3][3] = {
+    { 0.0f, 0.0f, 0.0f},
+    { 1.0f, 0.0f, 0.0f  },
+    { 0.0f, 1.0f, 0.0f }
 };
 GLushort i_triangle[3] = { 0,1,2 };
 
-float v_square[4][4] = {
-    { 0.5f, 0.5f, 0.0f, 1.0f },
-    { -0.5f, 0.5f, 0.0f, 1.0f },
-    { -0.5f, -0.5f, 0.0f, 1.0f },
-    { 0.5f, -0.5f, 0.0f, 1.0f }
+float v_square[4][3] = {
+    { 0.5f, 0.5f, 0.0f },
+    { -0.5f, 0.5f, 0.0f },
+    { -0.5f, -0.5f, 0.0f },
+    { 0.5f, -0.5f, 0.0f }
 };
 
 GLushort i_square[6] = { 0, 1, 2, 0, 2, 3 };
 
-float v_para[4][4] = {
-    { 0.25f, 0.5f, 0.0f, 1.0f },
-    { -0.5f, 0.5f, 0.0f, 1.0f },
-    { -0.25f, -0.5f, 0.0f, 1.0f },
-    { 0.5f, -0.5f, 0.0f, 1.0f }
+float v_para[4][3] = {
+    { 0.25f, 0.5f, 0.0f },
+    { -0.5f, 0.5f, 0.0f },
+    { -0.25f, -0.5f, 0.0f },
+    { 0.5f, -0.5f, 0.0f }
 };
 
 GLushort i_para[6] = { 0, 1, 2, 0, 2, 3 };
@@ -38,34 +38,25 @@ GLushort i_para[6] = { 0, 1, 2, 0, 2, 3 };
 namespace engine {
     namespace geometry {
         template<std::size_t SIZE_V, std::size_t SIZE_I>
-        object create_object(float(&vertices)[SIZE_V][4],
+        object create_object(float(&vertices)[SIZE_V][3],
             GLushort(&indices)[SIZE_I], engine::math::vec4 color) {
-            GLuint vbo[3];
+            GLuint vbo[2];
             object o;
+            o.color = color;
             o.num_indexes = SIZE_I;
 
             glGenVertexArrays(1, &o.vao);
             glBindVertexArray(o.vao);
             {
-                glGenBuffers(3, vbo);
+                glGenBuffers(2, vbo);
 
                 glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
                 {
                     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
                     glEnableVertexAttribArray(ATTR::VERTICES);
-                    glVertexAttribPointer(ATTR::VERTICES, 4, GL_FLOAT, GL_FALSE, 0, 0);
+                    glVertexAttribPointer(ATTR::VERTICES, 3, GL_FLOAT, GL_FALSE, 0, 0);
                 }
-                glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-                {
-                    GLsizei offset = sizeof(float) * 4;
-                    glBufferData(GL_ARRAY_BUFFER, offset * SIZE_V, nullptr, GL_STATIC_DRAW);
-                    for(int i = 0; i < SIZE_V; i++) {
-                        glBufferSubData(GL_ARRAY_BUFFER, i * offset, offset, color.data());
-                    }
-                    glEnableVertexAttribArray(ATTR::COLORS);
-                    glVertexAttribPointer(ATTR::COLORS, 4, GL_FLOAT, GL_FALSE, 0, 0);
-                }
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
                 {
                     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
                 }

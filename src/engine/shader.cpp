@@ -2,8 +2,7 @@
 #include <iostream>
 
 #include "shader.hpp"
-
-std::shared_ptr<engine::shader> engine::shader::instance;
+#include "camera.hpp"
 
 std::string engine::shader::read_shader(std::string file_name) {
     std::string str;
@@ -22,26 +21,16 @@ std::string engine::shader::read_shader(std::string file_name) {
     return str;
 }
 
-GLuint engine::shader::get_id() {
-    return program_id;
-}
+engine::shader::shader() {}
 
-GLint engine::shader::get_uniform() {
-    return uniform_id;
-}
-
-const GLuint engine::shader::get_block_ptr() {
-    return block_pointer;
-}
-
-void engine::shader::load() {
-    std::string vertex_shader = read_shader("res/shaders/vertex.glsl");
+engine::shader::shader(std::string vert_file, std::string frag_file) {
+    std::string vertex_shader = read_shader(vert_file);
     GLuint vertex_shdr_id = glCreateShader(GL_VERTEX_SHADER);
     const GLchar* vscode = vertex_shader.c_str();
     glShaderSource(vertex_shdr_id, 1, &vscode, 0);
     glCompileShader(vertex_shdr_id);
 
-    std::string fragment_shader = read_shader("res/shaders/fragment.glsl");
+    std::string fragment_shader = read_shader(frag_file);
     GLuint fragment_shdr_id = glCreateShader(GL_FRAGMENT_SHADER);
     const GLchar* fscode = fragment_shader.c_str();
     glShaderSource(fragment_shdr_id, 1, &fscode, 0);
@@ -52,12 +41,13 @@ void engine::shader::load() {
     glAttachShader(program_id, fragment_shdr_id);
 
     glBindAttribLocation(program_id, engine::ATTR::VERTICES, "in_position");
-    glBindAttribLocation(program_id, engine::ATTR::COLORS, "in_color");
 
     glLinkProgram(program_id);
-    uniform_id = glGetUniformLocation(program_id, "ModelMatrix");
+    uniforms["ModelMatrix"] = glGetUniformLocation(program_id, "ModelMatrix");
+    uniforms["in_color"] = glGetUniformLocation(program_id, "in_color");
     GLint ubo_id = glGetUniformBlockIndex(program_id, "SharedMatrices");
-    glUniformBlockBinding(program_id, ubo_id, block_pointer);
+    blocks["SharedMatrices"] = 0;
+    glUniformBlockBinding(program_id, ubo_id, blocks["SharedMatrices"]);
 
     glDetachShader(program_id, vertex_shdr_id);
     glDeleteShader(vertex_shdr_id);
@@ -65,8 +55,17 @@ void engine::shader::load() {
     glDeleteShader(fragment_shdr_id);
 
 #ifndef ERROR_CALLBACK
-    checkOpenGLError("ERROR: Could not create shaders.");
+    checkOpenGLError("ERROR: Could not create shader.");
 #endif
+}
+
+GLuint engine::shader::get_id() {
+    return program_id;
+}
+
+void engine::shader::enable() {
+    glUseProgram(program_id);
+    camera::get_instance()->enable_block(blocks["SharedMatrices"]);
 }
 
 void engine::shader::destroy() {

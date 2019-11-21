@@ -2,8 +2,9 @@
 
 #include "scene.hpp"
 
-#include "geometry/geometry.hpp"
 #include "shader.hpp"
+#include "geometry/geometry.hpp"
+#include "manager/shader_manager.hpp"
 
 std::shared_ptr<engine::scene> engine::scene::instance;
 
@@ -98,13 +99,12 @@ void engine::scene::create_objects() {
 }
 
 void engine::scene::delete_objects() {
-    GLuint vbo[3];
+    GLuint vbo[2];
 
     for(auto& o : objs) {
         glBindVertexArray(o.vao);
         glDisableVertexAttribArray(ATTR::VERTICES);
-        glDisableVertexAttribArray(ATTR::COLORS);
-        glDeleteBuffers(3, vbo);
+        glDeleteBuffers(2, vbo);
         glDeleteVertexArrays(1, &o.vao);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -119,9 +119,11 @@ void engine::scene::delete_objects() {
 void engine::scene::draw() {
     for(auto& o : objs) {
         glBindVertexArray(o.vao);
-        glUseProgram(shader::get_instance()->get_id());
+        shader shdr = manager::shader_manager::get_instance()->elements["main"];
+        shdr.enable();
 
-        glUniformMatrix4fv(shader::get_instance()->get_uniform(), 1, GL_FALSE, o.transform.data);
+        glUniformMatrix4fv(shdr.uniforms["ModelMatrix"], 1, GL_FALSE, o.transform.data);
+        glUniform4fv(shdr.uniforms["in_color"], 1, o.color.data());
         glDrawElements(GL_TRIANGLES, o.num_indexes, GL_UNSIGNED_SHORT, (GLvoid*)0);
 
         glUseProgram(0);

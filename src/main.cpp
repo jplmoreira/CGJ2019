@@ -6,8 +6,8 @@
 #include "engine/include.hpp"
 
 #include "engine/camera.hpp"
-#include "engine/shader.hpp"
 #include "engine/scene.hpp"
+#include "engine/manager/shader_manager.hpp"
 
 #ifdef  ERROR_CALLBACK
 
@@ -117,7 +117,7 @@ static void checkOpenGLError(std::string error) {
 ///////////////////////////////////////////////////////////////////// CALLBACKS
 
 void window_close_callback(GLFWwindow* win) {
-    engine::shader::get_instance()->destroy();
+    engine::manager::shader_manager::free_instance();
     engine::camera::get_instance()->destroy_block();
     engine::scene::get_instance()->delete_objects();
 }
@@ -263,13 +263,12 @@ GLFWwindow* setup(int major, int minor,
 #ifdef ERROR_CALLBACK
     setupErrorCallback();
 #endif
-    engine::shader::get_instance()->load();
-    engine::camera::get_instance()->create_block();
-    engine::scene::get_instance()->create_objects();
+    engine::manager::shader_manager::get_instance()->elements["main"] = engine::shader("res/shaders/vertex.glsl", "res/shaders/fragment.glsl");
     engine::camera::get_instance()->setup(false, winx, winy, 30.0f, 1.0f, 100.0f);
     engine::camera::get_instance()->look_at(engine::math::vec3(0.0f, 0.0f, 5.0f),
         engine::math::vec3(0.0f, 0.0f, 0.0f),
         engine::math::vec3(0.0f, 1.0f, 0.0f));
+    engine::scene::get_instance()->create_objects();
     return win;
 }
 

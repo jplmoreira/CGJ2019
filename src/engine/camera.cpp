@@ -8,26 +8,30 @@ std::shared_ptr<engine::camera> engine::camera::instance;
 engine::camera::camera() :
     ubo_id(0), ortho(false), rotation(false),
     change(false), fov(0), near(0), far(0),
-    width(0), height(0), velocity(5.0f), gimbal(false) {}
-
-void engine::camera::create_block() {
+    width(0), height(0), velocity(5.0f), gimbal(false) {
     glGenBuffers(1, &ubo_id);
+}
 
+void engine::camera::enable_block(const GLuint ubo_bp) {
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_id);
     {
         glBufferData(GL_UNIFORM_BUFFER, sizeof(float) * 16 * 2, 0, GL_STREAM_DRAW);
-        glBindBufferBase(GL_UNIFORM_BUFFER, shader::get_instance()->get_block_ptr(), ubo_id);
+        glBindBufferBase(GL_UNIFORM_BUFFER, ubo_bp, ubo_id);
+        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float) * 16, view().data);
+        glBufferSubData(GL_UNIFORM_BUFFER, sizeof(float) * 16, sizeof(float) * 16, projection().data);
     }
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 void engine::camera::calculate_camera(float time_elapsed) {
-    glBindBuffer(GL_UNIFORM_BUFFER, ubo_id);
-    {
-        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float) * 16, view().data);
-        glBufferSubData(GL_UNIFORM_BUFFER, sizeof(float) * 16, sizeof(float) * 16, projection().data);
-    }
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    math::vec3 v = (center - eye).normalized();
+    math::vec3 s = cross(v, up).normalized();
+    math::vec3 u = cross(s, v);
+
+    view_mat = math::mat4(s.x, u.x, -v.x, 0.0f,
+        s.y, u.y, -v.y, 0.0f,
+        s.z, u.z, -v.z, 0.0f,
+        -dot(s, eye), -dot(u, eye), dot(v, eye), 1.0f); 
     eye += dir * velocity * time_elapsed;
     center += dir * velocity * time_elapsed;
 }
@@ -164,14 +168,7 @@ void engine::camera::orthographic(const float left, const float right, const flo
 }
 
 const engine::math::mat4 engine::camera::view() const {
-    math::vec3 v = (center - eye).normalized();
-    math::vec3 s = cross(v, up).normalized();
-    math::vec3 u = cross(s, v);
-
-    return math::mat4(s.x, u.x, -v.x, 0.0f,
-        s.y, u.y, -v.y, 0.0f,
-        s.z, u.z, -v.z, 0.0f,
-        -dot(s, eye), -dot(u, eye), dot(v, eye), 1.0f);
+    return view_mat;
 }
 
 const engine::math::mat4 engine::camera::projection() const {

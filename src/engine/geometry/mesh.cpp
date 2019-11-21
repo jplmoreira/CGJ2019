@@ -84,10 +84,7 @@ void engine::geometry::mesh::free_mesh_data() {
 }
 
 void engine::geometry::mesh::create_buffer_objects() {
-    std::vector<math::vec4> colors(vertices.size());
-    for(int i = 0; i < colors.size(); i++)
-        colors[i] = color;
-    GLuint v_vbo, c_vbo, n_vbo, t_vbo;
+    GLuint v_vbo, n_vbo, t_vbo;
     glGenVertexArrays(1, &vao_id);
     glBindVertexArray(vao_id);
     {
@@ -96,11 +93,6 @@ void engine::geometry::mesh::create_buffer_objects() {
         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(math::vec3), &vertices[0], GL_STATIC_DRAW);
         glEnableVertexAttribArray(ATTR::VERTICES);
         glVertexAttribPointer(ATTR::VERTICES, 3, GL_FLOAT, GL_FALSE, sizeof(math::vec3), 0);
-        glGenBuffers(1, &c_vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, c_vbo);
-        glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(math::vec4), &colors[0], GL_STATIC_DRAW);
-        glEnableVertexAttribArray(ATTR::COLORS);
-        glVertexAttribPointer(ATTR::COLORS, 4, GL_FLOAT, GL_FALSE, sizeof(math::vec4), 0);
         if(normals.size() > 0) {
             glGenBuffers(1, &n_vbo);
             glBindBuffer(GL_ARRAY_BUFFER, n_vbo);
@@ -133,8 +125,6 @@ engine::geometry::mesh::~mesh() {
         GLuint vbo;
         glBindVertexArray(vao_id);
         glDisableVertexAttribArray(ATTR::VERTICES);
-        glDeleteBuffers(1, &vbo);
-        glDisableVertexAttribArray(ATTR::COLORS);
         glDeleteBuffers(1, &vbo);
         if(normals.size() > 0) {
             glDisableVertexAttribArray(ATTR::NORMALS);

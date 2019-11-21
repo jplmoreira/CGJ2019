@@ -17,7 +17,7 @@ namespace engine {
         math::vec3 up;
         math::vec3 dir;
         math::vec2 last_pos;
-        math::mat4 project_mat;
+        math::mat4 project_mat, view_mat;
         GLuint ubo_id;
         bool ortho, rotation, change, gimbal;
         float fov, near, far;
@@ -39,7 +39,7 @@ namespace engine {
 
         camera();
 
-        void create_block();
+        void enable_block(const GLuint ubo_bp);
         void calculate_camera(float time_elapsed);
         void destroy_block();
 
