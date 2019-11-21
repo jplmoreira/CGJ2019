@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\camera.cpp" />
+    <ClCompile Include="src\engine\geometry\mesh.cpp" />
     <ClCompile Include="src\engine\math\matrices.cpp" />
     <ClCompile Include="src\engine\math\mat_fact.cpp" />
     <ClCompile Include="src\engine\math\quaternions.cpp" />
@@ -32,6 +33,7 @@
   <ItemGroup>
     <ClInclude Include="src\engine\camera.hpp" />
     <ClInclude Include="src\engine\geometry\geometry.hpp" />
+    <ClInclude Include="src\engine\geometry\mesh.hpp" />
     <ClInclude Include="src\engine\geometry\object.hpp" />
     <ClInclude Include="src\engine\include.hpp" />
     <ClInclude Include="src\engine\math\matrices.hpp" />

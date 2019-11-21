@@ -3,6 +3,8 @@
 namespace engine {
     enum ATTR {
         VERTICES,
-        COLORS
+        COLORS,
+        NORMALS,
+        TEXCOORDS
     };
 }
