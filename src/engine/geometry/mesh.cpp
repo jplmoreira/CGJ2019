@@ -112,12 +112,12 @@ void engine::geometry::mesh::create_buffer_objects() {
     }
 }
 
-engine::geometry::mesh::mesh() : vao_id(0) {}
-
-engine::geometry::mesh::mesh(std::string filename) {
+engine::geometry::mesh::mesh(std::string filename) :
+    elements(false) {
     load_mesh_data(filename);
     process_mesh_data();
     free_mesh_data();
+    create_buffer_objects();
 }
 
 engine::geometry::mesh::~mesh() {
@@ -136,12 +136,15 @@ engine::geometry::mesh::~mesh() {
         }
         glDeleteVertexArrays(1, &vao_id);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        if (elements) glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
     }
 }
 
 void engine::geometry::mesh::draw() {
     glBindVertexArray(vao_id);
-    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size());
+    if(elements)
+        glDrawElements(GL_TRIANGLES, num_indexes, GL_UNSIGNED_SHORT, (GLvoid*)0);
+    else glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size());
     glBindVertexArray(0);
 }

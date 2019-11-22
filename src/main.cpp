@@ -5,8 +5,10 @@
 
 #include "engine/include.hpp"
 
-#include "engine/camera.hpp"
 #include "engine/scene.hpp"
+#include "engine/camera.hpp"
+#include "engine/geometry/geometry.hpp"
+#include "engine/manager/mesh_manager.hpp"
 #include "engine/manager/shader_manager.hpp"
 
 #ifdef  ERROR_CALLBACK
@@ -119,7 +121,6 @@ static void checkOpenGLError(std::string error) {
 void window_close_callback(GLFWwindow* win) {
     engine::manager::shader_manager::free_instance();
     engine::camera::get_instance()->destroy_block();
-    engine::scene::get_instance()->delete_objects();
 }
 
 void window_size_callback(GLFWwindow* win, int winx, int winy) {
@@ -169,6 +170,30 @@ void mouse_button_callback(GLFWwindow* win, int button, int action, int mods) {
 }
 
 ///////////////////////////////////////////////////////////////////////// SETUP
+
+void setup_shaders() {
+    engine::manager::shader_manager::get_instance()->elements["main"] =
+        std::make_shared<engine::shader>("res/shaders/vertex.glsl", "res/shaders/fragment.glsl");
+}
+
+void setup_meshes() {
+    GLushort ri_triangle[3] = { i_triangle[2], i_triangle[1], i_triangle[0] };
+    GLushort ri_square[6] = { i_square[5], i_square[4], i_square[3], i_square[2], i_square[1], i_square[0] };
+    GLushort ri_para[6] = { i_para[5], i_para[4], i_para[3], i_para[2], i_para[1], i_para[0] };
+
+    engine::manager::mesh_manager::get_instance()->elements["triangle"] =
+        std::make_shared<engine::geometry::mesh>(v_triangle, i_triangle);
+    engine::manager::mesh_manager::get_instance()->elements["rtriangle"] =
+        std::make_shared<engine::geometry::mesh>(v_triangle, ri_triangle);
+    engine::manager::mesh_manager::get_instance()->elements["square"] =
+        std::make_shared<engine::geometry::mesh>(v_square, i_square);
+    engine::manager::mesh_manager::get_instance()->elements["rsquare"] =
+        std::make_shared<engine::geometry::mesh>(v_square, ri_square);
+    engine::manager::mesh_manager::get_instance()->elements["para"] =
+        std::make_shared<engine::geometry::mesh>(v_para, i_para);
+    engine::manager::mesh_manager::get_instance()->elements["rpara"] =
+        std::make_shared<engine::geometry::mesh>(v_para, ri_para);
+}
 
 void glfw_error_callback(int error, const char* description) {
     std::cerr << "GLFW Error: " << description << std::endl;
@@ -263,11 +288,12 @@ GLFWwindow* setup(int major, int minor,
 #ifdef ERROR_CALLBACK
     setupErrorCallback();
 #endif
-    engine::manager::shader_manager::get_instance()->elements["main"] = engine::shader("res/shaders/vertex.glsl", "res/shaders/fragment.glsl");
     engine::camera::get_instance()->setup(false, winx, winy, 30.0f, 1.0f, 100.0f);
     engine::camera::get_instance()->look_at(engine::math::vec3(0.0f, 0.0f, 5.0f),
         engine::math::vec3(0.0f, 0.0f, 0.0f),
         engine::math::vec3(0.0f, 1.0f, 0.0f));
+    setup_shaders();
+    setup_meshes();
     engine::scene::get_instance()->create_objects();
     return win;
 }

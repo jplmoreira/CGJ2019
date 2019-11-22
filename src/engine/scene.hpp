@@ -8,7 +8,7 @@
 namespace engine {
     class scene {
         static std::shared_ptr<scene> instance;
-        std::vector<geometry::object> objs;
+        std::vector<std::shared_ptr<geometry::object>> objs;
 
     public:
         static std::shared_ptr<scene> get_instance() {
@@ -17,7 +17,6 @@ namespace engine {
         }
 
         void create_objects();
-        void delete_objects();
         void draw();
     };
 }

@@ -14,7 +14,7 @@ namespace engine {
         public:
             static std::shared_ptr<i_manager<T>> get_instance();
             static void free_instance();
-            std::map<std::string, T> elements;
+            std::map<std::string, std::shared_ptr<T>> elements;
         };
 
         template<typename T>
