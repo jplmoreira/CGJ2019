@@ -15,11 +15,10 @@ namespace engine {
         std::map<std::string, GLint> uniforms;
         std::map<std::string, GLuint> blocks;
 
-        shader();
         shader(std::string vert_file, std::string frag_file);
+        ~shader();
 
         GLuint get_id();
         void enable();
-        void destroy();
     };
 }

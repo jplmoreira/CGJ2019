@@ -18,7 +18,11 @@ namespace engine {
         };
 
         template<typename T>
-        inline void i_manager<T>::destroy() {}
+        inline void i_manager<T>::destroy() {
+            for(auto it = elements.begin(); it != elements.end(); ++it)
+                it->second.reset();
+            elements.clear();
+        }
         template<typename T>
         inline std::shared_ptr<i_manager<T>> i_manager<T>::get_instance() {
             if(!instance) instance = std::make_shared<i_manager<T>>();
@@ -27,7 +31,7 @@ namespace engine {
         template<typename T>
         inline void i_manager<T>::free_instance() {
             instance->destroy();
-            instance = nullptr;
+            instance.reset();
         }
     }
 }

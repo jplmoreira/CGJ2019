@@ -1,7 +1,6 @@
 #include <chrono>
 
 #include "camera.hpp"
-#include "shader.hpp"
 
 std::shared_ptr<engine::camera> engine::camera::instance;
 

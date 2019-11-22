@@ -9,6 +9,7 @@
 #include "engine/camera.hpp"
 #include "engine/geometry/geometry.hpp"
 #include "engine/manager/mesh_manager.hpp"
+#include "engine/manager/scene_manager.hpp"
 #include "engine/manager/shader_manager.hpp"
 
 #ifdef  ERROR_CALLBACK
@@ -119,6 +120,8 @@ static void checkOpenGLError(std::string error) {
 ///////////////////////////////////////////////////////////////////// CALLBACKS
 
 void window_close_callback(GLFWwindow* win) {
+    engine::manager::scene_manager::free_instance();
+    engine::manager::mesh_manager::free_instance();
     engine::manager::shader_manager::free_instance();
     engine::camera::get_instance()->destroy_block();
 }
@@ -193,6 +196,132 @@ void setup_meshes() {
         std::make_shared<engine::geometry::mesh>(v_para, i_para);
     engine::manager::mesh_manager::get_instance()->elements["rpara"] =
         std::make_shared<engine::geometry::mesh>(v_para, ri_para);
+}
+
+void setup_scenes() {
+    engine::math::vec4 purple(163.0f / 255.0f, 92.0f / 255.0f, 189.0f / 255.0f, 1.0f);
+    engine::math::vec4 yellow(240.0f / 255.0f, 222.0f / 255.0f, 51.0f / 255.0f, 1.0f);
+    engine::math::vec4 red(223.0f / 255.0f, 86.0f / 255.0f, 86.0f / 255.0f, 1.0f);
+    engine::math::vec4 blue(86.0f / 255.0f, 116.0f / 255.0f, 223.0f / 255.0f, 1.0f);
+    engine::math::vec4 green(62.0f / 255.0f, 137.0f / 255.0f, 98.0f / 255.0f, 1.0f);
+    engine::math::vec4 brown(126.0f / 255.0f, 83.0f / 255.0f, 60.0f / 255.0f, 1.0f);
+    engine::math::vec4 teal(19.0f / 255.0f, 111.0f / 255.0f, 114.0f / 255.0f, 1.0f);
+    engine::math::vec3 z_axis(0.0f, 0.0f, 1.0f);
+
+    std::shared_ptr<engine::scene> main_scene = std::make_shared<engine::scene>();
+    main_scene->root_obj->shdr = engine::manager::shader_manager::get_instance()->elements["main"];
+
+    engine::math::mat4 transform = engine::math::mat_fact::translate(0.0f, -0.35f, 0.0f) *
+        engine::math::mat_fact::rodr_rot(45.0f, z_axis) *
+        engine::math::mat_fact::scale(0.5f, 0.5f, 1.0f);
+    std::unique_ptr<engine::geometry::object> obj = std::make_unique<engine::geometry::object>();
+    obj->m = engine::manager::mesh_manager::get_instance()->elements["square"];
+    obj->transform = transform;
+    obj->color = purple;
+    main_scene->root_obj->add_node(obj);
+    obj = std::make_unique<engine::geometry::object>();
+    obj->m = engine::manager::mesh_manager::get_instance()->elements["rsquare"];
+    obj->transform = transform;
+    obj->color = engine::math::vec4(purple.x * 0.5f, purple.y * 0.5f, purple.z * 0.5f, 1.0f);
+    main_scene->root_obj->add_node(obj);
+
+    transform =
+        engine::math::mat_fact::translate(0.265f, -0.35f, 0.0f) *
+        engine::math::mat_fact::rodr_rot(45.0f, z_axis);
+    obj = std::make_unique<engine::geometry::object>();
+    obj->m = engine::manager::mesh_manager::get_instance()->elements["triangle"];
+    obj->transform = transform;
+    obj->color = yellow;
+    main_scene->root_obj->add_node(obj);
+    obj = std::make_unique<engine::geometry::object>();
+    obj->m = engine::manager::mesh_manager::get_instance()->elements["rtriangle"];
+    obj->transform = transform;
+    obj->color = engine::math::vec4(yellow.x * 0.5f, yellow.y * 0.5f, yellow.z * 0.5f, 1.0f);
+    main_scene->root_obj->add_node(obj);
+
+    transform =
+        engine::math::mat_fact::translate(0.0f, -0.085f, 0.0f) *
+        engine::math::mat_fact::rodr_rot(135.0f, z_axis) *
+        engine::math::mat_fact::scale(0.5f, 0.5f, 1.0f);
+    obj = std::make_unique<engine::geometry::object>();
+    obj->m = engine::manager::mesh_manager::get_instance()->elements["triangle"];
+    obj->transform = transform;
+    obj->color = red;
+    main_scene->root_obj->add_node(obj);
+    obj = std::make_unique<engine::geometry::object>();
+    obj->m = engine::manager::mesh_manager::get_instance()->elements["rtriangle"];
+    obj->transform = transform;
+    obj->color = engine::math::vec4(red.x * 0.5f, red.y * 0.5f, red.z * 0.5f, 1.0f);
+    main_scene->root_obj->add_node(obj);
+
+    transform =
+        engine::math::mat_fact::translate(-0.266f, 0.179f, 0.0f) *
+        engine::math::mat_fact::rodr_rot(180.0f, z_axis) *
+        engine::math::mat_fact::scale(0.71f, 0.71f, 1.0f);
+    obj = std::make_unique<engine::geometry::object>();
+    obj->m = engine::manager::mesh_manager::get_instance()->elements["triangle"];
+    obj->transform = transform;
+    obj->color = blue;
+    main_scene->root_obj->add_node(obj);
+    obj = std::make_unique<engine::geometry::object>();
+    obj->m = engine::manager::mesh_manager::get_instance()->elements["rtriangle"];
+    obj->transform = transform;
+    obj->color = engine::math::vec4(blue.x * 0.5f, blue.y * 0.5f, blue.z * 0.5f, 1.0f);
+    main_scene->root_obj->add_node(obj);
+
+    transform =
+        engine::math::mat_fact::translate(-0.27f, 0.71f, 0.0f) *
+        engine::math::mat_fact::rodr_rot(225.0f, z_axis);
+    obj = std::make_unique<engine::geometry::object>();
+    obj->m = engine::manager::mesh_manager::get_instance()->elements["triangle"];
+    obj->transform = transform;
+    obj->color = green;
+    main_scene->root_obj->add_node(obj);
+    obj = std::make_unique<engine::geometry::object>();
+    obj->m = engine::manager::mesh_manager::get_instance()->elements["rtriangle"];
+    obj->transform = transform;
+    obj->color = engine::math::vec4(green.x * 0.5f, green.y * 0.5f, green.z * 0.5f, 1.0f);
+    main_scene->root_obj->add_node(obj);
+
+    transform =
+        engine::math::mat_fact::translate(0.436f, 0.272f, 0.0f) *
+        engine::math::mat_fact::scale(0.95f, 0.243f, 1.0f);
+    obj = std::make_unique<engine::geometry::object>();
+    obj->m = engine::manager::mesh_manager::get_instance()->elements["para"];
+    obj->transform = transform;
+    obj->color = brown;
+    main_scene->root_obj->add_node(obj);
+    obj = std::make_unique<engine::geometry::object>();
+    obj->m = engine::manager::mesh_manager::get_instance()->elements["rpara"];
+    obj->transform = transform;
+    obj->color = engine::math::vec4(brown.x * 0.5f, brown.y * 0.5f, brown.z * 0.5f, 1.0f);
+    main_scene->root_obj->add_node(obj);
+
+    transform =
+        engine::math::mat_fact::translate(0.35f, 0.63f, 0.0f) *
+        engine::math::mat_fact::rodr_rot(225.0f, z_axis) *
+        engine::math::mat_fact::scale(0.5f, 0.5f, 1.0f);
+    obj = std::make_unique<engine::geometry::object>();
+    obj->m = engine::manager::mesh_manager::get_instance()->elements["triangle"];
+    obj->transform = transform;
+    obj->color = teal;
+    main_scene->root_obj->add_node(obj);
+    obj = std::make_unique<engine::geometry::object>();
+    obj->m = engine::manager::mesh_manager::get_instance()->elements["rtriangle"];
+    obj->transform = transform;
+    obj->color = engine::math::vec4(teal.x * 0.5f, teal.y * 0.5f, teal.z * 0.5f, 1.0f);
+    main_scene->root_obj->add_node(obj);
+
+    for(auto& o : main_scene->root_obj->children) {
+        o->transform = o->transform *
+            engine::math::mat_fact::scale(0.75, 0.75, 1.0f);
+    }
+
+    engine::manager::scene_manager::get_instance()->elements["main"] = main_scene;
+
+#ifndef ERROR_CALLBACK
+    checkOpenGLError("ERROR: Could not create VAOs and VBOs.");
+#endif
 }
 
 void glfw_error_callback(int error, const char* description) {
@@ -294,7 +423,7 @@ GLFWwindow* setup(int major, int minor,
         engine::math::vec3(0.0f, 1.0f, 0.0f));
     setup_shaders();
     setup_meshes();
-    engine::scene::get_instance()->create_objects();
+    setup_scenes();
     return win;
 }
 
@@ -321,7 +450,7 @@ void updateFPS(GLFWwindow* win, double elapsed_sec) {
 void display(GLFWwindow* win, double elapsed_sec) {
     updateFPS(win, elapsed_sec);
     engine::camera::get_instance()->calculate_camera((float)elapsed_sec);
-    engine::scene::get_instance()->draw();
+    engine::manager::scene_manager::get_instance()->elements["main"]->draw();
 }
 
 void run(GLFWwindow* win) {

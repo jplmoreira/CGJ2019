@@ -21,8 +21,6 @@ std::string engine::shader::read_shader(std::string file_name) {
     return str;
 }
 
-engine::shader::shader() {}
-
 engine::shader::shader(std::string vert_file, std::string frag_file) {
     std::string vertex_shader = read_shader(vert_file);
     GLuint vertex_shdr_id = glCreateShader(GL_VERTEX_SHADER);
@@ -59,6 +57,14 @@ engine::shader::shader(std::string vert_file, std::string frag_file) {
 #endif
 }
 
+engine::shader::~shader() {
+    glUseProgram(0);
+    glDeleteProgram(program_id);
+#ifndef ERROR_CALLBACK
+    checkOpenGLError("ERROR: Could not destroy shaders.");
+#endif
+}
+
 GLuint engine::shader::get_id() {
     return program_id;
 }
@@ -66,13 +72,4 @@ GLuint engine::shader::get_id() {
 void engine::shader::enable() {
     glUseProgram(program_id);
     camera::get_instance()->enable_block(blocks["SharedMatrices"]);
-}
-
-void engine::shader::destroy() {
-    glUseProgram(0);
-    glDeleteProgram(program_id);
-
-#ifndef ERROR_CALLBACK
-    checkOpenGLError("ERROR: Could not destroy shaders.");
-#endif
 }

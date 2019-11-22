@@ -6,17 +6,12 @@
 #include "geometry/object.hpp"
 
 namespace engine {
-    class scene {
-        static std::shared_ptr<scene> instance;
-        std::vector<std::shared_ptr<geometry::object>> objs;
+    struct scene {
+        std::unique_ptr<engine::geometry::object> root_obj;
 
-    public:
-        static std::shared_ptr<scene> get_instance() {
-            if(!instance) instance = std::make_shared<scene>();
-            return instance;
-        }
+        scene();
+        ~scene();
 
-        void create_objects();
         void draw();
     };
 }

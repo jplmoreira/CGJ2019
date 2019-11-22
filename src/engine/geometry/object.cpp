@@ -4,12 +4,17 @@ engine::geometry::object::object() :
     transform(1.0f), quaternion(1.0f, math::vec3()),
     color(1.0f) {}
 
-std::shared_ptr<engine::geometry::object> engine::geometry::object::create_node() {
-    std::shared_ptr<object> child = std::make_shared<object>();
-    child->parent = shared_from_this();
-    child->shdr = shdr;
-    children.push_back(child);
-    return children.back();
+engine::geometry::object::~object() {
+    m.reset();
+    shdr.reset();
+    for(auto& child : children)
+        child.reset();
+    children.clear();
+}
+
+void engine::geometry::object::add_node(std::unique_ptr<engine::geometry::object>& obj) {
+    obj->shdr = shdr;
+    children.push_back(std::move(obj));
 }
 
 void engine::geometry::object::draw() {
@@ -21,6 +26,6 @@ void engine::geometry::object::draw() {
 
         m->draw();
     }
-    for(auto child : children)
+    for(auto& child : children)
         child->draw();
 }
