@@ -7,7 +7,8 @@ std::shared_ptr<engine::camera> engine::camera::instance;
 engine::camera::camera() :
     ubo_id(0), ortho(false), rotation(false),
     change(false), fov(0), near(0), far(0),
-    width(0), height(0), velocity(5.0f), gimbal(false) {
+    width(0), height(0), velocity(5.0f), gimbal(false),
+	last_pos(-1.0f, -1.0f) {
     glGenBuffers(1, &ubo_id);
 }
 
