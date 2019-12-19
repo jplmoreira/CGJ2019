@@ -332,3 +332,4 @@ ASALocalRun/
 # Do not ignore dependencies
 !GLEW/**
 !GLFW/**
+!res/**
