@@ -17,7 +17,7 @@ engine::texture::texture(std::string file, std::string sampler) : sampler(sample
     int width, height, nrChannels;
     unsigned char* data = stbi_load(file.c_str(), &width, &height, &nrChannels, 0);
     if(data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     } else {
         std::cout << "Failed to load texture" << std::endl;
     }
