@@ -24,6 +24,14 @@ void engine::geometry::object::draw() {
         glUniformMatrix4fv(shdr->uniforms["ModelMatrix"], 1, GL_FALSE, transform.data);
         glUniform4fv(shdr->uniforms["in_color"], 1, color.data());
 
+        int tex_unit = 0;
+        for(auto& tex : textures) {
+            glActiveTexture(GL_TEXTURE0 + tex_unit);
+            glBindTexture(GL_TEXTURE_2D, tex->id);
+            glUniform1i(glGetUniformLocation(shdr->get_id(), tex->sampler.c_str()), tex_unit);
+            tex_unit++;
+        }
+
         m->draw();
     }
     for(auto& child : children)
