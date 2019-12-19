@@ -333,3 +333,6 @@ ASALocalRun/
 !GLEW/**
 !GLFW/**
 !res/**
+
+# Ignore MacOSX
+.DS_Store
