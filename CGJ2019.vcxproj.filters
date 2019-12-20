@@ -60,6 +60,9 @@
     <ClCompile Include="src\planar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\bloom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\test\test.hpp">
@@ -128,12 +131,21 @@
     <ClInclude Include="src\planar.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\bloom.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\fragment.glsl">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="res\shaders\vertex.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\bright_vert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\bright_frag.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

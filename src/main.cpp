@@ -3,6 +3,7 @@
 #include "engine/gl_engine.hpp"
 #include "tangram.hpp"
 #include "planar.hpp"
+#include "bloom.hpp"
 
 int main(int argc, char* argv[]) {
     int gl_major = 4, gl_minor = 3;

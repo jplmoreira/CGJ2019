@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\bloom.cpp" />
     <ClCompile Include="src\engine\camera.cpp" />
     <ClCompile Include="src\engine\geometry\mesh.cpp" />
     <ClCompile Include="src\engine\geometry\object.cpp" />
@@ -36,6 +37,7 @@
     <ClCompile Include="src\test\test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\bloom.hpp" />
     <ClInclude Include="src\engine\camera.hpp" />
     <ClInclude Include="src\engine\geometry\geometry.hpp" />
     <ClInclude Include="src\engine\geometry\mesh.hpp" />
@@ -60,6 +62,8 @@
     <ClInclude Include="src\test\test.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\bright_frag.glsl" />
+    <None Include="res\shaders\bright_vert.glsl" />
     <None Include="res\shaders\fragment.glsl" />
     <None Include="res\shaders\vertex.glsl" />
   </ItemGroup>

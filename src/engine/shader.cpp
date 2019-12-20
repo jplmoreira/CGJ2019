@@ -23,13 +23,13 @@ std::string engine::shader::read_shader(std::string file_name) {
 
 engine::shader::shader(std::string vert_file, std::string frag_file) {
     std::string vertex_shader = read_shader(vert_file);
-    GLuint vertex_shdr_id = glCreateShader(GL_VERTEX_SHADER);
+    vertex_shdr_id = glCreateShader(GL_VERTEX_SHADER);
     const GLchar* vscode = vertex_shader.c_str();
     glShaderSource(vertex_shdr_id, 1, &vscode, 0);
     glCompileShader(vertex_shdr_id);
 
     std::string fragment_shader = read_shader(frag_file);
-    GLuint fragment_shdr_id = glCreateShader(GL_FRAGMENT_SHADER);
+    fragment_shdr_id = glCreateShader(GL_FRAGMENT_SHADER);
     const GLchar* fscode = fragment_shader.c_str();
     glShaderSource(fragment_shdr_id, 1, &fscode, 0);
     glCompileShader(fragment_shdr_id);
@@ -57,6 +57,8 @@ engine::shader::shader(std::string vert_file, std::string frag_file) {
 #endif
 }
 
+engine::shader::shader() {}
+
 engine::shader::~shader() {
     glUseProgram(0);
     glDeleteProgram(program_id);
@@ -65,11 +67,37 @@ engine::shader::~shader() {
 #endif
 }
 
+void engine::shader::compile(std::string vs, std::string fs) {
+	std::string vertex_shader = read_shader(vs);
+	vertex_shdr_id = glCreateShader(GL_VERTEX_SHADER);
+	const GLchar* vscode = vertex_shader.c_str();
+	glShaderSource(vertex_shdr_id, 1, &vscode, 0);
+	glCompileShader(vertex_shdr_id);
+
+	std::string fragment_shader = read_shader(fs);
+	fragment_shdr_id = glCreateShader(GL_FRAGMENT_SHADER);
+	const GLchar* fscode = fragment_shader.c_str();
+	glShaderSource(fragment_shdr_id, 1, &fscode, 0);
+	glCompileShader(fragment_shdr_id);
+
+	program_id = glCreateProgram();
+	glAttachShader(program_id, vertex_shdr_id);
+	glAttachShader(program_id, fragment_shdr_id);
+}
+
+void engine::shader::cleanup() {
+	glDetachShader(program_id, vertex_shdr_id);
+	glDeleteShader(vertex_shdr_id);
+	glDetachShader(program_id, fragment_shdr_id);
+	glDeleteShader(fragment_shdr_id);
+}
+
 GLuint engine::shader::get_id() {
     return program_id;
 }
 
 void engine::shader::enable() {
     glUseProgram(program_id);
-    camera::get_instance()->enable_block(blocks["SharedMatrices"]);
+    if(blocks.find("SharedMatrices") != blocks.end())
+		camera::get_instance()->enable_block(blocks["SharedMatrices"]);
 }
