@@ -10,4 +10,6 @@ struct planar : engine::i_app {
 	virtual void mouse_button_callback(GLFWwindow* win, int button, int action, int mods) override;
 	virtual void setup(int winx, int winy) override;
 	virtual void display(float elapsed_sec) override;
+
+	void setup_shaders();
 };

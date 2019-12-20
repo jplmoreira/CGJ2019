@@ -33,14 +33,29 @@ void planar::mouse_button_callback(GLFWwindow* win, int button, int action, int 
 	}
 }
 
+void planar::setup_shaders() {
+	std::shared_ptr<engine::shader> main = std::make_shared<engine::shader>();
+	main->compile("res/shaders/bright_vert.glsl", "res/shaders/planar_frag.glsl");
+	glBindAttribLocation(main->get_id(), engine::ATTR::VERTICES, "in_position");
+	glBindAttribLocation(main->get_id(), engine::ATTR::NORMALS, "in_normal");
+	glBindAttribLocation(main->get_id(), engine::ATTR::TEXCOORDS, "in_texcoord");
+	glLinkProgram(main->get_id());
+	main->uniforms["ModelMatrix"] = glGetUniformLocation(main->get_id(), "ModelMatrix");
+	main->uniforms["in_color"] = glGetUniformLocation(main->get_id(), "in_color");
+	GLint ubo_id = glGetUniformBlockIndex(main->get_id(), "SharedMatrices");
+	main->blocks["SharedMatrices"] = 0;
+	glUniformBlockBinding(main->get_id(), ubo_id, main->blocks["SharedMatrices"]);
+	main->cleanup();
+	engine::manager::shader_manager::get_instance()->elements["main"] = main;
+}
+
 void planar::setup(int winx, int winy) {
 	engine::camera::get_instance()->setup(false, winx, winy, 30.0f, 1.0f, 100.0f);
-	engine::camera::get_instance()->look_at(engine::math::vec3(0.0f, 0.0f, 5.0f),
+	engine::camera::get_instance()->look_at(engine::math::vec3(0.0f, 0.0f, 10.0f),
 		engine::math::vec3(0.0f, 0.0f, 0.0f),
 		engine::math::vec3(0.0f, 1.0f, 0.0f));
 
-	engine::manager::shader_manager::get_instance()->elements["main"] =
-		std::make_shared<engine::shader>("res/shaders/vertex.glsl", "res/shaders/fragment.glsl");
+	setup_shaders();
 
 	engine::manager::mesh_manager::get_instance()->elements["cube"] =
 		std::make_shared<engine::geometry::mesh>("res/models/cube.obj");
