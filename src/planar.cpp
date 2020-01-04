@@ -58,7 +58,7 @@ void planar::setup(int winx, int winy) {
 	setup_shaders();
 
 	engine::manager::mesh_manager::get_instance()->elements["cube"] =
-		std::make_shared<engine::geometry::mesh>("res/models/cube.obj");
+		std::make_shared<engine::geometry::mesh>("res/models/-zfor_yup/cup.obj");
 
 	engine::math::vec4 yellow(240.0f / 255.0f, 222.0f / 255.0f, 51.0f / 255.0f, 1.0f);
 
