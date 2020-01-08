@@ -5,7 +5,7 @@
 
 #include "texture.hpp"
 
-engine::texture::texture(std::string file, std::string sampler) : sampler(sampler) {
+engine::texture::texture(std::string file) {
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_2D, id);
     // set the texture wrapping/filtering options (on the currently bound texture object)
@@ -23,3 +23,5 @@ engine::texture::texture(std::string file, std::string sampler) : sampler(sample
     }
     stbi_image_free(data);
 }
+
+engine::texture::texture(GLuint id) : id(id) {} // For textures created at runtime

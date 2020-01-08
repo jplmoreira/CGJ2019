@@ -5,8 +5,8 @@
 namespace engine {
 	struct texture {
 		GLuint id;
-		std::string sampler;
 
-		texture(std::string file, std::string sampler);
+		texture(std::string file);
+		texture(GLuint id);
 	};
 }

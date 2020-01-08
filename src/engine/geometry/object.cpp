@@ -28,7 +28,6 @@ void engine::geometry::object::draw() {
         for(auto& tex : textures) {
             glActiveTexture(GL_TEXTURE0 + tex_unit);
             glBindTexture(GL_TEXTURE_2D, tex->id);
-            glUniform1i(glGetUniformLocation(shdr->get_id(), tex->sampler.c_str()), tex_unit);
             tex_unit++;
         }
 
