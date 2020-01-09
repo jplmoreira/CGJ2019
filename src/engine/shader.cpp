@@ -83,6 +83,12 @@ void engine::shader::compile(std::string vs, std::string fs) {
 	program_id = glCreateProgram();
 	glAttachShader(program_id, vertex_shdr_id);
 	glAttachShader(program_id, fragment_shdr_id);
+
+    glBindAttribLocation(program_id, engine::ATTR::VERTICES, "in_position");
+    glBindAttribLocation(program_id, engine::ATTR::NORMALS, "in_normal");
+    glBindAttribLocation(program_id, engine::ATTR::TEXCOORDS, "in_texcoord");
+
+    glLinkProgram(program_id);
 }
 
 void engine::shader::cleanup() {
@@ -100,4 +106,8 @@ void engine::shader::enable() {
     glUseProgram(program_id);
     if(blocks.find("SharedMatrices") != blocks.end())
 		camera::get_instance()->enable_block(blocks["SharedMatrices"]);
+}
+
+void engine::shader::disable() {
+    glUseProgram(0);
 }

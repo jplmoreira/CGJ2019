@@ -36,10 +36,6 @@ void planar::mouse_button_callback(GLFWwindow* win, int button, int action, int 
 void planar::setup_shaders() {
 	std::shared_ptr<engine::shader> main = std::make_shared<engine::shader>();
 	main->compile("res/shaders/bright_vert.glsl", "res/shaders/planar_frag.glsl");
-	glBindAttribLocation(main->get_id(), engine::ATTR::VERTICES, "in_position");
-	glBindAttribLocation(main->get_id(), engine::ATTR::NORMALS, "in_normal");
-	glBindAttribLocation(main->get_id(), engine::ATTR::TEXCOORDS, "in_texcoord");
-	glLinkProgram(main->get_id());
 	main->uniforms["ModelMatrix"] = glGetUniformLocation(main->get_id(), "ModelMatrix");
 	main->uniforms["in_color"] = glGetUniformLocation(main->get_id(), "in_color");
 	GLint ubo_id = glGetUniformBlockIndex(main->get_id(), "SharedMatrices");

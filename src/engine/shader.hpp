@@ -24,5 +24,6 @@ namespace engine {
 		void cleanup();
         GLuint get_id();
         void enable();
+        void disable();
     };
 }
