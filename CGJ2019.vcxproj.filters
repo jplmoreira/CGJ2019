@@ -151,5 +151,17 @@
     <None Include="res\shaders\planar_frag.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\shaders\bloom_frag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\bloom_vert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\blur_frag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\blur_vert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

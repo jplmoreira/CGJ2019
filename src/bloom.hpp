@@ -8,6 +8,8 @@ struct bloom : engine::i_app {
 
 	GLuint bloom_fbo;
 	GLuint color_buffers[2];
+	GLuint pingpong_fbos[2];
+	GLuint pingpong_color_buffers[2];
 
 	virtual void window_close_callback(GLFWwindow* win) override;
 	virtual void window_size_callback(GLFWwindow* win, int winx, int winy) override;

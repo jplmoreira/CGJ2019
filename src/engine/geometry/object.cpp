@@ -21,8 +21,10 @@ void engine::geometry::object::draw() {
     if(m) {
         shdr->enable();
 
-        glUniformMatrix4fv(shdr->uniforms["ModelMatrix"], 1, GL_FALSE, transform.data);
-        glUniform4fv(shdr->uniforms["in_color"], 1, color.data());
+		if (shdr->uniforms.find("ModelMatrix") != shdr->uniforms.end())
+			glUniformMatrix4fv(shdr->uniforms["ModelMatrix"], 1, GL_FALSE, transform.data);
+		if (shdr->uniforms.find("in_color") != shdr->uniforms.end())
+			glUniform4fv(shdr->uniforms["in_color"], 1, color.data());
 
         int tex_unit = 0;
         for(auto& tex : textures) {
@@ -32,6 +34,8 @@ void engine::geometry::object::draw() {
         }
 
         m->draw();
+
+		shdr->disable();
     }
     for(auto& child : children)
         child->draw();

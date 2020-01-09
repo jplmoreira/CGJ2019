@@ -25,12 +25,14 @@ engine::shader::shader(std::string vert_file, std::string frag_file) {
     std::string vertex_shader = read_shader(vert_file);
     vertex_shdr_id = glCreateShader(GL_VERTEX_SHADER);
     const GLchar* vscode = vertex_shader.c_str();
+	std::cout << "Compiling " << vert_file << std::endl;
     glShaderSource(vertex_shdr_id, 1, &vscode, 0);
     glCompileShader(vertex_shdr_id);
 
     std::string fragment_shader = read_shader(frag_file);
     fragment_shdr_id = glCreateShader(GL_FRAGMENT_SHADER);
     const GLchar* fscode = fragment_shader.c_str();
+	std::cout << "Compiling " << frag_file << std::endl;
     glShaderSource(fragment_shdr_id, 1, &fscode, 0);
     glCompileShader(fragment_shdr_id);
 
