@@ -68,6 +68,8 @@ void bloom::setup(int winx, int winy) {
 	blur_scene->root_obj->shdr = engine::manager::shader_manager::get_instance()->elements["blur"];
 	std::unique_ptr<engine::geometry::object> quad_obj = std::make_unique<engine::geometry::object>();
 	quad_obj->m = engine::manager::mesh_manager::get_instance()->elements["quad"];
+	std::shared_ptr<engine::texture> image = std::make_shared<engine::texture>(color_buffers[1]);
+	quad_obj->textures.push_back(image);
 	blur_scene->root_obj->add_node(quad_obj);
 	engine::manager::scene_manager::get_instance()->elements["blur"] = blur_scene;
 
@@ -95,14 +97,19 @@ void bloom::display(float elapsed_sec) {
 	//blur
 	bool horizontal = true;
 	bool first_iteration = true;
-	const int amount = 10;
+	const int amount = 100;
 	std::shared_ptr<engine::shader> blur_shdr = engine::manager::shader_manager::get_instance()->elements["blur"];
 	for (int i = 0; i < amount; i++) {
 		glBindFramebuffer(GL_FRAMEBUFFER, pingpong_fbos[horizontal]);
 		blur_shdr->enable();
 		glUniform1i(blur_shdr->uniforms["horizontal"], horizontal);
-		glBindTexture(GL_TEXTURE_2D, first_iteration ? color_buffers[1] : pingpong_color_buffers[!horizontal]);
 		blur_shdr->disable();
+		if(first_iteration)
+			engine::manager::scene_manager::get_instance()->elements["blur"]->
+			root_obj->children[0]->textures[0]->id = color_buffers[1];
+		else
+			engine::manager::scene_manager::get_instance()->elements["blur"]->
+			root_obj->children[0]->textures[0]->id = pingpong_color_buffers[!horizontal];
 		engine::manager::scene_manager::get_instance()->elements["blur"]->draw();
 		horizontal = !horizontal;
 		if (first_iteration)
@@ -112,6 +119,10 @@ void bloom::display(float elapsed_sec) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//bloom
+	engine::manager::scene_manager::get_instance()->elements["bloom"]->
+		root_obj->children[0]->textures[0]->id = color_buffers[0];
+	engine::manager::scene_manager::get_instance()->elements["bloom"]->
+		root_obj->children[0]->textures[1]->id = pingpong_color_buffers[!horizontal];
 	engine::manager::scene_manager::get_instance()->elements["bloom"]->draw();
 }
 
@@ -141,8 +152,8 @@ void bloom::setup_shaders() {
 	bloom->compile("res/shaders/bloom_vert.glsl", "res/shaders/bloom_frag.glsl");
 	bloom->cleanup();
 	bloom->enable();
-	glUniform1i(glGetUniformLocation(blur->get_id(), "scene"), 0);  //uniform texture initialization
-	glUniform1i(glGetUniformLocation(blur->get_id(), "bloom_blur"), 1);  //uniform texture initialization
+	glUniform1i(glGetUniformLocation(bloom->get_id(), "scene"), 0);  //uniform texture initialization
+	glUniform1i(glGetUniformLocation(bloom->get_id(), "bloom_blur"), 1);  //uniform texture initialization
 	bloom->disable();
 	engine::manager::shader_manager::get_instance()->elements["bloom"] = bloom;
 }
