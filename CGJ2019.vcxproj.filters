@@ -63,6 +63,9 @@
     <ClCompile Include="src\bloom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\post-processing\sepia.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\test\test.hpp">
@@ -134,6 +137,9 @@
     <ClInclude Include="src\bloom.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\post-processing\sepia.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\fragment.glsl">
@@ -161,6 +167,18 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="res\shaders\blur_vert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\sepia_vert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\sepia_frag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\filter_frag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\filter_vert.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

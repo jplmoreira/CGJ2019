@@ -28,6 +28,7 @@
     <ClCompile Include="src\engine\math\mat_fact.cpp" />
     <ClCompile Include="src\engine\math\quaternions.cpp" />
     <ClCompile Include="src\engine\math\vectors.cpp" />
+    <ClCompile Include="src\engine\post-processing\sepia.cpp" />
     <ClCompile Include="src\engine\scene.cpp" />
     <ClCompile Include="src\engine\shader.cpp" />
     <ClCompile Include="src\engine\texture.cpp" />
@@ -53,6 +54,7 @@
     <ClInclude Include="src\engine\math\mat_fact.hpp" />
     <ClInclude Include="src\engine\math\quaternions.hpp" />
     <ClInclude Include="src\engine\math\vectors.hpp" />
+    <ClInclude Include="src\engine\post-processing\sepia.hpp" />
     <ClInclude Include="src\engine\scene.hpp" />
     <ClInclude Include="src\engine\shader.hpp" />
     <ClInclude Include="src\engine\texture.hpp" />
@@ -68,8 +70,12 @@
     <None Include="res\shaders\blur_vert.glsl" />
     <None Include="res\shaders\bright_frag.glsl" />
     <None Include="res\shaders\bright_vert.glsl" />
+    <None Include="res\shaders\filter_vert.glsl" />
+    <None Include="res\shaders\filter_frag.glsl" />
     <None Include="res\shaders\fragment.glsl" />
     <None Include="res\shaders\planar_frag.glsl" />
+    <None Include="res\shaders\sepia_frag.glsl" />
+    <None Include="res\shaders\sepia_vert.glsl" />
     <None Include="res\shaders\vertex.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

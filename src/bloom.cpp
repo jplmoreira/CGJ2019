@@ -51,15 +51,14 @@ void bloom::setup(int winx, int winy) {
 	engine::manager::mesh_manager::get_instance()->elements["quad"] = 
 		std::make_shared<engine::geometry::mesh>("res/models/quad.obj");
 
-	engine::math::vec4 glow_color(1.0f, 1.0f, 1.0f, 1.0f);
-
 	//main scene
 	std::shared_ptr<engine::scene> main_scene = std::make_shared<engine::scene>();
 	main_scene->root_obj->shdr = engine::manager::shader_manager::get_instance()->elements["main"];
 	std::unique_ptr<engine::geometry::object> obj = std::make_unique<engine::geometry::object>();
 	obj->m = engine::manager::mesh_manager::get_instance()->elements["cube"];
 	obj->transform = engine::math::mat_fact::scale(0.4f, 0.4f, 0.4f);
-	obj->color = glow_color;
+	std::shared_ptr<engine::texture> tex = std::make_shared<engine::texture>("res/models/cube_texture.png");
+	obj->textures.push_back(tex);
 	main_scene->root_obj->add_node(obj);
 	engine::manager::scene_manager::get_instance()->elements["main"] = main_scene;
 
@@ -130,11 +129,13 @@ void bloom::setup_shaders() {
 	std::shared_ptr<engine::shader> main = std::make_shared<engine::shader>();
 	main->compile("res/shaders/bright_vert.glsl", "res/shaders/bright_frag.glsl");
 	main->uniforms["ModelMatrix"] = glGetUniformLocation(main->get_id(), "ModelMatrix");
-	main->uniforms["in_color"] = glGetUniformLocation(main->get_id(), "in_color");
 	GLint ubo_id = glGetUniformBlockIndex(main->get_id(), "SharedMatrices");
 	main->blocks["SharedMatrices"] = 0;
 	glUniformBlockBinding(main->get_id(), ubo_id, main->blocks["SharedMatrices"]);
 	main->cleanup();
+	main->enable();
+	glUniform1i(glGetUniformLocation(main->get_id(), "tex"), 0);  //uniform texture initialization
+	main->disable();
 	engine::manager::shader_manager::get_instance()->elements["main"] = main;
 
 
