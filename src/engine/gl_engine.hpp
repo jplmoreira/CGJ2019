@@ -10,6 +10,7 @@
 
 namespace engine {
 	class gl_engine {
+		std::string win_title;
 		static std::shared_ptr<gl_engine> instance;
 
 	public:

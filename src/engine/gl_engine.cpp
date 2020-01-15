@@ -144,6 +144,7 @@ std::shared_ptr<engine::gl_engine> engine::gl_engine::get_instance() {
 
 GLFWwindow* engine::gl_engine::setup(int major, int minor, int winx, int winy,
 	const char* title, int is_fullscreen, int is_vsync) {
+	win_title = title;
 	GLFWwindow* win =
 		setupGLFW(major, minor, winx, winy, title, is_fullscreen, is_vsync);
 	setupGLEW();
@@ -269,7 +270,7 @@ void engine::gl_engine::updateFPS(GLFWwindow* win, double elapsed_sec) {
 	if(acc_time > UPDATE_TIME) {
 		std::ostringstream oss;
 		double fps = acc_frames / acc_time;
-		oss << std::fixed << std::setw(5) << std::setprecision(1) << fps << " FPS";
+		oss << win_title << " |" << std::fixed << std::setw(5) << std::setprecision(1) << fps << " FPS";
 		glfwSetWindowTitle(win, oss.str().c_str());
 
 		acc_frames = 0;
