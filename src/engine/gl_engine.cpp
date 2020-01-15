@@ -221,6 +221,9 @@ void engine::gl_engine::setupOpenGL(int winx, int winy) {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_ALWAYS, 1, 0xFF);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 	glViewport(0, 0, winx, winy);
 }
 
@@ -243,7 +246,7 @@ void engine::gl_engine::run(GLFWwindow* win) {
 		double elapsed_time = time - last_time;
 		last_time = time;
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		updateFPS(win, elapsed_time);
 		app->display((float)elapsed_time);
 		glfwSwapBuffers(win);

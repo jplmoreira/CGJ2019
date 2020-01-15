@@ -50,10 +50,19 @@ void planar::setup_shaders() {
 	shadow->uniforms["ModelMatrix"] = glGetUniformLocation(shadow->get_id(), "ModelMatrix");
 	shadow->uniforms["ShadowProjMat"] = glGetUniformLocation(shadow->get_id(), "ShadowProjMat");
 	ubo_id = glGetUniformBlockIndex(shadow->get_id(), "SharedMatrices");
-	main->blocks["SharedMatrices"] = 0;
+	shadow->blocks["SharedMatrices"] = 0;
 	glUniformBlockBinding(shadow->get_id(), ubo_id, shadow->blocks["SharedMatrices"]);
 	shadow->cleanup();
 	engine::manager::shader_manager::get_instance()->elements["shadow"] = shadow;
+
+	std::shared_ptr<engine::shader> stencil = std::make_shared<engine::shader>();
+	stencil->compile("res/shaders/shadowstencil_vs.glsl", "res/shaders/shadowstencil_fs.glsl");
+	stencil->uniforms["ModelMatrix"] = glGetUniformLocation(stencil->get_id(), "ModelMatrix");
+	ubo_id = glGetUniformBlockIndex(stencil->get_id(), "SharedMatrices");
+	stencil->blocks["SharedMatrices"] = 0;
+	glUniformBlockBinding(stencil->get_id(), ubo_id, stencil->blocks["SharedMatrices"]);
+	stencil->cleanup();
+	engine::manager::shader_manager::get_instance()->elements["stencil"] = stencil;
 }
 
 void planar::setup(int winx, int winy) {
@@ -74,6 +83,8 @@ void planar::setup(int winx, int winy) {
 
 	engine::math::mat4 transform1 = engine::math::mat_fact::scale(0.25f, 0.25f, 0.25f) *
 		engine::math::mat_fact::translate(0.0f, 1.0f, 0.0f);
+	engine::math::mat4 transform2 = 
+		engine::math::mat4(engine::math::mat_fact::rodr_rot(-90.0f, engine::math::vec3(1.0f, 0.0f, 0.0f)));
 
 	std::shared_ptr<engine::scene> main_scene = std::make_shared<engine::scene>();
 	main_scene->root_obj->shdr = engine::manager::shader_manager::get_instance()->elements["main"];
@@ -100,16 +111,24 @@ void planar::setup(int winx, int winy) {
 	plane_scene->root_obj->shdr = engine::manager::shader_manager::get_instance()->elements["main"];
 	obj = std::make_unique<engine::geometry::object>();
 	obj->m = engine::manager::mesh_manager::get_instance()->elements["quad"];
-	obj->transform = engine::math::mat_fact::translate(0.0f, -0.001f, 0.0f)
-		* engine::math::mat4(engine::math::mat_fact::rodr_rot(-90.0f, engine::math::vec3(1.0f, 0.0f, 0.0f)));
+	obj->transform = transform2;
 	obj->color = brown;
 	plane_scene->root_obj->add_node(obj);
 
 	engine::manager::scene_manager::get_instance()->elements["plane"] = plane_scene;
+
+	std::shared_ptr<engine::scene> stencil_scene = std::make_shared<engine::scene>();
+	stencil_scene->root_obj->shdr = engine::manager::shader_manager::get_instance()->elements["stencil"];
+	obj = std::make_unique<engine::geometry::object>();
+	obj->m = engine::manager::mesh_manager::get_instance()->elements["quad"];
+	obj->transform = transform2;
+	stencil_scene->root_obj->add_node(obj);
+
+	engine::manager::scene_manager::get_instance()->elements["stencil"] = stencil_scene;
 }
 
 void planar::display(float elapsed_sec) {
-	engine::math::vec3 light_pos(5.0f);
+	light_pos = engine::math::mat_fact::rodr_rot(elapsed_sec * 100.0f, engine::math::vec3(0.0f, 1.0f, 0.0f)) * light_pos;
 	engine::math::vec3 p_point(0.0f);
 	engine::math::vec3 p_normal(0.0f, 1.0f, 0.0f);
 	engine::math::mat4 shadow_mat =
@@ -129,6 +148,28 @@ void planar::display(float elapsed_sec) {
 	engine::camera::get_instance()->calculate_camera((float)elapsed_sec);
 
 	engine::manager::scene_manager::get_instance()->elements["plane"]->draw();
+
+	glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+	glStencilFunc(GL_ALWAYS, 1, 0xFF);
+	glStencilMask(0xFF);
+
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+	glDepthMask(GL_FALSE);
+	engine::manager::scene_manager::get_instance()->elements["stencil"]->draw();
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	glDepthMask(GL_TRUE);
+
+	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+	glStencilFunc(GL_EQUAL, 1, 0xFF);
+	glStencilMask(0x00);
+
+	glDisable(GL_DEPTH_TEST);
 	engine::manager::scene_manager::get_instance()->elements["shadow"]->draw();
+	glEnable(GL_DEPTH_TEST);
+
+	glStencilFunc(GL_ALWAYS, 1, 0xFF);
+	glStencilMask(0xFF);
+
 	engine::manager::scene_manager::get_instance()->elements["main"]->draw();
 }

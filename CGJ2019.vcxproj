@@ -77,6 +77,8 @@
     <None Include="res\shaders\planar_vert.glsl" />
     <None Include="res\shaders\sepia_frag.glsl" />
     <None Include="res\shaders\sepia_vert.glsl" />
+    <None Include="res\shaders\shadowstencil_fs.glsl" />
+    <None Include="res\shaders\shadowstencil_vs.glsl" />
     <None Include="res\shaders\shadow_frag.glsl" />
     <None Include="res\shaders\shadow_vert.glsl" />
     <None Include="res\shaders\vertex.glsl" />

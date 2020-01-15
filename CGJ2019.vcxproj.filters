@@ -190,5 +190,11 @@
     <None Include="res\shaders\shadow_frag.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\shaders\shadowstencil_vs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\shadowstencil_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
