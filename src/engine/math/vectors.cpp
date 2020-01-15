@@ -241,8 +241,8 @@ engine::math::vec4::vec4(const float k) :
 engine::math::vec4::vec4(const float x, const float y, const float z, const float w) :
     x(x), y(y), z(z), w(w) {}
 
-engine::math::vec4::vec4(const math::vec3& v) :
-    x(v.x), y(v.y), z(v.z), w(1.0f) {}
+engine::math::vec4::vec4(const math::vec3& v, const float w) :
+    x(v.x), y(v.y), z(v.z), w(w) {}
 
 engine::math::vec4::vec4(const vec4& v) :
     x(v.x), y(v.y), z(v.z), w(v.w) {}

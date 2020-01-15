@@ -1,6 +1,7 @@
 #version 330 core
 
 uniform vec4 in_color;
+uniform vec3 light_pos;
 
 in vec3 o_position;
 in vec3 o_normal;
@@ -9,7 +10,6 @@ in vec2 o_texcoord;
 out vec4 frag_color;
 
 void main(void) {
-	vec3 light_pos = vec3(5.0, 5.0, 5.0);
 	vec3 light_color = vec3(1.0, 1.0, 1.0);
 
 	float ambient_strength = 0.25;

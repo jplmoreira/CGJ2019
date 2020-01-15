@@ -80,7 +80,7 @@ namespace engine {
             vec4();
             vec4(const float k);
             vec4(const float x, const float y, const float z, const float w);
-            vec4(const math::vec3& v);
+            vec4(const math::vec3& v, const float w);
             vec4(const vec4& v);
 
             float* data();

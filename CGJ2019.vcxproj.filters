@@ -181,5 +181,14 @@
     <None Include="res\shaders\filter_vert.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\shaders\planar_vert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\shadow_vert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\shadow_frag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -74,8 +74,11 @@
     <None Include="res\shaders\filter_frag.glsl" />
     <None Include="res\shaders\fragment.glsl" />
     <None Include="res\shaders\planar_frag.glsl" />
+    <None Include="res\shaders\planar_vert.glsl" />
     <None Include="res\shaders\sepia_frag.glsl" />
     <None Include="res\shaders\sepia_vert.glsl" />
+    <None Include="res\shaders\shadow_frag.glsl" />
+    <None Include="res\shaders\shadow_vert.glsl" />
     <None Include="res\shaders\vertex.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

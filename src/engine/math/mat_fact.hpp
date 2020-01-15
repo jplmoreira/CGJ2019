@@ -12,6 +12,7 @@ namespace engine {
             static mat3 dual_mat(const vec3& v);
             static mat3 rodr_rot(const float angle, const vec3& axis);
             static mat3 rot_qtrn(const qtrn& q);
+            static mat4 shadow(const vec3& l_pos, const vec3& p_point, const vec3& p_normal);
         };
     }
 }
