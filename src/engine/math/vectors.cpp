@@ -16,7 +16,7 @@ engine::math::vec2::vec2(const float x, const float y) :
 engine::math::vec2::vec2(const vec2& v) :
     x(v.x), y(v.y) {}
 
-float* engine::math::vec2::data() {
+float* engine::math::vec2::data() const {
     return new float[2]{ x,y };
 }
 
@@ -122,7 +122,7 @@ engine::math::vec3::vec3(const float x, const float y, const float z) :
 engine::math::vec3::vec3(const vec3& v) :
     x(v.x), y(v.y), z(v.z) {}
 
-float* engine::math::vec3::data() {
+float* engine::math::vec3::data() const {
     return new float[3]{ x,y,z };
 }
 
@@ -247,7 +247,7 @@ engine::math::vec4::vec4(const math::vec3& v, const float w) :
 engine::math::vec4::vec4(const vec4& v) :
     x(v.x), y(v.y), z(v.z), w(v.w) {}
 
-float* engine::math::vec4::data() {
+float* engine::math::vec4::data() const {
     return new float[4]{ x,y,z,w };
 }
 

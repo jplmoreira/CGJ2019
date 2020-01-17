@@ -17,7 +17,7 @@ namespace engine {
             vec2(const float x, const float y);
             vec2(const vec2& v);
 
-            float* data();
+            float* data() const;
             void clean();
             const float quadrance() const;
             const float length() const;
@@ -49,7 +49,7 @@ namespace engine {
             vec3(const float x, const float y, const float z);
             vec3(const vec3& v);
 
-            float* data();
+            float* data() const;
             void clean();
             const float quadrance() const;
             const float length() const;
@@ -83,7 +83,7 @@ namespace engine {
             vec4(const math::vec3& v, const float w);
             vec4(const vec4& v);
 
-            float* data();
+            float* data() const;
             void clean();
             const float quadrance() const;
             const float length() const;

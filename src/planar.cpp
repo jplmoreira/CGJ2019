@@ -39,6 +39,7 @@ void planar::setup_shaders() {
 	main->uniforms["ModelMatrix"] = glGetUniformLocation(main->get_id(), "ModelMatrix");
 	main->uniforms["in_color"] = glGetUniformLocation(main->get_id(), "in_color");
 	main->uniforms["light_pos"] = glGetUniformLocation(main->get_id(), "light_pos");
+	main->uniforms["view_pos"] = glGetUniformLocation(main->get_id(), "view_pos");
 	GLint ubo_id = glGetUniformBlockIndex(main->get_id(), "SharedMatrices");
 	main->blocks["SharedMatrices"] = 0;
 	glUniformBlockBinding(main->get_id(), ubo_id, main->blocks["SharedMatrices"]);
@@ -128,6 +129,8 @@ void planar::setup(int winx, int winy) {
 }
 
 void planar::display(float elapsed_sec) {
+	engine::camera::get_instance()->calculate_camera((float)elapsed_sec);
+
 	light_pos = engine::math::mat_fact::rodr_rot(elapsed_sec * 100.0f, engine::math::vec3(0.0f, 1.0f, 0.0f)) * light_pos;
 	engine::math::vec3 p_point(0.0f);
 	engine::math::vec3 p_normal(0.0f, 1.0f, 0.0f);
@@ -140,12 +143,12 @@ void planar::display(float elapsed_sec) {
 		engine::manager::shader_manager::get_instance()->elements["shadow"];
 	main->enable();
 	glUniform3fv(main->uniforms["light_pos"], 1, light_pos.data());
+	glUniform3fv(main->uniforms["view_pos"], 1, engine::camera::get_instance()->get_position().data());
 	main->disable();
 	shadow->enable();
 	glUniformMatrix4fv(shadow->uniforms["ShadowProjMat"], 1, GL_FALSE, shadow_mat.data);
 	shadow->disable();
 
-	engine::camera::get_instance()->calculate_camera((float)elapsed_sec);
 
 	engine::manager::scene_manager::get_instance()->elements["plane"]->draw();
 
