@@ -2,6 +2,7 @@
 
 #include "engine/gl_engine.hpp"
 #include "tangram.hpp"
+#include "window.hpp"
 #include "planar.hpp"
 #include "bloom.hpp"
 #include "rainy.hpp"

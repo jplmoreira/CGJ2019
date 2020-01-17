@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "window.hpp"
 
 #include "engine/camera.hpp"
@@ -8,6 +9,7 @@
 #include "engine/manager/shader_manager.hpp"
 
 #include <algorithm>
+#include <time.h>
 
 void window::window_close_callback(GLFWwindow* win) {
 	engine::manager::scene_manager::free_instance();
@@ -21,7 +23,55 @@ void window::window_size_callback(GLFWwindow* win, int winx, int winy) {
 	glViewport(0, 0, winx, winy);
 }
 
-void window::key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {}
+void saveScreenshotToFile(std::string filename, int windowWidth, int windowHeight) {
+	const int numberOfPixels = windowWidth * windowHeight * 3;
+	unsigned char *pixels;
+	pixels = (unsigned char*)malloc(numberOfPixels);
+
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+	glReadBuffer(GL_FRONT);
+	glReadPixels(0, 0, windowWidth, windowHeight, GL_BGR_EXT, GL_UNSIGNED_BYTE, pixels);
+
+	FILE* outputFile = fopen(filename.c_str(), "w");
+	short header[] = { 0, 2, 0, 0, 0, 0, (short)windowWidth, (short)windowHeight, 24 };
+
+	if (outputFile != NULL) {
+		fwrite(&header, sizeof(header), 1, outputFile);
+		fwrite(pixels, numberOfPixels, 1, outputFile);
+		fclose(outputFile);
+	}
+	else
+		std::cout << "Unable to create Screenshot.\n";
+
+	std::cout << "Finished writing to file.\n";
+}
+
+void window::key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+		glfwSetWindowShouldClose(win, GLFW_TRUE);
+		window_close_callback(win);
+	} else if(key == GLFW_KEY_X && action == GLFW_PRESS) {
+		int width, height;
+		glfwGetWindowSize(win, &width, &height);
+
+		time_t rawtime;
+		struct tm* timeinfo;
+
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		std::string time = asctime(timeinfo);
+		time = time.c_str();
+		size_t f1 = time.find(' ');
+		size_t f2 = time.find('\n');
+		time = time.substr(f1+1, 20);
+		time.erase(std::remove(time.begin(), time.end(), ':'), time.end());
+
+		std::string filename = "ss/awesomeSS";
+		filename.append(time);
+		filename.append(".tga");
+		saveScreenshotToFile(filename, width, height);
+	}
+}
 
 void window::mouse_callback(GLFWwindow* win, double xpos, double ypos) {
 	engine::camera::get_instance()->rotate((float)xpos, (float)ypos);
