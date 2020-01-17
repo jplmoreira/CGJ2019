@@ -22,7 +22,9 @@ void sepia::window_size_callback(GLFWwindow* win, int winx, int winy) {
 }
 
 void sepia::key_callback(GLFWwindow* win, int key, int scancode, int action, int mods) {
-	//press f to filter to sepia
+	if(key == GLFW_KEY_T && action == GLFW_PRESS) {
+		toggle = !toggle;
+	}
 }
 
 void sepia::mouse_callback(GLFWwindow* win, double xpos, double ypos) {
@@ -85,6 +87,11 @@ void sepia::display(float elapsed_sec) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//sepia
+	std::shared_ptr<engine::shader> sepia = engine::manager::shader_manager::get_instance()->elements["sepia"];
+	sepia->enable();
+	glUniform1i(sepia->uniforms["toggle"], toggle);
+	sepia->disable();
+
 	engine::manager::scene_manager::get_instance()->elements["sepia"]->root_obj->children[0]->textures[0]->id = color_buffer;
 	engine::manager::scene_manager::get_instance()->elements["sepia"]->draw();
 }
@@ -106,6 +113,7 @@ void sepia::setup_shaders() {
 	//sepia shaders
 	std::shared_ptr<engine::shader> sepia = std::make_shared<engine::shader>();
 	sepia->compile("res/shaders/sepia_vert.glsl", "res/shaders/sepia_frag.glsl");
+	sepia->uniforms["toggle"] = glGetUniformLocation(sepia->get_id(), "toggle");
 	sepia->cleanup();
 	sepia->enable();
 	glUniform1i(glGetUniformLocation(sepia->get_id(), "image"), 0);  //uniform texture initialization

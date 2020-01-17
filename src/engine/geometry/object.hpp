@@ -17,6 +17,7 @@ namespace engine {
             std::vector<std::shared_ptr<texture>> textures;
 
             math::vec4 color;
+            math::vec3 position;
             math::mat4 transform;
             math::qtrn quaternion;
 

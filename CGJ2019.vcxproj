@@ -34,8 +34,10 @@
     <ClCompile Include="src\engine\texture.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\planar.cpp" />
+    <ClCompile Include="src\rainy.cpp" />
     <ClCompile Include="src\tangram.cpp" />
     <ClCompile Include="src\test\test.cpp" />
+    <ClCompile Include="src\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\bloom.hpp" />
@@ -60,8 +62,10 @@
     <ClInclude Include="src\engine\texture.hpp" />
     <ClInclude Include="src\engine\vert_attr.hpp" />
     <ClInclude Include="src\planar.hpp" />
+    <ClInclude Include="src\rainy.hpp" />
     <ClInclude Include="src\tangram.hpp" />
     <ClInclude Include="src\test\test.hpp" />
+    <ClInclude Include="src\window.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\bloom_frag.glsl" />
@@ -75,6 +79,8 @@
     <None Include="res\shaders\fragment.glsl" />
     <None Include="res\shaders\planar_frag.glsl" />
     <None Include="res\shaders\planar_vert.glsl" />
+    <None Include="res\shaders\rainy_fs.glsl" />
+    <None Include="res\shaders\rainy_vs.glsl" />
     <None Include="res\shaders\sepia_frag.glsl" />
     <None Include="res\shaders\sepia_vert.glsl" />
     <None Include="res\shaders\shadowstencil_fs.glsl" />

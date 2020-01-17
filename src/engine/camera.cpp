@@ -174,3 +174,7 @@ const engine::math::mat4 engine::camera::view() const {
 const engine::math::mat4 engine::camera::projection() const {
     return project_mat;
 }
+
+const engine::math::vec3 engine::camera::get_position() const {
+	return eye;
+}

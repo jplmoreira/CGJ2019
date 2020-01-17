@@ -1,14 +1,10 @@
 #pragma once
 
-#include "../i_app.hpp"
+#include "engine/i_app.hpp"
+#include <vector>
 
-struct sepia : engine::i_app {
-	unsigned int SCR_WIDTH = 0;
-	unsigned int SCR_HEIGHT = 0;
-	bool toggle = true;
-
-	GLuint sepia_fbo;
-	GLuint color_buffer;
+struct window : engine::i_app {
+	std::vector<engine::math::vec3> positions;
 
 	virtual void window_close_callback(GLFWwindow* win) override;
 	virtual void window_size_callback(GLFWwindow* win, int winx, int winy) override;
@@ -17,6 +13,4 @@ struct sepia : engine::i_app {
 	virtual void mouse_button_callback(GLFWwindow* win, int button, int action, int mods) override;
 	virtual void setup(int winx, int winy) override;
 	virtual void display(float elapsed_sec) override;
-	void setup_shaders();
-	void create_fbos();
 };

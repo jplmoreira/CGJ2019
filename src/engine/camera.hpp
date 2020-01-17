@@ -60,5 +60,6 @@ namespace engine {
             const float up, const float bottom, const float near, const float far);
         const math::mat4 view() const;
         const math::mat4 projection() const;
+        const math::vec3 get_position() const;
     };
 }
