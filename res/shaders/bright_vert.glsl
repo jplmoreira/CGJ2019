@@ -15,11 +15,11 @@ uniform SharedMatrices {
 };
 
 void main(void) {
-	o_position = vec3(ModelMatrix * vec4(in_position, 1.0));
-	o_texcoord = in_texcoord;
+	o_position = vec3(ModelMatrix * vec4(in_position, 1.0));   //posiçao em model space
+	o_texcoord = in_texcoord;								   //passamos coordenadas de textura
 
-	mat3 NormalMatrix = transpose(inverse(mat3(ModelMatrix)));
-	o_normal = normalize(NormalMatrix * in_normal);
+	mat3 NormalMatrix = transpose(inverse(mat3(ModelMatrix))); //para atualizar as normais
+	o_normal = normalize(NormalMatrix * in_normal);            //a normal em view space
 
-	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(in_position, 1.0);
+	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(in_position, 1.0);  //posiçao do vertex em pvm clip space
 }

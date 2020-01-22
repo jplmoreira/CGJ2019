@@ -35,7 +35,7 @@ void wood::mouse_button_callback(GLFWwindow* win, int button, int action, int mo
 
 void wood::setup_shaders() {
 	std::shared_ptr<engine::shader> main = std::make_shared<engine::shader>();
-	main->compile("res/shaders/wood_vs.glsl", "res/shaders/wood_fs.glsl");
+	main->compile("res/shaders/wood_vs.glsl", "res/shaders/wood_fs.glsl");                  //shader normal com matrizes pvm, mt basico
 	main->uniforms["ModelMatrix"] = glGetUniformLocation(main->get_id(), "ModelMatrix");
 	main->uniforms["in_color"] = glGetUniformLocation(main->get_id(), "in_color");
 	GLint ubo_id = glGetUniformBlockIndex(main->get_id(), "SharedMatrices");
@@ -53,21 +53,21 @@ void wood::setup(int winx, int winy) {
 
 	setup_shaders();
 
-	engine::math::vec4 brown(126.0f / 255.0f, 83.0f / 255.0f, 60.0f / 255.0f, 1.0f);
+	engine::math::vec4 brown(126.0f / 255.0f, 83.0f / 255.0f, 60.0f / 255.0f, 1.0f);  //criamos cor castanha para interpolacao
 
 	engine::manager::mesh_manager::get_instance()->elements["quad"] =
-		std::make_shared<engine::geometry::mesh>("res/models/quad.obj");
+		std::make_shared<engine::geometry::mesh>("res/models/quad.obj");   //vamos buscar a mesh do quad 
 
 	std::shared_ptr<engine::scene> main_scene = std::make_shared<engine::scene>();
-	main_scene->root_obj->shdr = engine::manager::shader_manager::get_instance()->elements["main"];
+	main_scene->root_obj->shdr = engine::manager::shader_manager::get_instance()->elements["main"];   //criamos a cena 
 
-	std::unique_ptr<engine::geometry::object> obj = std::make_unique<engine::geometry::object>();
-	obj->m = engine::manager::mesh_manager::get_instance()->elements["quad"];
-	obj->transform = engine::math::mat4::identity_mat();
-	obj->color = brown;
-	main_scene->root_obj->add_node(obj);
+	std::unique_ptr<engine::geometry::object> obj = std::make_unique<engine::geometry::object>();    //criamos o objecto
+	obj->m = engine::manager::mesh_manager::get_instance()->elements["quad"];                        //Adicionamos mesh do quad ao obj
+	obj->transform = engine::math::mat4::identity_mat();										     //nao alteramos o quad
+	obj->color = brown;																				 //passamos o castanho uniform var para o fragment
+	main_scene->root_obj->add_node(obj);															 //Adicionamos o no do obj ao root node
 
-	engine::manager::scene_manager::get_instance()->elements["main"] = main_scene;
+	engine::manager::scene_manager::get_instance()->elements["main"] = main_scene;                   //guardamos cena no scene mnger
 }
 
 void wood::display(float elapsed_sec) {

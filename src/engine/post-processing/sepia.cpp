@@ -45,13 +45,13 @@ void sepia::setup(int winx, int winy) {
 	SCR_HEIGHT = winy;
 	setup_shaders();
 	create_fbos();
-	engine::camera::get_instance()->setup(false, winx, winy, 30.0f, 1.0f, 100.0f);
+	engine::camera::get_instance()->setup(false, winx, winy, 30.0f, 1.0f, 100.0f); //setup da camera
 	engine::camera::get_instance()->look_at(engine::math::vec3(0.0f, 0.0f, 5.0f),
 		engine::math::vec3(0.0f, 0.0f, 0.0f),
 		engine::math::vec3(0.0f, 1.0f, 0.0f));
 
 	engine::manager::mesh_manager::get_instance()->elements["cube"] =
-		std::make_shared<engine::geometry::mesh>("res/models/cube.obj");
+		std::make_shared<engine::geometry::mesh>("res/models/cube.obj");   //load dos meshes do cubo e do quad para projectar
 	engine::manager::mesh_manager::get_instance()->elements["quad"] =
 		std::make_shared<engine::geometry::mesh>("res/models/quad.obj");
 
@@ -77,29 +77,29 @@ void sepia::setup(int winx, int winy) {
 	engine::manager::scene_manager::get_instance()->elements["sepia"] = sepia_scene;
 }
 
-void sepia::display(float elapsed_sec) {
+void sepia::display(float elapsed_sec) {  //default + 1 framebuffer já a pensar na implementaçao com o bloom, o sepia seria a ultima coisa a acrescentar
 	//main
-	glBindFramebuffer(GL_FRAMEBUFFER, sepia_fbo);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	engine::camera::get_instance()->calculate_camera((float)elapsed_sec);
-	engine::manager::scene_manager::get_instance()->elements["main"]->draw();
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glBindFramebuffer(GL_FRAMEBUFFER, sepia_fbo);  //bind do fbo da sepia para calcular o post processing
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  //limpar os buffers
+	engine::camera::get_instance()->calculate_camera((float)elapsed_sec);  //atualizar a camera
+	engine::manager::scene_manager::get_instance()->elements["main"]->draw();  //desenhar a cena
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);  //bind ao default framebuffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  //limpar buffers again
 
 	//sepia
-	std::shared_ptr<engine::shader> sepia = engine::manager::shader_manager::get_instance()->elements["sepia"];
+	std::shared_ptr<engine::shader> sepia = engine::manager::shader_manager::get_instance()->elements["sepia"]; //get sepia shader
 	sepia->enable();
-	glUniform1i(sepia->uniforms["toggle"], toggle);
+	glUniform1i(sepia->uniforms["toggle"], toggle);  //atualizar a flag de toggle no shader
 	sepia->disable();
 
-	engine::manager::scene_manager::get_instance()->elements["sepia"]->root_obj->children[0]->textures[0]->id = color_buffer;
-	engine::manager::scene_manager::get_instance()->elements["sepia"]->draw();
+	engine::manager::scene_manager::get_instance()->elements["sepia"]->root_obj->children[0]->textures[0]->id = color_buffer; //atualizar textura do quad
+	engine::manager::scene_manager::get_instance()->elements["sepia"]->draw(); //desenhar cena
 }
 
-void sepia::setup_shaders() {
+void sepia::setup_shaders() {  //um faz o render normal e o outro faz só a projecçao no quad do rgb em sepia
 	//main filter shaders
 	std::shared_ptr<engine::shader> main = std::make_shared<engine::shader>();
-	main->compile("res/shaders/filter_vert.glsl", "res/shaders/filter_frag.glsl");
+	main->compile("res/shaders/filter_vert.glsl", "res/shaders/filter_frag.glsl");  //shaders para render normal, dao render a cena normalmente, just in case precisassemos de mais coisas
 	main->uniforms["ModelMatrix"] = glGetUniformLocation(main->get_id(), "ModelMatrix");
 	GLint ubo_id = glGetUniformBlockIndex(main->get_id(), "SharedMatrices");
 	main->blocks["SharedMatrices"] = 0;
@@ -123,16 +123,17 @@ void sepia::setup_shaders() {
 
 void sepia::create_fbos() {
 	//create sepia fbo
-	glGenFramebuffers(1, &sepia_fbo);
-	glBindFramebuffer(GL_FRAMEBUFFER, sepia_fbo);
-	glGenTextures(1, &color_buffer);
-	glBindTexture(GL_TEXTURE_2D, color_buffer);
+	glGenFramebuffers(1, &sepia_fbo);  //criamos o fbo
+	glBindFramebuffer(GL_FRAMEBUFFER, sepia_fbo);  //bind do fbo
+	glGenTextures(1, &color_buffer);  //geramos a textura para o color buffer attachment
+	glBindTexture(GL_TEXTURE_2D, color_buffer); //bind ao color attachment
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color_buffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color_buffer, 0);  //we specify a color attachment when linking a 
+																								   //texture as a framebuffer's colorbuffer
 
 	//create depth rbo
 	GLuint rbo_depth;
@@ -141,7 +142,7 @@ void sepia::create_fbos() {
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, SCR_WIDTH, SCR_HEIGHT);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo_depth);
 
-	GLuint attachment = GL_COLOR_ATTACHMENT0;
+	GLuint attachment = GL_COLOR_ATTACHMENT0;  //desnecessario pq já e so 1 color attachment
 	glDrawBuffers(1, &attachment);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)

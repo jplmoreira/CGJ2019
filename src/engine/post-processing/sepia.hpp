@@ -5,10 +5,10 @@
 struct sepia : engine::i_app {
 	unsigned int SCR_WIDTH = 0;
 	unsigned int SCR_HEIGHT = 0;
-	bool toggle = true;
+	bool toggle = true;  //para ligar e desligar o filtro
 
-	GLuint sepia_fbo;
-	GLuint color_buffer;
+	GLuint sepia_fbo;  //criamos um framebuffer
+	GLuint color_buffer; //e um color buffer para attachment
 
 	virtual void window_close_callback(GLFWwindow* win) override;
 	virtual void window_size_callback(GLFWwindow* win, int winx, int winy) override;

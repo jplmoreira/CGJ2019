@@ -38,6 +38,7 @@
     <ClCompile Include="src\tangram.cpp" />
     <ClCompile Include="src\test\test.cpp" />
     <ClCompile Include="src\window.cpp" />
+    <ClCompile Include="src\wood.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\bloom.hpp" />
@@ -66,6 +67,7 @@
     <ClInclude Include="src\tangram.hpp" />
     <ClInclude Include="src\test\test.hpp" />
     <ClInclude Include="src\window.hpp" />
+    <ClInclude Include="src\wood.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\bloom_frag.glsl" />
@@ -88,6 +90,8 @@
     <None Include="res\shaders\shadow_frag.glsl" />
     <None Include="res\shaders\shadow_vert.glsl" />
     <None Include="res\shaders\vertex.glsl" />
+    <None Include="res\shaders\wood_fs.glsl" />
+    <None Include="res\shaders\wood_vs.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

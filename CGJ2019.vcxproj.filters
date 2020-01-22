@@ -72,6 +72,9 @@
     <ClCompile Include="src\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\wood.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\test\test.hpp">
@@ -152,6 +155,9 @@
     <ClInclude Include="src\window.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\wood.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\fragment.glsl">
@@ -212,6 +218,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="res\shaders\rainy_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\wood_fs.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\wood_vs.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
